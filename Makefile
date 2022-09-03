@@ -14,6 +14,9 @@ Sources += $(wildcard *.R)
 
 autopipeR = defined
 
+undercount.pdf: undercount.rmd
+	Rscript -e "rmarkdown::render('undercount.rmd')"
+
 parameters.Rout: parameters.R
 	$(pipeR)
 

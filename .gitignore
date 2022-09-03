@@ -1,0 +1,8 @@
+*.Rlog
+*.Rout
+*.Rout.pdf
+*.mk
+*.rda
+*.Rout.args
+makestuff/
+*~
