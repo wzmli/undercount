@@ -1,0 +1,21 @@
+library(shellpipes)
+
+start_date <- as.Date("2022-01-01")
+end_date <- as.Date("2023-01-01")
+
+N <- 1e6
+I <- 10
+S <- N - I
+
+## Rate parameters
+beta <- 0.3
+gamma <- 0.3
+
+## Convolution
+c_prop <- 0.8
+c_delay_cv <- 1
+c_delay_mean <- 0.5
+
+disp <- 1000
+
+saveEnvironment()
