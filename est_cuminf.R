@@ -1,14 +1,14 @@
 library(McMasterPandemic)
 library(tidyverse)
 library(shellpipes)
-
+## rpcall("est_cuminf.Rout est_cuminf.R simulate.rda")
 loadEnvironments()
 
 ## 
 
 htfun <- function(n){
 	n_1 <- c(NA,n[-length(n)])
-   return((n*n_1)/(1+n_1))
+   return((n*(n_1-1))/(1+n_1))
 }
 
 simdat$ht <- htfun(simdat[["conv_incidence"]])

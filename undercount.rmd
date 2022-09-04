@@ -39,5 +39,22 @@ $$
 
 More generally, just looking at the form of the expression $[\Delta N(t)]^2/\Delta N(t - 1)$, we can see that the undercount will *always* be taken equal to the rate of acceleration of observed cases ($\Delta N(t)/\Delta N(t-1)$) times the number of new cases $\Delta N(t)$, so undercounting will always be assumed to be large (proportional to observed cases) at the beginning of the epidemic and continuously decreasing toward the end.
 
+## example
+
+```{r get_pars, echo=FALSE}
+## Next two lines don't work
+## > Error in makeArgs() : Define callArgs to use makeR files; see .args file?
+## library(shellpipes)
+## loadEnvironments()
+load("parameters.rda")
+options(digits = 2)
+```
+
+Here is a simulated SIR epidemic with ${\cal R}_0 = `r beta/gamma`$, infectious period of `r 1/gamma` days, and ascertainment rate of `r 100*c_prop`%:
+
+```{r get_plot, echo = FALSE, out.height = "4in"}
+knitr::include_graphics("plot_cuminf.Rout.pdf")
+```
+
 ## references
 

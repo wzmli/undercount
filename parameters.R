@@ -8,7 +8,7 @@ I <- 10
 S <- N - I
 
 ## Rate parameters
-beta <- 0.3
+beta <- 0.4
 gamma <- 0.3
 
 ## Convolution

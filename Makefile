@@ -14,7 +14,7 @@ Sources += $(wildcard *.R)
 
 autopipeR = defined
 
-undercount.pdf: undercount.rmd
+undercount.pdf: undercount.rmd parameters.rda plot_cuminf.Rout.pdf
 	Rscript -e "rmarkdown::render('undercount.rmd')"
 
 parameters.Rout: parameters.R
