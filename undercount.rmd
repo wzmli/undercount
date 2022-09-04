@@ -50,7 +50,7 @@ load("parameters.rda")
 options(digits = 2)
 ```
 
-Here is a simulated SIR epidemic with ${\cal R}_0 = `r beta/gamma`$, infectious period of `r 1/gamma` days, and ascertainment rate of `r 100*c_prop`%:
+Here is a simulated SIR epidemic with ${\cal R}_0 = `r beta/gamma`$, infectious period of `r 1/gamma` days, and ascertainment rate of `r 100*c_prop`% (which means that the proportion of "hidden" cases is $(1-a)/a = `r (1-c_prop)/c_prop`$):
 
 ```{r get_plot, echo = FALSE, out.height = "4in"}
 knitr::include_graphics("plot_cuminf.Rout.pdf")

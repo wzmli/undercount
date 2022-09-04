@@ -29,10 +29,10 @@ model_definition.Rout: model_definition.R parameters.rda states.rda
 simulate.Rout: simulate.R model_definition.rda
 	$(pipeR)
 
-est_cuminf.Rout: est_cuminf.R simulate.rda
+est_cuminf.Rout: est_cuminf.R simulate.rda parameters.rda
 	$(pipeR)
 
-plot_cuminf.Rout: plot_cuminf.R est_cuminf.rda
+plot_cuminf.Rout: plot_cuminf.R est_cuminf.rda parameters.rda
 	$(pipeR)
 
 ### Makestuff
