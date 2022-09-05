@@ -52,6 +52,17 @@ $$
 
 This shows that the number of hidden counts will be estimated to depend on the growth rate $\lambda$ as well as the ascertainment ratio $a$ --- not what we wanted.
 
+Furthermore, this implies the true incidence is:
+
+$$
+\begin{split}
+\bf{I(t)} & = \Delta N(t) + H(t) \\
+& = aI(t) + a \lambda I(t) \\
+& = aI(t)(1+\lambda) 
+\end{split}
+$$
+where $1 + \lambda$ is the proposed estimate of the ratio of total to observed case, which is independent of $a$. 
+
 More generally, looking at the form of the expression $[\Delta N(t)]^2/\Delta N(t - 1)$, we can see that the undercount will *always* be equal to the rate of acceleration of observed cases ($\Delta N(t)/\Delta N(t-1)$) times the number of new cases $\Delta N(t)$, so undercounting will always be assumed to be large (proportional to observed cases) when disease incidence is increasing, and small when incidence is decreasing.
 
 ### Simulation example (SIR model)
@@ -67,11 +78,17 @@ The Figure illustrates the predicted behaviour.
 We simulate a simple SIR epidemic with a constant ascertainment rate `r 100*c_prop`% (i.e., an  underreporting level of $(1-a)/a \cdot 100 = `r pct((1-c_prop)/c_prop)`$%), and apply the authors' formula. 
 JD: we should do another simulation with a different ascertainment rate. The last s. can then highlight that the calculated quantity responds to epidemic dynamics, but not to ascertainment rate.
 
+MLi: Done. 
+
 [orphan text:] leads to the incorrect conclusion that cases are underreported by an average of `r pct(summ[["mean"]])`% (minimum, `r pct(summ[["min"]])`%; maximum `r pct(summ[["max"]])`%).
 
 ![Simulated SIR epidemic with ${\cal R}_0 = `r beta/gamma`$, infectious period of `r 1/gamma` days, $N = `r N`$, and ascertainment rate of `r 100*c_prop`%  (undercounting fraction `r (1-c_prop)/c_prop`%).](plot_cuminf.Rout.pdf)
 
+MLi: Pipeline the plot?
+
 We conclude that the authors' suggested formula should not be applied to disease outbreak incidence data.
+
+\newpage
 
 ## References
 

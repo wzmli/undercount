@@ -9,7 +9,7 @@ I0 <- 10
 S0 <- N - I0
 
 ## Rate parameters
-beta <- 0.6
+beta <- 0.4
 gamma <- 0.3
 
 # Reporting fraction
