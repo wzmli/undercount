@@ -18,8 +18,8 @@ autopipeR = defined
 
 Ignore += undercount.pdf
 Sources += undercount.rmd
-undercount.pdf: undercount.rmd parameters.rda plot_cuminf.Rout.pdf
-	Rscript -e "rmarkdown::render('undercount.rmd')"
+undercount.pdf: undercount.rmd parameters.rda est_cuminf.rda plot_cuminf.Rout.pdf
+	$(knitpdf)
 
 parameters.Rout: parameters.R
 	$(pipeRcall)
