@@ -31,15 +31,17 @@ The logic is hard to understand here. Why are cases identified at time $t-1$ rep
 ----------------------------------------------------------------------
 
 
-Suppose we have an epidemic that is growing exponentially. In the epidemic phase, the various measures of current epidemic size (incidence, prevalence, cumulative incidence, etc.) *all* grow exponentially, or geometrically if we're sampling in discrete time. Suppose $I(t)$ ("new cases" or incidence) is growing at a geometric rate $R$ per time step, i.e. $I(t) = I(0) R^t$, and suppose we are sampling a fraction $a$ (for "ascertainment") of the incidence. Again for simplicity, we'll see how the simple/non-bias-corrected estimate, without death, works out:
+Suppose we have an epidemic that is growing exponentially. In the epidemic phase, the various measures of current epidemic size (incidence, prevalence, cumulative incidence, etc.) *all* grow exponentially, or geometrically if we're sampling in discrete time. Suppose $I(t)$ ("new cases" or incidence) is growing at a geometric rate $\lambda$ per time step, i.e. $I(t) = I(0) \lambda^t$, and suppose we are sampling a fraction $a$ (for "ascertainment") of the incidence. Again for simplicity, we'll see how the simple/non-bias-corrected estimate, without death, works out:
 
 $$
 \begin{split}
 H(t) & = \frac{[\Delta N(t)]^2}{\Delta N(t - 1)} \\
-& = \frac{a^2 I(0)^2 R^{2t}}{a I(0) R^{t-1}} \\
-& = a I(0) R^{t+1}
+& = \frac{a^2 I(0)^2 \lambda^{2t}}{a I(0) \lambda^{t-1}} \\
+& = a I(0) \lambda^{t+1}
 \end{split}
 $$
+
+<Sentence about how this is not at all what we are trying to do>
 
 More generally, just looking at the form of the expression $[\Delta N(t)]^2/\Delta N(t - 1)$, we can see that the undercount will *always* be taken equal to the rate of acceleration of observed cases ($\Delta N(t)/\Delta N(t-1)$) times the number of new cases $\Delta N(t)$, so undercounting will always be assumed to be large (proportional to observed cases) at the beginning of the epidemic and continuously decreasing toward the end.
 
