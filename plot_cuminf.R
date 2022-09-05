@@ -1,10 +1,11 @@
 library(ggplot2);theme_set(theme_bw(base_size=14))
 library(directlabels)
-library(shellpipes)
 library(tidyverse)
 library(cowplot)
+library(shellpipes)
+rpcall("plot_cuminf.Rout plot_cuminf.R est_cuminf.rda parameters.rda")
 
-## rpcall("plot_cuminf.Rout plot_cuminf.R est_cuminf.rda parameters.rda")
+
 loadEnvironments()
 startGraphics(width = 8, height = 4)
 

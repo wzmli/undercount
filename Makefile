@@ -22,22 +22,22 @@ undercount.pdf: undercount.rmd parameters.rda plot_cuminf.Rout.pdf
 	Rscript -e "rmarkdown::render('undercount.rmd')"
 
 parameters.Rout: parameters.R
-	$(pipeR)
+	$(pipeRcall)
 
 states.Rout: states.R parameters.rda
-	$(pipeR)
+	$(pipeRcall)
 
 model_definition.Rout: model_definition.R parameters.rda states.rda
-	$(pipeR)
+	$(pipeRcall)
 
 simulate.Rout: simulate.R model_definition.rda
-	$(pipeR)
+	$(pipeRcall)
 
 est_cuminf.Rout: est_cuminf.R simulate.rda parameters.rda
-	$(pipeR)
+	$(pipeRcall)
 
 plot_cuminf.Rout: plot_cuminf.R est_cuminf.rda parameters.rda
-	$(pipeR)
+	$(pipeRcall)
 
 ### Makestuff
 

@@ -1,5 +1,6 @@
 library(McMasterPandemic)
 library(shellpipes)
+rpcall("states.Rout states.R parameters.rda")
 
 loadEnvironments()
 epi_states <- c("S", "I", "R")

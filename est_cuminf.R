@@ -1,7 +1,7 @@
 library(McMasterPandemic)
 library(tidyverse)
 library(shellpipes)
-## rpcall("est_cuminf.Rout est_cuminf.R simulate.rda")
+rpcall("est_cuminf.Rout est_cuminf.R simulate.rda parameters.rda")
 loadEnvironments()
 
 ## 
@@ -12,24 +12,21 @@ htfun <- function(n){
 }
 
 
-simdat <- (simdat
-    %>% filter(I > I0)
-    %>% mutate(ht = htfun(conv_incidence))
-)
-
 print(head(simdat))
 
 dat0 <- (simdat
-    %>% mutate(NULL
-             , truecuminc = cumsum(incidence)
-             , report = ifelse(is.na(conv_incidence),0,conv_incidence)
-             , cumreport = cumsum(report)
-             , htfill = ifelse(is.na(ht),0,ht)
-             , htfrac = ht/report
-             , cumht = cumsum(htfill)
-             , estcuminc = cumreport+cumht
-               )
-    %>% select(Date, cumreport, truecuminc, estcuminc, htfrac)
+	%>% filter(I > I0)
+   %>% mutate(NULL
+		, truecuminc = cumsum(incidence)
+      , report = c_prop*incidence 
+      , ht = htfun(report)
+      , cumreport = cumsum(report)
+      , htfill = ifelse(is.na(ht),0,ht)
+      , htfrac = ht/report
+      , cumht = cumsum(htfill)
+      , estcuminc = cumreport+cumht
+	)
+   %>% select(Date, cumreport, truecuminc, estcuminc, htfrac)
 )
 
 dat <- (dat0
