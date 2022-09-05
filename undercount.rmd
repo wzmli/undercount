@@ -67,7 +67,7 @@ options(digits = 2)
 pct <- function(x) round(100*x)
 ```
 
-Simulating a simple SIR epidemic with a constant ascertainment rate `r 100*c_prop`% (i.e., an  underreporting level of $(1-a)/a \cdot 100 = `r pct((1-c_prop)/c_prop)`$%) and applying the formula (Figure 1) incorrectly concludes that cases are underreported by an average of `r pct(summ[["mean"]])`% (minimum, `r pct(summ[["min"]])`%; maximum `r pct(summ[["max"]])`%).
+Simulating a simple SIR epidemic with a constant ascertainment rate `r 100*c_prop`% (i.e., an  underreporting level of $(1-a)/a \cdot 100 = `r pct((1-c_prop)/c_prop)`$%) and applying the formula (Figure 1) leads to the incorrect conclusion that cases are underreported by an average of `r pct(summ[["mean"]])`% (minimum, `r pct(summ[["min"]])`%; maximum `r pct(summ[["max"]])`%).
 
 ![Simulated SIR epidemic with ${\cal R}_0 = `r beta/gamma`$, infectious period of `r 1/gamma` days, $N = `r N`$, and ascertainment rate of `r 100*c_prop`%  (undercounting fraction `r (1-c_prop)/c_prop`%).](plot_cuminf.Rout.pdf)
 
