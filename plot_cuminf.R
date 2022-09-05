@@ -5,7 +5,6 @@ library(cowplot)
 library(shellpipes)
 rpcall("plot_cuminf.Rout plot_cuminf.R est_cuminf.rda parameters.rda")
 
-
 loadEnvironments()
 startGraphics(width = 8, height = 4)
 
@@ -29,7 +28,7 @@ gg_cum <- (ggplot(dat_cum, aes(Date,y=value/1e5, color=type))
                             "last.bumpup"),
               aes(label = type))
     ## hack to expand limits for direct labels
-    + expand_limits(x = max(dat$Date) + 60, y = 11)
+    + expand_limits(x = max(dat$Date) + 60, y = 8)
     + scale_colour_brewer(palette = "Dark2")
 )
 
@@ -41,3 +40,5 @@ gg_prop <- (ggplot(dat_prop, aes(Date, value))
 )
 
 plot_grid(gg_cum, gg_prop)
+
+saveVars(gg_cum, gg_prop)

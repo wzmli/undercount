@@ -7,3 +7,7 @@
 makestuff/
 *~
 \#*
+*.log
+*.aux
+*.oldfile
+*.rtmp

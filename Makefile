@@ -39,6 +39,9 @@ est_cuminf.Rout: est_cuminf.R simulate.rda parameters.rda
 plot_cuminf.Rout: plot_cuminf.R est_cuminf.rda parameters.rda
 	$(pipeRcall)
 
+plot_tikz.Rout: plot_cuminf.rda
+	$(pipeRcall)
+
 ### Makestuff
 
 Sources += Makefile
