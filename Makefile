@@ -3,6 +3,8 @@ current: target
 
 # -include makestuff/perl.def
 
+all: undercount.pdf
+
 vim_session:
 	bash -cl "vmt"
 
