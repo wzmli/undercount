@@ -30,14 +30,38 @@ states.Rout: states.R parameters.rda
 model_definition.Rout: model_definition.R parameters.rda states.rda
 	$(pipeRcall)
 
-simulate.Rout: simulate.R model_definition.rda
+
+## Setting up different parameters
+
+high.Rout: high.R
 	$(pipeRcall)
 
-est_cuminf.Rout: est_cuminf.R simulate.rda parameters.rda
+med.Rout: med.R
 	$(pipeRcall)
 
-plot_cuminf.Rout: plot_cuminf.R est_cuminf.rda parameters.rda
+low.Rout: low.R
 	$(pipeRcall)
+
+impmakeR += simulate
+
+
+# high.simulate.Rout: simulate.R model_definition.R
+%.simulate.Rout: simulate.R model_definition.rda %.rda
+	$(pipeRcall)
+
+impmakeR += est_cuminf
+
+# high.est_cuminf.Rout: est_cuminf.R
+%.est_cuminf.Rout: est_cuminf.R %.simulate.rda %.rda
+	$(pipeRcall)
+
+
+impmakeR += plot_cuminf
+
+# low.plot_cuminf.Rout: plot_cuminf.R
+%.plot_cuminf.Rout: plot_cuminf.R %.est_cuminf.rda parameters.rda
+	$(pipeRcall)
+
 
 plot_tikz.Rout: plot_cuminf.rda
 	$(pipeRcall)

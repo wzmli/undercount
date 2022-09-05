@@ -2,6 +2,9 @@ library(McMasterPandemic)
 library(tidyverse)
 library(shellpipes)
 rpcall("est_cuminf.Rout est_cuminf.R simulate.rda parameters.rda")
+rpcall("high.est_cuminf.Rout est_cuminf.R high.simulate.rda high.rda")
+rpcall("med.est_cuminf.Rout est_cuminf.R med.simulate.rda med.rda")
+rpcall("low.est_cuminf.Rout est_cuminf.R low.simulate.rda low.rda")
 loadEnvironments()
 
 ## 
@@ -18,7 +21,7 @@ dat0 <- (simdat
 	%>% filter(I > I0)
    %>% mutate(NULL
 		, truecuminc = cumsum(incidence)
-      , report = c_prop*incidence 
+      , report = new_c_prop*incidence 
       , ht = htfun(report)
       , cumreport = cumsum(report)
       , htfill = ifelse(is.na(ht),0,ht)
