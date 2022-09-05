@@ -3,7 +3,7 @@ title: "Evaluating undercounts in epidemics"
 output:
   pdf_document
 date: "`r format(Sys.Date(), '%d %B %Y')`"
-author: Michael Li, Jonathan Dushoff, David J. D. Earn, and Ben Bolker"
+author: "Michael Li, Jonathan Dushoff, David J. D. Earn, and Ben Bolker"
 bibliography: undercount.bib
 header-includes:
   - \usepackage[utf8]{inputenc}
@@ -54,7 +54,7 @@ This shows that the number of hidden counts will be estimated to depend on the g
 
 More generally, looking at the form of the expression $[\Delta N(t)]^2/\Delta N(t - 1)$, we can see that the undercount will *always* be taken equal to the rate of acceleration of observed cases ($\Delta N(t)/\Delta N(t-1)$) times the number of new cases $\Delta N(t)$, so undercounting will always be assumed to be large (proportional to observed cases) at the beginning of the epidemic and continuously decreasing toward the end.
 
-## Simulation example (SIR)
+### Simulation example (SIR model)
 
 ```{r get_pars, echo=FALSE}
 ## Next two lines don't work
@@ -68,9 +68,6 @@ pct <- function(x) round(100*x)
 ```
 
 Simulating a simple SIR epidemic with a constant ascertainment rate `r 100*c_prop`% (i.e., an  underreporting level of $(1-a)/a \cdot 100 = `r pct((1-c_prop)/c_prop)`$%) and applying the formula (Figure 1) incorrectly concludes that cases are underreported by an average of `r pct(summ[["mean"]])`% (minimum, `r pct(summ[["min"]])`%; maximum `r pct(summ[["max"]])`%).
-
-**fixme (Mike) simplify model as suggested [here](https://github.com/wzmli/undercount/issues/1) so there are no hidden/undescribed complexities?**
-
 
 ![Simulated SIR epidemic with ${\cal R}_0 = `r beta/gamma`$, infectious period of `r 1/gamma` days, $N = `r N`$, and ascertainment rate of `r 100*c_prop`%  (undercounting fraction `r (1-c_prop)/c_prop`%).](plot_cuminf.Rout.pdf)
 
