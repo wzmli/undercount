@@ -1,8 +1,8 @@
 library(McMasterPandemic)
 library(shellpipes)
 rpcall("simulate.Rout simulate.R model_definition.rda")
-rpcall("high.simulate.Rout simulate.R model_definition.rda high.rda")
 rpcall("med.simulate.Rout simulate.R model_definition.rda med.rda")
+rpcall("high.simulate.Rout simulate.R model_definition.rda high.rda")
 rpcall("low.simulate.Rout simulate.R model_definition.rda low.rda")
 
 loadEnvironments()

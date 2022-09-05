@@ -58,7 +58,7 @@ impmakeR += est_cuminf
 
 impmakeR += plot_cuminf
 
-# low.plot_cuminf.Rout: plot_cuminf.R
+# high.plot_cuminf.Rout: plot_cuminf.R
 %.plot_cuminf.Rout: plot_cuminf.R %.est_cuminf.rda parameters.rda
 	$(pipeRcall)
 
