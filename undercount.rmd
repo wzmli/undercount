@@ -27,6 +27,10 @@ but the bias-correction ($\pm 1$) terms don't change our basic critique of the m
 
 The logic is hard to understand here. Why are cases identified at time $t-1$ representative of the number of cases counted twice? The fact that the same individual *could* be counted twice in the cumulative case report (for some sampling designs) is not relevant. How can comparing yesterday's count to today's provide information about the completeness of sampling, or anything other than the rate of growth of the epidemic? Public health case reporting is typically unrelated to mark-recapture (although there are applications in contact tracing: @lerdsuwansriSensitivity2022, @polonskyNovel2022). Furthermore, case reports are often exclusive (i.e. someone who has been reported as a case will not be tested again), *or* are anonymous so that we cannot identify whether a particular case/infected individual was double-counted or not.
 
+
+----------------------------------------------------------------------
+
+
 Suppose we have an epidemic that is growing exponentially. In the epidemic phase, the various measures of current epidemic size (incidence, prevalence, cumulative incidence, etc.) *all* grow exponentially, or geometrically if we're sampling in discrete time. Suppose $I(t)$ ("new cases" or incidence) is growing at a geometric rate $R$ per time step, i.e. $I(t) = I(0) R^t$, and suppose we are sampling a fraction $a$ (for "ascertainment") of the incidence. Again for simplicity, we'll see how the simple/non-bias-corrected estimate, without death, works out:
 
 $$
@@ -52,9 +56,7 @@ options(digits = 2)
 
 Here is a simulated SIR epidemic with ${\cal R}_0 = `r beta/gamma`$, infectious period of `r 1/gamma` days, and ascertainment rate of `r 100*c_prop`% (which means that the proportion of "hidden" cases is $(1-a)/a = `r (1-c_prop)/c_prop`$):
 
-```{r get_plot, echo = FALSE, out.height = "4in"}
-knitr::include_graphics("plot_cuminf.Rout.pdf")
-```
+\includegraphics{"plot_cuminf.Rout.pdf"}
 
 ## references
 
