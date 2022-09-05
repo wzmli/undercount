@@ -19,7 +19,7 @@ simdat <- (simdat
 
 print(head(simdat))
 
-dat <- (simdat
+dat0 <- (simdat
     %>% mutate(NULL
              , truecuminc = cumsum(incidence)
              , report = ifelse(is.na(conv_incidence),0,conv_incidence)
@@ -29,13 +29,22 @@ dat <- (simdat
              , cumht = cumsum(htfill)
              , estcuminc = cumreport+cumht
                )
-	%>% select(Date, cumreport, truecuminc, estcuminc, htfrac)
-	%>% pivot_longer(!Date, names_to = "type", values_to = "value")
+    %>% select(Date, cumreport, truecuminc, estcuminc, htfrac)
+)
+
+dat <- (dat0
+    %>% pivot_longer(!Date, names_to = "type", values_to = "value")
 )
 
 print(dat)
 
-saveVars(dat)
+summ <- with(dat0,
+             c(min = min(htfrac, na.rm = TRUE),
+               max = max(htfrac, na.rm = TRUE),
+               mean = mean(htfrac, na.rm  = TRUE))
+             )
+
+saveVars(dat, summ)
 
 
 

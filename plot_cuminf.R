@@ -19,16 +19,16 @@ dat_cum <- (dat
                       ))
 )
 
-gg_cum <- (ggplot(dat_cum, aes(Date,y=value,color=type))
+gg_cum <- (ggplot(dat_cum, aes(Date,y=value/1e5, color=type))
     + geom_line()
-    + ylab("Cumulative Count")
+    + ylab("Cumulative count (× 100,000)")
     + theme_bw()
     + theme(legend.position = "none")
     + geom_dl(method = list(dl.trans(x = x + 0.1),
                             "last.bumpup"),
               aes(label = type))
     ## hack to expand limits for direct labels
-    + expand_limits(x = max(dat$Date) + 60, y = max(dat$value*1.2))
+    + expand_limits(x = max(dat$Date) + 60, y = 11)
     + scale_colour_brewer(palette = "Dark2")
 )
 

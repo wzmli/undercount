@@ -1,13 +1,18 @@
 ---
-title: "evaluating undercounts in epidemics"
+title: "Evaluating undercounts in epidemics"
 output:
   pdf_document
 date: "`r format(Sys.Date(), '%d %B %Y')`"
-author: Mike Li and Ben Bolker"
+author: Michael Li, Jonathan Dushoff, David J. D. Earn, and Ben Bolker"
 bibliography: undercount.bib
 header-includes:
   - \usepackage[utf8]{inputenc}
+urlcolor: blue
 ---
+
+## Introduction
+
+Two papers (@bohningEstimating2020 and @maruottiEstimating2022) have promoted a formula that claims  to estimate the completeness of sampling of an infectious disease epidemic, using only case reporting counts. We believe this formula is fundamentally wrong, and that it is impossible to estimate undercounting without some kind of auxiliary information.
 
 From @bohningEstimating2020:
 
@@ -19,33 +24,37 @@ Or from @maruottiEstimating2022:
 
 > We will denote with $N(t)$ the cumulative count of infections at week $t$ where $t = t_0, \dots, t_m$. Hence $\Delta N (t) = N(t) -N(t-1)$ are the number of  new  infections at week $t$ where $t = t_0, t_1,  \dots t_m$ ... Here $\Delta N(t)$ corresponds to the infected people identified just once, and $\Delta N(t-1)$  is the  number  of  those  identified  twice. 
 
-Here the full bias-corrected expression (without a death term), eq 1 in the paper, is
+In this paper the full bias-corrected expression (without a death term) (eq 1) is given as
+
 \[
-\frac{\Delta N(t) (\Delta N(t) - 1)}{1 + \Delta N(t-1)}
+\frac{\Delta N(t) (\Delta N(t) - 1)}{1 + \Delta N(t-1)} ;
 \]
-but the bias-correction ($\pm 1$) terms don't change our basic critique of the method.
 
-The logic is hard to understand here. Why are cases identified at time $t-1$ representative of the number of cases counted twice? The fact that the same individual *could* be counted twice in the cumulative case report (for some sampling designs) is not relevant. How can comparing yesterday's count to today's provide information about the completeness of sampling, or anything other than the rate of growth of the epidemic? Public health case reporting is typically unrelated to mark-recapture (although there are applications in contact tracing: @lerdsuwansriSensitivity2022, @polonskyNovel2022). Furthermore, case reports are often exclusive (i.e. someone who has been reported as a case will not be tested again), *or* are anonymous so that we cannot identify whether a particular case/infected individual was double-counted or not.
+the additional bias-correction ($\pm 1$) terms don't change our basic critique of the method.
 
+## Critique
 
-----------------------------------------------------------------------
+This logic doesn't make sense. Why are cases identified at time $t-1$ representative of the number of cases counted twice? The fact that the same individual *could* be counted twice in the cumulative case report (for some sampling designs) is not relevant. How can comparing yesterday's count to today's provide information about the completeness of sampling, or anything other than the rate of growth of the epidemic? 
 
+In principle, it is possible to estimate "observability" or "catchability" if individuals are marked so they can be re-identified, or even with unmarked individuals given an appropriate sampling design [@royleHierarchical2008]. However, public health case reporting is typically unrelated to mark-recapture (although it can be used to estimate completeness of contact tracing: @lerdsuwansriSensitivity2022, @polonskyNovel2022). Furthermore, in practice case reports are often exclusive (i.e. someone who has been identified as a case will not be reported again later), *or* are anonymous so that we cannot identify whether a particular case/infected individual was double-counted or not.
 
-Suppose we have an epidemic that is growing exponentially. In the epidemic phase, the various measures of current epidemic size (incidence, prevalence, cumulative incidence, etc.) *all* grow exponentially, or geometrically if we're sampling in discrete time. Suppose $I(t)$ ("new cases" or incidence) is growing at a geometric rate $\lambda$ per time step, i.e. $I(t) = I(0) \lambda^t$, and suppose we are sampling a fraction $a$ (for "ascertainment") of the incidence. Again for simplicity, we'll see how the simple/non-bias-corrected estimate, without death, works out:
+### Exponential example
+Suppose we have an epidemic that is growing exponentially. In the epidemic phase, the various measures of current epidemic size (incidence, prevalence, cumulative incidence, etc.) all grow exponentially, or geometrically if we sample in discrete time. Suppose $I(t)$ ("new cases" or incidence) is growing at a geometric rate $\lambda$ per time step, i.e. $I(t) = I(0) \lambda^t$, and suppose we are sampling a fraction $a$ (for "ascertainment") of the incidence. Again for simplicity, we'll see how the simple/non-bias-corrected estimate, without death or recovery, works out:
 
 $$
 \begin{split}
 H(t) & = \frac{[\Delta N(t)]^2}{\Delta N(t - 1)} \\
 & = \frac{a^2 I(0)^2 \lambda^{2t}}{a I(0) \lambda^{t-1}} \\
-& = a I(0) \lambda^{t+1}
+& = a I(0) \lambda^{t+1} \\
+& = a \lambda I(t)
 \end{split}
 $$
 
-<Sentence about how this is not at all what we are trying to do>
+This shows that the number of hidden counts will be estimated to depend on the growth rate $\lambda$ as well as the ascertainment ratio $a$ --- not what we wanted.
 
-More generally, just looking at the form of the expression $[\Delta N(t)]^2/\Delta N(t - 1)$, we can see that the undercount will *always* be taken equal to the rate of acceleration of observed cases ($\Delta N(t)/\Delta N(t-1)$) times the number of new cases $\Delta N(t)$, so undercounting will always be assumed to be large (proportional to observed cases) at the beginning of the epidemic and continuously decreasing toward the end.
+More generally, looking at the form of the expression $[\Delta N(t)]^2/\Delta N(t - 1)$, we can see that the undercount will *always* be taken equal to the rate of acceleration of observed cases ($\Delta N(t)/\Delta N(t-1)$) times the number of new cases $\Delta N(t)$, so undercounting will always be assumed to be large (proportional to observed cases) at the beginning of the epidemic and continuously decreasing toward the end.
 
-## example
+## Simulation example (SIR)
 
 ```{r get_pars, echo=FALSE}
 ## Next two lines don't work
@@ -53,12 +62,19 @@ More generally, just looking at the form of the expression $[\Delta N(t)]^2/\Del
 ## library(shellpipes)
 ## loadEnvironments()
 load("parameters.rda")
+load("est_cuminf.rda")
 options(digits = 2)
+pct <- function(x) round(100*x)
 ```
 
-Here is a simulated SIR epidemic with ${\cal R}_0 = `r beta/gamma`$, infectious period of `r 1/gamma` days, and ascertainment rate of `r 100*c_prop`% (which means that the proportion of "hidden" cases is $(1-a)/a = `r (1-c_prop)/c_prop`$):
+Simulating a simple SIR epidemic with a constant ascertainment rate `r 100*c_prop`% (i.e., an  underreporting level of $(1-a)/a \cdot 100 = `r pct((1-c_prop)/c_prop)`$%) and applying the formula (Figure 1) incorrectly concludes that cases are underreported by an average of `r pct(summ[["mean"]])`% (minimum, `r pct(summ[["min"]])`%; maximum `r pct(summ[["max"]])`%).
 
-\includegraphics{"plot_cuminf.Rout.pdf"}
+**fixme (Mike) simplify model as suggested [here](https://github.com/wzmli/undercount/issues/1) so there are no hidden/undescribed complexities?**
 
-## references
+
+![Simulated SIR epidemic with ${\cal R}_0 = `r beta/gamma`$, infectious period of `r 1/gamma` days, $N = `r N`$, and ascertainment rate of `r 100*c_prop`%  (undercounting fraction `r (1-c_prop)/c_prop`%).](plot_cuminf.Rout.pdf)
+
+We conclude that the authors' suggested formula is invalid.
+
+## References
 
