@@ -22,6 +22,7 @@ undercount.pdf: undercount.rmd parameters.rda plot_all_estimates.pdf
 	$(knitpdf)
 
 ## Stupid work-around for knitr error
+Ignore += plot_all_estimates.pdf
 %.pdf: %.Rout.pdf
 	$(copy)
 
