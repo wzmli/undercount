@@ -34,11 +34,11 @@ the bias-correction ($\pm 1$) terms don't affect the critique below.
 
 This approach is not an appropriate application of these mark-recapture formulas. Why are cases identified at time $t-1$ representative of the number of cases counted twice? The fact that the same individual *could* be counted twice in the cumulative case report (for some sampling designs) is not relevant. How can comparing yesterday's count to today's provide information about the completeness of sampling, or anything other than the rate of growth of the epidemic? 
 
-JD: I would simplify the following \P\ drastically. The first three cites are all about things that they are not doing. Is it an attempt at pre-emption?
-
-In principle, it is possible to estimate "observability" or "catchability" if individuals are marked so they can be re-identified, or even with unmarked individuals given an appropriate sampling design [@royleHierarchical2008]. However, public health case reporting is typically unrelated to mark-recapture (although it can be used to estimate completeness of contact tracing: @lerdsuwansriSensitivity2022, @polonskyNovel2022). Furthermore, in practice case reports are often exclusive (i.e. someone who has been identified as a case will not be reported again later), *or* are anonymous so that we cannot identify whether a particular case/infected individual was double-counted or not.
+In principle, it is possible to estimate the number of unobserved individuals (hidden cases) if individuals can be re-identified when observed a second time, or even with unmarked individuals given an appropriate sampling design [@royleHierarchical2008]. 
+<!--- However, public health case reporting is typically unrelated to mark-recapture (although it can be used to estimate completeness of contact tracing: @lerdsuwansriSensitivity2022, @polonskyNovel2022). Furthermore, --> In practice public health case reporting does not use such sampling designs. Case reporting is usually exclusive (i.e. someone who has been identified as a case will not be reported again later) and/or anonymized so that we cannot identify whether a particular case/infected individual was double-counted or not.
 
 ### Exponential example
+
 Suppose we have an epidemic that is growing exponentially. In the epidemic phase, the various measures of current epidemic size (incidence, prevalence, cumulative incidence, etc.) all grow exponentially, or geometrically if we sample in discrete time. Suppose $I(t)$ ("new cases" or incidence) is growing at a geometric rate $\lambda$ per time step, i.e. $I(t) = I(0) \lambda^t$, and suppose we are sampling a fraction $a$ (for "ascertainment") of the incidence. Again for simplicity, we'll see how the simple/non-bias-corrected estimate, without death or recovery, works out:
 
 $$
@@ -50,18 +50,17 @@ H(t) & = \frac{[\Delta N(t)]^2}{\Delta N(t - 1)} \\
 \end{split}
 $$
 
-This shows that the number of hidden counts will be estimated to depend on the growth rate $\lambda$ as well as the ascertainment ratio $a$ --- not what we wanted.
+This shows that the estimated number of hidden counts depends on the growth rate $\lambda$ as well as the ascertainment ratio $a$ --- not what we wanted. The "undercount ratio" $H(t)/\Delta N(t) = H(t)/(a I(t)) = \lambda$ is independent of the ascertainment ratio.
 
-Furthermore, this implies the true incidence is:
-
+Furthermore, the estimated total incidence is:
 $$
 \begin{split}
-\bf{I(t)} & = \Delta N(t) + H(t) \\
+\textrm{inc}(t) & = \Delta N(t) + H(t) \\
 & = aI(t) + a \lambda I(t) \\
 & = aI(t)(1+\lambda) 
 \end{split}
 $$
-where $1 + \lambda$ is the proposed estimate of the ratio of total to observed case, which is independent of $a$. 
+so the estimated ratio of total to observed cases $\textrm{inc}(t)/\Delta N(t) = (1+ \lambda)$ is again independent of $a$. 
 
 More generally, looking at the form of the expression $[\Delta N(t)]^2/\Delta N(t - 1)$, we can see that the undercount will *always* be equal to the rate of acceleration of observed cases ($\Delta N(t)/\Delta N(t-1)$) times the number of new cases $\Delta N(t)$, so undercounting will always be assumed to be large (proportional to observed cases) when disease incidence is increasing, and small when incidence is decreasing.
 
@@ -75,10 +74,18 @@ pct <- function(x) round(100*x)
 ```
 
 The Figure illustrates the predicted behaviour.
-We simulate a simple SIR epidemic with a constant ascertainment rate `r 100*c_prop`% (i.e., an  underreporting level of $(1-a)/a \cdot 100 = `r pct((1-c_prop)/c_prop)`$%), and apply the authors' formula. 
+
+<!-- We simulate a simple SIR epidemic with a constant ascertainment rate `r 100*c_prop`% (i.e., an  underreporting level of $(1-a)/a \cdot 100 = `r pct((1-c_prop)/c_prop)`$%), and apply the authors' formula. 
 JD: we should do another simulation with a different ascertainment rate. The last s. can then highlight that the calculated quantity responds to epidemic dynamics, but not to ascertainment rate.
 
 MLi: Done. 
+
+-->
+
+```{r summ_hack, echo = FALSE}
+## just here so next bit renders
+summ <- c(mean = NA, min = NA, max = NA)
+```
 
 [orphan text:] leads to the incorrect conclusion that cases are underreported by an average of `r pct(summ[["mean"]])`% (minimum, `r pct(summ[["min"]])`%; maximum `r pct(summ[["max"]])`%).
 

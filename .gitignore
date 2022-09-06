@@ -11,3 +11,4 @@ makestuff/
 *.aux
 *.oldfile
 *.rtmp
+*.out
