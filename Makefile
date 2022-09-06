@@ -18,8 +18,12 @@ autopipeR = defined
 
 Ignore += undercount.pdf
 Sources += undercount.rmd
-undercount.pdf: undercount.rmd parameters.rda
+undercount.pdf: undercount.rmd parameters.rda plot_all_estimates.pdf
 	$(knitpdf)
+
+## Stupid work-around for knitr error
+%.pdf: %.Rout.pdf
+	$(copy)
 
 parameters.Rout: parameters.R
 	$(pipeR)
@@ -32,6 +36,9 @@ model_definition.Rout: model_definition.R parameters.rda states.rda
 
 
 ## Setting up different parameters
+
+ascScen = low medium high
+estScen = $(ascScen:%=%.estimate.rda)
 
 high.Rout: high.R
 	$(pipeR)
@@ -62,9 +69,6 @@ impmakeR += plot_estimate
 
 plot_tikz.Rout: plot_estimate.rda
 	$(pipeR)
-
-ascScen = low medium high
-estScen = $(ascScen:%=%.estimate.rda)
 
 plot_all_estimates.Rout: plot_all_estimates.R
 plot_all_estimates.Rout: $(estScen)

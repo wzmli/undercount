@@ -1,6 +1,12 @@
 library(tidyverse)
+library(ggplot2);theme_set(theme_bw(base_size=14))
+library(directlabels)
+library(cowplot)
 
 library(shellpipes)
+rpcall("plot_all_estimates.Rout plot_all_estimates.R low.estimate.rda medium.estimate.rda high.estimate.rda")
+
+startGraphics(width = 8, height = 4)
 
 el <- loadEnvironmentList(trim=".estimate.*")
 
@@ -8,4 +14,42 @@ dat <- el %>% map(~ .x[["dat"]]) %>% bind_rows(.id="Scenario")
 
 summary(dat)
 summary(dat %>% mutate_if(is.character, as.factor))
+
+summ <- el %>% map(~ .x[["dat"]]) %>% bind_rows(.id="Scenario")
+summary(summ)
+
+dat_cum <- (dat
+    %>% filter(type != "htfrac")
+    %>% mutate(across(type, factor,
+                      levels = c("cumreport", "truecuminc",
+                                 "estcuminc"),
+                      labels = c("reported\ncases",
+                                 "true\ncases",
+                                 "estimated\ncases")
+                      ))
+)
+
+gg_cum <- (ggplot(dat_cum, aes(Date,y=value/1e5, color=type))
+    + geom_line()
+    + ylab("Cumulative count (× 100,000)")
+    + theme_bw()
+    + theme(legend.position = "none")
+    + geom_dl(method = list(dl.trans(x = x + 0.1),
+                            "last.bumpup"),
+              aes(label = type))
+    ## hack to expand limits for direct labels
+    + expand_limits(x = max(dat$Date) + 60, y = 8)
+    + scale_colour_brewer(palette = "Dark2")
+)
+
+dat_prop <- filter(dat, type == "htfrac")
+gg_prop <- (ggplot(dat_prop, aes(Date, value))
+    + geom_line()
+    + labs(x = "Date", y = "underreporting fraction")
+    ## + geom_hline(yintercept = (1-c_prop)/c_prop, lty = 2)
+)
+
+plot_grid(gg_cum, gg_prop, labels=pipeStar())
+
+saveVars(gg_cum, gg_prop)
 

@@ -7,6 +7,7 @@ author: "Michael Li, Jonathan Dushoff, David J. D. Earn, and Ben Bolker"
 bibliography: undercount.bib
 header-includes:
   - \usepackage[utf8]{inputenc}
+  - \usepackage{grffile}
 urlcolor: blue
 ---
 
@@ -75,16 +76,10 @@ pct <- function(x) round(100*x)
 ```
 
 The Figure illustrates the predicted behaviour.
-We simulate a simple SIR epidemic with a constant ascertainment rate `r 100*c_prop`% (i.e., an  underreporting level of $(1-a)/a \cdot 100 = `r pct((1-c_prop)/c_prop)`$%), and apply the authors' formula. 
-JD: we should do another simulation with a different ascertainment rate. The last s. can then highlight that the calculated quantity responds to epidemic dynamics, but not to ascertainment rate.
 
-MLi: Done. 
-
-[orphan text:] leads to the incorrect conclusion that cases are underreported by an average of `r pct(summ[["mean"]])`% (minimum, `r pct(summ[["min"]])`%; maximum `r pct(summ[["max"]])`%).
-
-![Simulated SIR epidemic with ${\cal R}_0 = `r beta/gamma`$, infectious period of `r 1/gamma` days, $N = `r N`$, and ascertainment rate of `r 100*c_prop`%  (undercounting fraction `r (1-c_prop)/c_prop`%).](plot_cuminf.Rout.pdf)
-
-MLi: Pipeline the plot?
+```{r get_plot, echo = FALSE, out.height = "4in"}
+knitr::include_graphics(matchFile(exts="pdf"))
+```
 
 We conclude that the authors' suggested formula should not be applied to disease outbreak incidence data.
 
