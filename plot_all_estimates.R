@@ -34,17 +34,36 @@ dat_cum <- (dat
     %>% replace_scenario()
 )
 
-gg_cum <- (ggplot(dat_cum, aes(Date,y=value/1e5, color=type, linetype = Scenario))
-    + geom_line()
+ddtrue <- (dat_cum
+	%>% filter(type == "true")
+	%>% mutate(type = as.character(type))
+)
+
+print(ddtrue)
+
+dat_cum2 <- (dat_cum
+	%>% filter(type != "true")
+	%>% mutate(type = factor(type,levels=c("estimated","reported"))
+	)
+)
+
+print(dat_cum2)
+
+#gg_cum <- (ggplot(dat_cum, aes(Date,y=value/1e5, color=type, linetype = Scenario))
+gg_cum <- (ggplot(dat_cum2, aes(Date,y=value/1e5))
+	 + geom_line(aes(color=Scenario,linetype=type))
+	 + scale_linetype_manual(values=c("dashed","solid"))
     + ylab("Cumulative count (× 100,000)")
     + theme_bw()
     + theme(legend.position = c(0.2,0.6))
+	 + xlim(as.Date(c("2022-01-01","2022-07-01")))
     ## + geom_dl(method = list(dl.trans(x = x + 0.1),
     ## "last.bumpup"),
     ## aes(label = type))
     ## hack to expand limits for direct labels
     ## + expand_limits(x = max(dat$Date) + 60, y = 8)
     + colorblindr::scale_colour_OkabeIto()
+	+ geom_line(data=ddtrue,aes(Date,y=value/1e5),size=1.5,color="black",guide=FALSE)
 )
 
 dat_prop <- (dat
@@ -55,16 +74,17 @@ dat_prop <- (dat
 true_prop <- (tibble(Scenario = names(c_prop), value = c_prop)
     %>% replace_scenario())
 
-gg_prop <- (ggplot(dat_prop, aes(Date, value, linetype = Scenario))
-    + geom_line()
+gg_prop <- (ggplot(dat_prop, aes(Date, value, color = Scenario))
+    + geom_line(linetype = "dashed")
     + labs(x = "Date", y = "underreporting fraction")
     + geom_hline(data = true_prop,
-                 colour = "blue",
-                 aes(yintercept = (1-value)/value, linetype = Scenario))
+    #             colour = "blue",
+                 aes(yintercept = (1-value)/value, color = Scenario))
     + theme(legend.position = c(0.2,0.6))
+    + colorblindr::scale_colour_OkabeIto()
 )
 
 plot_grid(gg_cum, gg_prop)
 
-saveVars(gg_cum, gg_prop, summ)
+saveVars(gg_cum, gg_prop)
 
