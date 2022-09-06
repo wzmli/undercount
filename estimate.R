@@ -1,10 +1,9 @@
 library(McMasterPandemic)
 library(tidyverse)
 library(shellpipes)
-rpcall("est_cuminf.Rout est_cuminf.R simulate.rda parameters.rda")
-rpcall("med.est_cuminf.Rout est_cuminf.R med.simulate.rda med.rda")
-rpcall("high.est_cuminf.Rout est_cuminf.R high.simulate.rda high.rda")
-rpcall("low.est_cuminf.Rout est_cuminf.R low.simulate.rda low.rda")
+rpcall("medium.estimate.Rout estimate.R medium.simulate.rda medium.rda")
+rpcall("low.estimate.Rout estimate.R low.simulate.rda low.rda")
+rpcall("high.estimate.Rout estimate.R high.simulate.rda high.rda")
 loadEnvironments()
 
 ## 

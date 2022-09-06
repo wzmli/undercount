@@ -18,53 +18,58 @@ autopipeR = defined
 
 Ignore += undercount.pdf
 Sources += undercount.rmd
-undercount.pdf: undercount.rmd parameters.rda est_cuminf.rda plot_cuminf.Rout.pdf
+undercount.pdf: undercount.rmd parameters.rda
 	$(knitpdf)
 
 parameters.Rout: parameters.R
-	$(pipeRcall)
+	$(pipeR)
 
 states.Rout: states.R parameters.rda
-	$(pipeRcall)
+	$(pipeR)
 
 model_definition.Rout: model_definition.R parameters.rda states.rda
-	$(pipeRcall)
+	$(pipeR)
 
 
 ## Setting up different parameters
 
 high.Rout: high.R
-	$(pipeRcall)
+	$(pipeR)
 
-med.Rout: med.R
-	$(pipeRcall)
+medium.Rout: medium.R
+	$(pipeR)
 
 low.Rout: low.R
-	$(pipeRcall)
+	$(pipeR)
 
 impmakeR += simulate
 
 
 # high.simulate.Rout: simulate.R model_definition.R
 %.simulate.Rout: simulate.R model_definition.rda %.rda
-	$(pipeRcall)
+	$(pipeR)
 
-impmakeR += est_cuminf
+impmakeR += estimate
 
-# high.est_cuminf.Rout: est_cuminf.R
-%.est_cuminf.Rout: est_cuminf.R %.simulate.rda %.rda
-	$(pipeRcall)
+# high.estimate.Rout: estimate.R
+%.estimate.Rout: estimate.R %.simulate.rda %.rda
+	$(pipeR)
 
+impmakeR += plot_estimate
+# high.plot_estimate.Rout: plot_estimate.R
+%.plot_estimate.Rout: plot_estimate.R %.estimate.rda parameters.rda
+	$(pipeR)
 
-impmakeR += plot_cuminf
+plot_tikz.Rout: plot_estimate.rda
+	$(pipeR)
 
-# high.plot_cuminf.Rout: plot_cuminf.R
-%.plot_cuminf.Rout: plot_cuminf.R %.est_cuminf.rda parameters.rda
-	$(pipeRcall)
+ascScen = low medium high
+estScen = $(ascScen:%=%.estimate.rda)
 
+plot_all_estimates.Rout: plot_all_estimates.R
+plot_all_estimates.Rout: $(estScen)
 
-plot_tikz.Rout: plot_cuminf.rda
-	$(pipeRcall)
+plot_all.Rout: high.estimate
 
 ### Makestuff
 
