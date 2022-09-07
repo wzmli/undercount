@@ -52,16 +52,6 @@ $$
 
 This shows that the estimated number of hidden counts depends on the growth rate $\lambda$ as well as the ascertainment fraction $a$ --- not what we wanted. The "undercount ratio" $H(t)/\Delta N(t) = H(t)/(a I(t)) = \lambda$ is independent of the ascertainment fraction.
 
-Furthermore, the estimated total incidence is:
-$$
-\begin{split}
-\textrm{inc}(t) & = \Delta N(t) + H(t) \\
-& = aI(t) + a \lambda I(t) \\
-& = aI(t)(1+\lambda) 
-\end{split}
-$$
-so the estimated ratio of incidence to observed cases $\textrm{inc}(t)/\Delta N(t) = (1+ \lambda)$ is again independent of $a$. 
-
 More generally, looking at the form of the expression $[\Delta N(t)]^2/\Delta N(t - 1)$, we can see that the undercount will always be equal to the rate of acceleration of observed cases ($\Delta N(t)/\Delta N(t-1)$) times the number of new cases $\Delta N(t)$, so undercounting will always be assumed to be large (proportional to observed cases) when disease incidence is increasing, and small when incidence is decreasing.
 
 ### Simulation example (SIR model)
