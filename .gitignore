@@ -3,7 +3,7 @@
 *.Rout.pdf
 *.mk
 *.rda
-*.Rout.args
+*.args
 makestuff/
 *~
 \#*
@@ -12,3 +12,5 @@ makestuff/
 *.oldfile
 *.rtmp
 *.out
+\.new
+\.#*

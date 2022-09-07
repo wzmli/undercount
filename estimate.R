@@ -1,7 +1,6 @@
 library(McMasterPandemic)
 library(tidyverse)
 library(shellpipes)
-rpcall("medium.estimate.Rout estimate.R medium.simulate.rda medium.rda")
 rpcall("low.estimate.Rout estimate.R low.simulate.rda low.rda")
 rpcall("high.estimate.Rout estimate.R high.simulate.rda high.rda")
 loadEnvironments()
@@ -17,21 +16,27 @@ htfun <- function(n){
 print(head(simdat))
 
 dat0 <- (simdat
-	%>% filter(I > I0)
-   %>% mutate(NULL
+    %>% mutate(NULL
 		, truecuminc = cumsum(incidence)
       , report = new_c_prop*incidence 
       , ht = htfun(report)
       , cumreport = cumsum(report)
       , htfill = ifelse(is.na(ht),0,ht)
+        ## ratio of estimated hidden to observed
       , htfrac = ht/report
+        ## ratio of estimated hidden to true missed cases
+      , htcorr = ht/(incidence-report)
       , cumht = cumsum(htfill)
       , estcuminc = cumreport+cumht
 	)
+    %>% filter(report > 1)
+)
+
+dat1 <- (dat0
    %>% select(Date, cumreport, truecuminc, estcuminc, htfrac)
 )
 
-dat <- (dat0
+dat <- (dat1
     %>% pivot_longer(!Date, names_to = "type", values_to = "value")
 )
 
@@ -43,7 +48,4 @@ summ <- with(dat0,
                mean = mean(htfrac, na.rm  = TRUE))
              )
 
-saveVars(dat, summ)
-
-
-
+saveVars(dat, summ, new_c_prop)

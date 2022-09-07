@@ -38,7 +38,7 @@ model_definition.Rout: model_definition.R parameters.rda states.rda
 
 ## Setting up different parameters
 
-ascScen = low medium high
+ascScen = low high
 estScen = $(ascScen:%=%.estimate.rda)
 
 high.Rout: high.R

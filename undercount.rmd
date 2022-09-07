@@ -17,7 +17,7 @@ Two papers (@bohningEstimating2020 and @maruottiEstimating2022) have promoted a 
 
 From @bohningEstimating2020:
 
-> The idea is to apply [the Chao estimator] day-wise. We take an arbitrary day $t$. At this day we have $\Delta N(t)$ new infections. This will be viewed as $f_1$, the infected people identified just once. If we look at $\Delta N(t - 1)$, then this is the count of new infections the day before. But these will still be infected at day $t$ unless they decease. So, $f_2$ corresponds to $\Delta N(t - 1) - \Delta D(t)$. We can ignore the number of recoveries as we are looking at infections which are very recent (notified at day $t$ or $t - 1$). Hence we are able to give the estimate for the number of hidden infections at day $t$ as $H(t) = \frac{[\Delta N(t)]^2}{\Delta N(t - 1) - \Delta D(t)}$
+> The idea is to apply [the Chao estimator] day-wise. We take an arbitrary day $t$. At this day we have $\Delta N(t)$ new infections. This will be viewed as $f_1$, the infected people identified just once. If we look at $\Delta N(t - 1)$, then this is the count of new infections the day before. But these will still be infected at day $t$ unless they decease. So, $f_2$ [the number of infections counted twice] corresponds to $\Delta N(t - 1) - \Delta D(t)$. We can ignore the number of recoveries as we are looking at infections which are very recent (notified at day $t$ or $t - 1$). Hence we are able to give the estimate for the number of hidden infections at day $t$ as $H(t) = \frac{[\Delta N(t)]^2}{\Delta N(t - 1) - \Delta D(t)}$ \ldots
 
 Or from @maruottiEstimating2022:
 
@@ -40,18 +40,18 @@ In principle, it is possible to estimate the number of unobserved individuals (h
 
 ### Exponential example
 
-Suppose we have an epidemic that is growing exponentially. In the epidemic phase, the various measures of current epidemic size (incidence, prevalence, cumulative incidence, etc.) all grow exponentially, or geometrically if we sample in discrete time. Suppose $I(t)$ ("new cases" or incidence) is growing at a geometric rate $\lambda$ per time step, i.e. $I(t) = I(0) \lambda^t$, and suppose we are sampling a fraction $a$ (for "ascertainment") of the incidence. Again for simplicity, we'll see how the simple/non-bias-corrected estimate, without death or recovery, works out:
+Suppose an epidemic is growing exponentially. In the epidemic phase, the various measures of current epidemic size (incidence, prevalence, cumulative incidence, etc.) all grow exponentially, or geometrically if we sample in discrete time. Suppose $I(t)$ ("new cases" or incidence) is growing at a geometric rate $\lambda$ per time step, i.e. $I(t) = I(0) \lambda^t$, and suppose we are sampling a fraction $a$ (for "ascertainment") of the incidence. Again for simplicity, we'll compute the simple/non-bias-corrected estimate, without death or recovery:
 
 $$
 \begin{split}
 H(t) & = \frac{[\Delta N(t)]^2}{\Delta N(t - 1)} \\
 & = \frac{a^2 I(0)^2 \lambda^{2t}}{a I(0) \lambda^{t-1}} \\
 & = a I(0) \lambda^{t+1} \\
-& = a \lambda I(t)
+& = a \lambda I(t).
 \end{split}
 $$
 
-This shows that the estimated number of hidden counts depends on the growth rate $\lambda$ as well as the ascertainment ratio $a$ --- not what we wanted. The "undercount ratio" $H(t)/\Delta N(t) = H(t)/(a I(t)) = \lambda$ is independent of the ascertainment ratio.
+This shows that the estimated number of hidden counts depends on the growth rate $\lambda$ as well as the ascertainment fraction $a$ --- not what we wanted. The "undercount ratio" $H(t)/\Delta N(t) = H(t)/(a I(t)) = \lambda$ is independent of the ascertainment fraction.
 
 Furthermore, the estimated total incidence is:
 $$
@@ -61,9 +61,9 @@ $$
 & = aI(t)(1+\lambda) 
 \end{split}
 $$
-so the estimated ratio of total to observed cases $\textrm{inc}(t)/\Delta N(t) = (1+ \lambda)$ is again independent of $a$. 
+so the estimated ratio of incidence to observed cases $\textrm{inc}(t)/\Delta N(t) = (1+ \lambda)$ is again independent of $a$. 
 
-More generally, looking at the form of the expression $[\Delta N(t)]^2/\Delta N(t - 1)$, we can see that the undercount will *always* be equal to the rate of acceleration of observed cases ($\Delta N(t)/\Delta N(t-1)$) times the number of new cases $\Delta N(t)$, so undercounting will always be assumed to be large (proportional to observed cases) when disease incidence is increasing, and small when incidence is decreasing.
+More generally, looking at the form of the expression $[\Delta N(t)]^2/\Delta N(t - 1)$, we can see that the undercount will always be equal to the rate of acceleration of observed cases ($\Delta N(t)/\Delta N(t-1)$) times the number of new cases $\Delta N(t)$, so undercounting will always be assumed to be large (proportional to observed cases) when disease incidence is increasing, and small when incidence is decreasing.
 
 ### Simulation example (SIR model)
 
@@ -72,11 +72,15 @@ library(shellpipes)
 loadEnvironments()
 options(digits = 2)
 pct <- function(x) round(100*x)
+R0  <- round(beta/gamma,2)
+inf_per <- round(1/gamma,2)
 ```
 
-The Figure illustrates the predicted behaviour.
+We simulate a simple SIR epidemic in discrete time, apply two different ascertainment fractions to derive a time series of case reports, and apply the authors' formula (including bias corrections) to estimate the number of hidden cases.
+At the peak of the epidemic, when the number of cases is large, the method predicts the same ratio of hidden cases to observed case reports regardless of the ascertainment fraction; at the beginning and end of the epidemic, the bias correction makes underreporting appear lower in the lower-ascertainment scenario, when the number of reported cases is lower.
 
-```{r get_plot, echo = FALSE, out.height = "4in"}
+<!-- note N is hard-coded, too hard to format nicely/automatically -->
+```{r get_plot, echo = FALSE, out.height = "4in", fig.cap = sprintf('Simulated SIR epidemic with ${\\cal R}_0 = %1.1f$, infectious period of %1.2f days, $N = 10^6$. Left panel, cumulative numbers of reported and estimated-hidden cases along with true incidence (only one line appears because both scenarios have the same true incidence). Right panel, ratio of estimated (black) or true (blue) hidden cases to reported cases for each scenario.', R0, inf_per)}
 knitr::include_graphics(matchFile(exts="pdf"))
 ```
 
