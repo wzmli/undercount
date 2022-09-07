@@ -13,6 +13,6 @@ beta <- 0.4
 gamma <- 0.3
 
 # Reporting fraction
-c_prop <- 0.8
+rProp <- 0.8
 
 saveEnvironment()

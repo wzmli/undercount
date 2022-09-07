@@ -8,7 +8,7 @@ loadEnvironments()
 params = c(beta = beta
 	, gamma = gamma
 	, N = N
-	, c_prop = c_prop
+	, rProp = rProp
 )
 
 

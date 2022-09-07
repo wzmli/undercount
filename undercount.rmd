@@ -63,13 +63,13 @@ options(digits = 2)
 pct <- function(x) round(100*x)
 R0  <- round(beta/gamma,2)
 inf_per <- round(1/gamma,2)
-getstat <- function(scenario, stat, rnd = 3) as.numeric(round(summ[summ$Scenario == scenario, stat], rnd))
-c_prop <- c(high = getstat("high", "reportProp"), low = getstat("low", "reportProp"))
-true_frac <- (1-c_prop)/c_prop
+getstat <- function(scenario, stat, rnd = 3) round(summ[summ$Scenario == scenario, stat], rnd)
+rProp <- c(high = as.numeric(getstat("high", "reportProp")), low = as.numeric(getstat("low", "reportProp")))
+true_frac <- (1-rProp)/rProp
 ```
 
 We simulate a simple SIR epidemic in discrete time, apply two different ascertainment fractions to derive a time series of case reports, and apply the authors' formula (including bias corrections) to estimate the number of hidden cases (Figure 1).
-At the peak of the epidemic, when the number of cases is large, the method predicts the same ratio of hidden cases to observed case reports regardless of the ascertainment fraction; at the beginning and end of the epidemic, the bias correction makes underreporting appear lower in the lower-ascertainment scenario, when the number of reported cases is lower. In the high-ascertainment case ($a = `r c_prop[["high"]]`$) the true ratio of hidden to reported cases is `r true_frac[["high"]]`, but the average estimated ratio is `r getstat("high", "mean")` (range `r getstat("high", "min")` -- `r getstat("high", "max")`); in the low-ascertainment case ($a = `r c_prop[["low"]]`$) the true ratio is `r true_frac[["low"]]` and the mean estimate is `r getstat("low", "mean")` (range `r getstat("low", "min")` -- `r getstat("low", "max")`).
+At the peak of the epidemic, when the number of cases is large, the method predicts the same ratio of hidden cases to observed case reports regardless of the ascertainment fraction; at the beginning and end of the epidemic, the bias correction makes underreporting appear lower in the lower-ascertainment scenario, when the number of reported cases is lower. In the high-ascertainment case ($a = `r rProp[["high"]]`$) the true ratio of hidden to reported cases is `r true_frac[["high"]]`, but the average estimated ratio is `r getstat("high", "mean")` (range `r getstat("high", "min")` -- `r getstat("high", "max")`); in the low-ascertainment case ($a = `r rProp[["low"]]`$) the true ratio is `r true_frac[["low"]]` and the mean estimate is `r getstat("low", "mean")` (range `r getstat("low", "min")` -- `r getstat("low", "max")`).
 
 <!-- note N is hard-coded, too hard to format nicely/automatically -->
 ```{r get_plot, echo = FALSE, out.height = "4in", fig.cap = sprintf('Simulated SIR epidemic with ${\\cal R}_0 = %1.1f$, infectious period of %1.2f days, $N = 10^6$. Left panel, cumulative numbers of reported and estimated-hidden cases along with true incidence (only one line appears because both scenarios have the same true incidence). Right panel, ratio of estimated (dashed) or true (solid) hidden cases to reported cases for each scenario.', R0, inf_per)}

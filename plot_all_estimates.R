@@ -18,12 +18,12 @@ summary(dat %>% mutate_if(is.character, as.factor))
 summ <- el %>% map_dfr("summ", .id="Scenario")
 summary(summ)
 
-c_prop <- el %>% map_dbl("reportProp")
+rProp <- el %>% map_dbl("reportProp")
 
 hh <- c("high", "low")
 replace_scenario <- .  %>% mutate(across(Scenario, factor,
                       levels = hh,
-                      labels = sprintf("a = %1.1f", c_prop[hh])))
+                      labels = sprintf("a = %1.1f", rProp[hh])))
 
 dat_cum <- (dat
     %>% filter(type != "htfrac")
@@ -74,7 +74,7 @@ dat_prop <- (dat
     %>% replace_scenario()
 )
 
-true_prop <- (tibble(Scenario = names(c_prop), value = c_prop)
+true_prop <- (tibble(Scenario = names(rProp), value = rProp)
     %>% replace_scenario())
 
 ## FIXME: better to merge, make horizontal lines pseudo-data
