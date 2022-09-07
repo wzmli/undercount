@@ -26,17 +26,16 @@ Or from @maruottiEstimating2022:
 This latter paper does not use a death term, and gives the full bias-corrected expression (their eq 1) as
 
 \[
-\frac{\Delta N(t) (\Delta N(t) - 1)}{1 + \Delta N(t-1)} ;
+\frac{\Delta N(t) (\Delta N(t) - 1)}{1 + \Delta N(t-1)}.
 \]
-
-the bias-correction ($\pm 1$) terms don't affect the critique below.
 
 ## Critique
 
 This approach is not an appropriate application of these mark-recapture formulas. Why are cases identified at time $t-1$ representative of the number of cases counted twice? The fact that the same individual *could* be counted twice in the cumulative case report (for some sampling designs) is not relevant. How can comparing yesterday's count to today's provide information about the completeness of sampling, or anything other than the rate of growth of the epidemic? 
 
 In principle, it is possible to estimate the number of unobserved individuals (hidden cases) if individuals can be re-identified when observed a second time, or even with unmarked individuals given an appropriate sampling design [@royleHierarchical2008]. 
-<!--- However, public health case reporting is typically unrelated to mark-recapture (although it can be used to estimate completeness of contact tracing: @lerdsuwansriSensitivity2022, @polonskyNovel2022). Furthermore, --> In practice public health case reporting does not use such sampling designs. Case reporting is usually exclusive (i.e. someone who has been identified as a case will not be reported again later) and/or anonymized so that we cannot identify whether a particular case/infected individual was double-counted or not.
+<!--- However, public health case reporting is typically unrelated to mark-recapture (although it can be used to estimate completeness of contact tracing: @lerdsuwansriSensitivity2022, @polonskyNovel2022).  -->
+In practice public health case reporting does not use such sampling designs. Case reporting is usually exclusive (i.e. someone who has been identified as a case will not be reported again later) and/or anonymized so that we cannot identify whether a particular case/infected individual was double-counted or not.
 
 ### Exponential example
 
