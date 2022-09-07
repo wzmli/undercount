@@ -39,7 +39,7 @@ In practice public health case reporting does not use such sampling designs. Cas
 
 ### Exponential example
 
-Suppose an epidemic is growing exponentially. In the epidemic phase, the various measures of current epidemic size (incidence, prevalence, cumulative incidence, etc.) all grow exponentially, or geometrically if we sample in discrete time. Suppose $I(t)$ ("new cases" or incidence) is growing at a geometric rate $\lambda$ per time step, i.e. $I(t) = I(0) \lambda^t$, and suppose we are sampling a fraction $a$ (for "ascertainment") of the incidence. Again for simplicity, we'll compute the simple/non-bias-corrected estimate, without death or recovery:
+Suppose an epidemic is growing exponentially. In the epidemic phase, the various measures of current epidemic size (incidence, prevalence, cumulative incidence, etc.) all grow exponentially, or geometrically if we sample in discrete time. Suppose $I(t)$ ("new cases" or incidence) is growing at a geometric rate $\lambda$ per time step, i.e. $I(t) = I(0) \lambda^t$, and suppose we are sampling a fraction $a$ (for "ascertainment") of the incidence. For simplicity, we use the simple (non-bias-corrected) estimate, without death or recovery. The problems with the bias-corrected formula are similar, and we use that formula in our simulations.
 
 $$
 \begin{split}
@@ -74,9 +74,9 @@ pct <- function(x) round(100*x)
 R0  <- round(beta/gamma,2)
 inf_per <- round(1/gamma,2)
 ## FIXME: HOW CAN I PIPELINE THIS?
-c_prop <- c(high = 0.8, low = 0.2)
-true_frac <- (1-c_prop)/c_prop
 getstat <- function(scenario, stat, rnd = 3) round(summ[summ$Scenario == scenario, stat], rnd)
+reportProp <- c(high = getstat("high", "reportProp"), low = getstat("low", "reportProp"))
+true_frac <- (1-reportProp)/reportProp
 ```
 
 We simulate a simple SIR epidemic in discrete time, apply two different ascertainment fractions to derive a time series of case reports, and apply the authors' formula (including bias corrections) to estimate the number of hidden cases (Figure 1).

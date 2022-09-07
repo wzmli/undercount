@@ -45,7 +45,10 @@ print(dat)
 summ <- with(dat0,
              c(min = min(htfrac, na.rm = TRUE),
                max = max(htfrac, na.rm = TRUE),
-               mean = mean(htfrac, na.rm  = TRUE))
+               mean = mean(htfrac, na.rm  = TRUE)
+					, new_c_prop=new_c_prop)
              )
+
+print(summ)
 
 saveVars(dat, summ, new_c_prop)
