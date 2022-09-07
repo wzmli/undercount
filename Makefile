@@ -18,7 +18,7 @@ autopipeR = defined
 
 Ignore += undercount.pdf
 Sources += undercount.rmd
-undercount.pdf: undercount.rmd parameters.rda plot_all_estimates.pdf
+undercount.pdf: undercount.rmd parameters.rda plot_all_estimates.pdf plot_all_estimates.rda
 	$(knitpdf)
 
 ## Stupid work-around for knitr error

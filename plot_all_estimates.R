@@ -66,5 +66,5 @@ gg_prop <- (ggplot(dat_prop, aes(Date, value, linetype = Scenario))
 
 plot_grid(gg_cum, gg_prop)
 
-saveVars(gg_cum, gg_prop)
+saveVars(gg_cum, gg_prop, summ)
 
