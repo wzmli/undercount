@@ -18,7 +18,7 @@ summary(dat %>% mutate_if(is.character, as.factor))
 summ <- el %>% map_dfr("summ", .id="Scenario")
 summary(summ)
 
-c_prop <- el %>% map_dbl("new_c_prop")
+c_prop <- el %>% map_dbl("reportProp")
 
 hh <- c("high", "low")
 replace_scenario <- .  %>% mutate(across(Scenario, factor,

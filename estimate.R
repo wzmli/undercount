@@ -18,7 +18,7 @@ print(head(simdat))
 dat0 <- (simdat
     %>% mutate(NULL
 		, truecuminc = cumsum(incidence)
-      , report = new_c_prop*incidence 
+      , report = reportProp*incidence 
       , ht = htfun(report)
       , cumreport = cumsum(report)
       , htfill = ifelse(is.na(ht),0,ht)
@@ -46,9 +46,9 @@ summ <- with(dat0,
              c(min = min(htfrac, na.rm = TRUE),
                max = max(htfrac, na.rm = TRUE),
                mean = mean(htfrac, na.rm  = TRUE)
-					, new_c_prop=new_c_prop)
+					, reportProp=reportProp)
              )
 
 print(summ)
 
-saveVars(dat, summ, new_c_prop)
+saveVars(dat, summ, reportProp)

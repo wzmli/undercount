@@ -63,10 +63,9 @@ options(digits = 2)
 pct <- function(x) round(100*x)
 R0  <- round(beta/gamma,2)
 inf_per <- round(1/gamma,2)
-## FIXME: HOW CAN I PIPELINE THIS?
-getstat <- function(scenario, stat, rnd = 3) round(summ[summ$Scenario == scenario, stat], rnd)
-reportProp <- c(high = getstat("high", "reportProp"), low = getstat("low", "reportProp"))
-true_frac <- (1-reportProp)/reportProp
+getstat <- function(scenario, stat, rnd = 3) as.numeric(round(summ[summ$Scenario == scenario, stat], rnd))
+c_prop <- c(high = getstat("high", "reportProp"), low = getstat("low", "reportProp"))
+true_frac <- (1-c_prop)/c_prop
 ```
 
 We simulate a simple SIR epidemic in discrete time, apply two different ascertainment fractions to derive a time series of case reports, and apply the authors' formula (including bias corrections) to estimate the number of hidden cases (Figure 1).

@@ -9,7 +9,7 @@ rpcall("high.simulate.Rout simulate.R model_definition.rda high.rda")
 loadEnvironments()
 
 model <- (model
-	%>% update_params(c_prop = new_c_prop)
+	%>% update_params(c_prop = reportProp)
 )
 
 simdat <- simulation_history(model)

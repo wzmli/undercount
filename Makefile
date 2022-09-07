@@ -98,3 +98,10 @@ makestuff/Makefile:
 -include makestuff/chains.mk
 -include makestuff/git.mk
 -include makestuff/visual.mk
+
+######################################################################
+
+## Temp
+
+reports:
+	perl -pi -e "s/new_c_prop/reportProp/g" *.rmd *.R
