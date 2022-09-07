@@ -40,6 +40,7 @@ model_definition.Rout: model_definition.R parameters.rda states.rda
 
 ascScen = low high
 estScen = $(ascScen:%=%.estimate.rda)
+$(estScen): %.rda: %.Rout ; $(lscheck)
 
 high.Rout: high.R
 	$(pipeR)
