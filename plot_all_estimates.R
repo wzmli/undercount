@@ -63,7 +63,10 @@ gg_cum <- (ggplot(dat_cum2, aes(Date,y=value/1e5))
     ## hack to expand limits for direct labels
     ## + expand_limits(x = max(dat$Date) + 60, y = 8)
     + colorblindr::scale_colour_OkabeIto()
-	+ geom_line(data=ddtrue,aes(Date,y=value/1e5),size=1.5,color="black",guide=FALSE)
+    + geom_line(data=ddtrue,aes(Date,y=value/1e5),
+                size=1.5,color="black")
+    + annotate(geom = "text", x = max(dat_cum2$Date)-50,
+               y = 5, label = "incidence")
 )
 
 dat_prop <- (dat
@@ -74,9 +77,10 @@ dat_prop <- (dat
 true_prop <- (tibble(Scenario = names(c_prop), value = c_prop)
     %>% replace_scenario())
 
+## FIXME: better to merge, make horizontal lines pseudo-data
 gg_prop <- (ggplot(dat_prop, aes(Date, value, color = Scenario))
     + geom_line(linetype = "dashed")
-    + labs(x = "Date", y = "underreporting fraction")
+    + labs(x = "Date", y = "underreporting ratio")
     + geom_hline(data = true_prop,
     #             colour = "blue",
                  aes(yintercept = (1-value)/value, color = Scenario))
@@ -86,5 +90,5 @@ gg_prop <- (ggplot(dat_prop, aes(Date, value, color = Scenario))
 
 plot_grid(gg_cum, gg_prop)
 
-saveVars(gg_cum, gg_prop)
+saveVars(gg_cum, gg_prop, summ)
 
