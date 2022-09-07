@@ -1,3 +1,5 @@
+MAKE=/usr/local/opt/make/bin/gmake
+
 current: target
 -include target.mk
 

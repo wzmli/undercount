@@ -13,7 +13,7 @@ urlcolor: blue
 
 ## Introduction
 
-Two papers (@bohningEstimating2020 and @maruottiEstimating2022) have promoted a formula that claims  to estimate the completeness of sampling of an infectious disease epidemic, using only case reporting counts, based on a mark-recapture formula developed by Chao. We believe this formula is fundamentally wrong, and that it is impossible to estimate undercounting without some kind of auxiliary information.
+Two papers (@bohningEstimating2020 and @maruottiEstimating2022) have promoted a formula that claims  to estimate the completeness of sampling of an infectious disease epidemic, using only case reporting counts, based on a mark-recapture formula developed by Chao. We believe this formula is fundamentally wrong, and that it is impossible to estimate undercounting without a specialized sampling design or some kind of auxiliary information.
 
 From @bohningEstimating2020:
 
@@ -35,11 +35,11 @@ This approach is not an appropriate application of these mark-recapture formulas
 
 In principle, it is possible to estimate the number of unobserved individuals (hidden cases) if individuals can be re-identified when observed a second time, or even with unmarked individuals given an appropriate sampling design [@royleHierarchical2008]. 
 <!--- However, public health case reporting is typically unrelated to mark-recapture (although it can be used to estimate completeness of contact tracing: @lerdsuwansriSensitivity2022, @polonskyNovel2022).  -->
-In practice public health case reporting does not use such sampling designs. Case reporting is usually exclusive (i.e. someone who has been identified as a case will not be reported again later) and/or anonymized so that we cannot identify whether a particular case/infected individual was double-counted or not.
+In practice public health case reporting rarely uses such sampling designs. Case reporting is usually exclusive (i.e. someone who has been identified as a case will not be reported again later) and/or anonymized so that we cannot identify whether a particular case/infected individual was double-counted or not. Mark-recapture methods are sometimes used in public health, but "one needs at least two sources of information with individual case reporting and a unique personal identifier for each case" [@desenclosLimitations1994].
 
 ### Exponential example
 
-Suppose an epidemic is growing exponentially. In the epidemic phase, the various measures of current epidemic size (incidence, prevalence, cumulative incidence, etc.) all grow exponentially, or geometrically if we sample in discrete time. Suppose $I(t)$ ("new cases" or incidence) is growing at a geometric rate $\lambda$ per time step, i.e. $I(t) = I(0) \lambda^t$, and suppose we are sampling a fraction $a$ (for "ascertainment") of the incidence. For simplicity, we use the simple (non-bias-corrected) estimate, without death or recovery. The problems with the bias-corrected formula are similar, and we use that formula in our simulations.
+Suppose an epidemic is growing exponentially. In the epidemic phase, the various measures of current epidemic size (incidence, prevalence, cumulative incidence, etc.) all grow exponentially, or geometrically if we sample in discrete time. Suppose $I(t)$ ("new cases" or incidence) is growing at a geometric rate $\lambda$ per time step, i.e. $I(t) = I(0) \lambda^t$, and suppose we are sampling a fraction $a$ (for "ascertainment") of the incidence. For simplicity, we use the simple (non-bias-corrected) estimate, without death or recovery.
 
 $$
 \begin{split}
@@ -50,9 +50,9 @@ H(t) & = \frac{[\Delta N(t)]^2}{\Delta N(t - 1)} \\
 \end{split}
 $$
 
-This shows that the estimated number of hidden counts depends on the growth rate $\lambda$ as well as the ascertainment fraction $a$ --- not what we wanted. The "undercount ratio" $H(t)/\Delta N(t) = H(t)/(a I(t)) = \lambda$ is independent of the ascertainment fraction.
+This shows that the estimated number of hidden counts depends on the growth rate $\lambda$ as well as the ascertainment fraction $a$ --- not what we wanted. The "underreporting ratio" $H(t)/\Delta N(t) = H(t)/(a I(t)) = \lambda$ is independent of the ascertainment fraction.  The bias-corrected formula, which we use in our simulations below, has similar problems.
 
-More generally, looking at the form of the expression $[\Delta N(t)]^2/\Delta N(t - 1)$, we can see that the undercount will always be equal to the rate of acceleration of observed cases ($\Delta N(t)/\Delta N(t-1)$) times the number of new cases $\Delta N(t)$, so undercounting will always be assumed to be large (proportional to observed cases) when disease incidence is increasing, and small when incidence is decreasing.
+More generally, looking at the form of the expression $[\Delta N(t)]^2/\Delta N(t - 1)$, we can see that the estimate of underreporting will always be equal to the rate of acceleration of observed cases ($\Delta N(t)/\Delta N(t-1)$) times the number of new cases $\Delta N(t)$, so underreporting will be assumed to be larger (proportional to observed cases) when disease incidence is increasing, and smaller when incidence is decreasing.
 
 ### Simulation example (SIR model)
 
@@ -68,8 +68,8 @@ rProp <- c(high = as.numeric(getstat("high", "reportProp")), low = as.numeric(ge
 true_frac <- (1-rProp)/rProp
 ```
 
-We simulate a simple SIR epidemic in discrete time, apply two different ascertainment fractions to derive a time series of case reports, and apply the authors' formula (including bias corrections) to estimate the number of hidden cases (Figure 1).
-At the peak of the epidemic, when the number of cases is large, the method predicts the same ratio of hidden cases to observed case reports regardless of the ascertainment fraction; at the beginning and end of the epidemic, the bias correction makes underreporting appear lower in the lower-ascertainment scenario, when the number of reported cases is lower. In the high-ascertainment case ($a = `r rProp[["high"]]`$) the true ratio of hidden to reported cases is `r true_frac[["high"]]`, but the average estimated ratio is `r getstat("high", "mean")` (range `r getstat("high", "min")` -- `r getstat("high", "max")`); in the low-ascertainment case ($a = `r rProp[["low"]]`$) the true ratio is `r true_frac[["low"]]` and the mean estimate is `r getstat("low", "mean")` (range `r getstat("low", "min")` -- `r getstat("low", "max")`).
+We simulate a deterministic SIR epidemic in discrete time, apply two different ascertainment fractions to derive a time series of case reports, and apply the authors' formula (including bias corrections) to estimate the number of hidden cases (Figure 1).
+At the peak of the epidemic, when the number of cases is large, the method predicts the same ratio of hidden cases to observed case reports regardless of the ascertainment fraction; at the beginning and end of the epidemic, the bias correction terms make underreporting appear lower in the lower-ascertainment scenario, when the number of reported cases is lower. In the high-ascertainment case ($a = `r rProp[["high"]]`$) the true ratio of hidden to reported cases is `r true_frac[["high"]]`, but the average estimated ratio is `r getstat("high", "mean")` (range `r getstat("high", "min")` -- `r getstat("high", "max")`); in the low-ascertainment case ($a = `r rProp[["low"]]`$) the true ratio is `r true_frac[["low"]]` and the mean estimate is `r getstat("low", "mean")` (range `r getstat("low", "min")` -- `r getstat("low", "max")`).
 
 <!-- note N is hard-coded, too hard to format nicely/automatically -->
 ```{r get_plot, echo = FALSE, out.height = "4in", fig.cap = sprintf('Simulated SIR epidemic with ${\\cal R}_0 = %1.1f$, infectious period of %1.2f days, $N = 10^6$. Left panel, cumulative numbers of reported and estimated-hidden cases along with true incidence (only one line appears because both scenarios have the same true incidence). Right panel, ratio of estimated (dashed) or true (solid) hidden cases to reported cases for each scenario.', R0, inf_per)}
