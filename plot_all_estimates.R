@@ -1,5 +1,5 @@
 library(tidyverse)
-library(ggplot2);theme_set(theme_bw(base_size=14))
+library(ggplot2); theme_set(theme_bw(base_size=14))
 library(directlabels)
 library(cowplot)
 
@@ -43,18 +43,16 @@ print(ddtrue)
 
 dat_cum2 <- (dat_cum
 	%>% filter(type != "true")
-	%>% mutate(type = factor(type,levels=c("estimated","reported"))
+	%>% mutate(type = factor(type, levels=c("estimated","reported"))
 	)
 )
 
 print(dat_cum2)
 
-#gg_cum <- (ggplot(dat_cum, aes(Date,y=value/1e5, color=type, linetype = Scenario))
 gg_cum <- (ggplot(dat_cum2, aes(Date,y=value/1e5))
 	 + geom_line(aes(color=Scenario,linetype=type))
 	 + scale_linetype_manual(values=c("dashed","solid"))
     + ylab("Cumulative count (× 100,000)")
-    + theme_bw()
     + theme(legend.position = c(0.2,0.6))
 	 + xlim(as.Date(c("2022-01-01","2022-07-01")))
     ## + geom_dl(method = list(dl.trans(x = x + 0.1),
