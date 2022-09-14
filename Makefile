@@ -1,4 +1,5 @@
-MAKE=/usr/local/opt/make/bin/gmake
+## Ben, if you have a make that works for you, can you just make it your default make, or would that break other stuff?
+## MAKE=/usr/local/opt/make/bin/gmake
 
 current: target
 -include target.mk
@@ -54,7 +55,6 @@ low.Rout: low.R
 	$(pipeR)
 
 impmakeR += simulate
-
 
 # high.simulate.Rout: simulate.R model_definition.R
 %.simulate.Rout: simulate.R model_definition.rda %.rda
