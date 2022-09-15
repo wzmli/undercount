@@ -24,6 +24,10 @@ Sources += undercount.rmd
 undercount.pdf: undercount.rmd parameters.rda plot_all_estimates.pdf plot_all_estimates.rda
 	$(knitpdf)
 
+## not piped, not using magic since I don't know what it is
+sim2.html: sim2.rmd
+	Rscript -e "rmarkdown::render('sim2.rmd')"
+
 ## Stupid work-around for knitr error
 Ignore += plot_all_estimates.pdf
 %.pdf: %.Rout.pdf

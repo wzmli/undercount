@@ -1,0 +1,263 @@
+---
+title: "more simulations"
+---
+
+Response from corresponding author:
+
+> We generated data from Poisson and Negative Binomial distributions whose expected value follows a Richards curve, to replicate the epidemic evolution. The proposed estimator is a lower bound estimator, based on Chao's lower bound estimator. From the simulations, the proposed estimator plays the role of a lower bound for the true population size whenever the reported cases are a "small" fraction of the true number, in practice if the observed cases are less than 70% of the true total number of cases, as reasonably occurring at the beginning of any epidemic. This is also the reason why we used the estimator only at the beginning of the epidemic, as changing in the testing policy or other external factors may also play a role as long as the epidemic spreads. 
+
+We simulate for a total of 80 different conditions (ascertainment ratio = {0.05, 0.1, 0.2, 0.4, 0.6}; growth rate per day = {0.01, 0.02, 0.04, 0.08}; initial incidence = {20, 40}; reporting period = {daily, weekly}). For simplicity and clarity, we simulate *deterministic* epidemics; adding Poisson or negative binomial noise to incidence and binomial error to underreporting would make the results more realistic, but would make them less clear and would not change any of our qualitative conclusions about the reliability of these metrics.
+
+All simulations used `tmax=100`, `K=1e5`, `s=2`.
+
+```{r setup, echo = FALSE, message=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(tidyverse)
+library(colorblindr)
+library(asymptor)
+library(cowplot)
+theme_set(theme_bw() + theme(panel.spacing = grid::unit(0, "lines")))
+
+## define Richards equation as an expression
+r_exp <- ~ K / (1 + s * exp(-s * r * (t - tinfl)))^(1 / s)
+
+## make it into a function returning value and gradient
+richards_deriv <-  deriv(r_exp, "t",
+                         function.arg = c("t", setdiff(all.vars(r_exp), "t")))
+
+## wrap to return value *or* gradient
+richards <- function(..., deriv = FALSE) {
+    dd <- richards_deriv(...)
+    r <- if (!deriv) dd else attr(dd, "gradient")
+    ## get rid of everything: names, attributes, dimensions, ...
+    c(unname(drop(r)))
+}
+
+## check
+stopifnot(all.equal(
+    richards(t = 1, r = 1, tinfl = 4, K=1, s=1),
+    0.0474258731775668))
+                    
+## curve(richards(x, r = 1, tinfl = 4, K=1, s=1), from = 0, to = 10, ylim = c(0,1))
+## curve(richards(x, r = 1, tinfl = 4, K=1, s=1, deriv = TRUE), from = 0, to = 10)
+
+## solve for I0 as a function of tinfl
+## I0 = K / (1 + s * exp(-s * r * (0 - tinfl)))^(1 / s)
+## (1 + s * exp(s*r*tinfl))^(1/s) = K/I0
+## (1 + s * exp(s*r*tinfl)) = (K/I0)^s
+## exp(s*r*tinfl) = ((K/I0)^s-1)/s
+## s*r*tinfl = log(((K/I0)^s-1)/s)
+## tinfl = log(((K/I0)^s-1)/s)/(s*r)
+
+## deriv calculation
+## sympy:
+## from sympy import *
+## ti, t, r, x, i0, K, s = symbols("ti, t, r,x,i0,K,s")
+## richards = K/(1+s*exp(-s*r*(t-ti)))**(1/s)
+## simplify(diff(richards, t).subs(t,0))
+## K*r*s*exp(r*s*ti)/(s*exp(r*s*ti) + 1)**((s + 1)/s)
+
+## K*r*s*exp(r*s*ti)/(s*exp(r*s*ti) + 1)**((s + 1)/s) == i0
+## log(i0) = log(K*r*s) + r*s*ti - ((s+1)/s)*(log(s) + r*s*ti)
+## log(i0) - log(K*r*s) =  r*s*ti - ((s+1)/s)*(log(s) + r*s*ti)
+## log(i0) - log(K*r*s) + ((s+1)/s)*log(s) =  r*s*ti * (1 - ((s+1)/s))
+## ti = (log(i0) - log(K*r*s) + ((s+1)/s)*log(s))/(r*s*(1-1/s)
+
+
+i0fun <- function(K, r, s, I0 = 1) {
+    ## deriv at zero, -1
+    f <- function(ti) { K*r*s*exp(r*s*ti)/(s*exp(r*s*ti) + 1)**((s + 1)/s) - I0}
+    uniroot(f , c(1e-3, 1000))$root
+}
+
+## check
+tinfl <- i0fun(K = 1e4, r = 0.02, s = 2)
+stopifnot(all.equal(1,
+                    richards(tinfl = tinfl, K = 1e4, r = 0.02, s = 2, t = 0, deriv = TRUE)
+                    )
+          )
+
+## old: set initial **cumulative incidence** to i0
+## i0fun <- function(K, r, s, I0 = 1) {
+##     log(((K/I0)^s-1)/s)/(s*r)
+## }
+
+## noise wrapper
+rfun <- function(mu, type = "nbinom", k) {
+    n <- length(mu)
+    if (k == Inf) type <- "poisson"
+    switch(type,
+           none = mu,
+           nbinom = rnbinom(n, mu = mu, size = k),
+           poisson = rpois(n, lambda = mu)
+           )
+}
+
+##' Simulate incidence etc. based on a cumulative Richards curve
+##' @param dt time step
+##' @param tmax max time
+##' @param K max cumulative incidence (final size)
+##' @param r growth rate
+##' @param s shape parameter
+##' @param tinfl inflection point time (epidemic peak; computed from I0 by default)
+##' @param I0 initial incidence 
+##' @param a ascertainment ratio
+##' @param rtype randomness for incidence
+##' @param obstype randomness for reporting
+##' @param k dispersion parameter for negative binomial
+##' @return a tibble containing date, incidence (not cumulative!), cases, true number of hidden cases, number of hidden cases computed by simple (biased) formula, deaths (currently set to zero)
+richards_sim <- function(dt = 1, tmax = 50,
+                         K = 10000,
+                         r = 0.02,
+                         s = 2,
+                         I0 = 1,
+                         tinfl = NULL,
+                         a = 0.6,
+                         rtype = c("nbinom", "poisson", "none"),
+                         obstype = c("binomial","none"),
+                         k = 0.5
+                         ) {
+    rtype <- match.arg(rtype)
+    obstype <- match.arg(obstype)
+    if (is.null(tinfl)) tinfl <- i0fun(K = K, r = r, s = s, I0 = I0)
+    tvec <- seq(0, tmax, by = dt)
+    mu <- richards(t = tvec, r = r, K = K, tinfl = tinfl, s = s)
+    ## compute differences etc.
+    (tibble::tibble(date = tvec[-1], mu = diff(mu))
+        |> mutate(incidence =  rfun(mu, type = rtype, k = k),
+                  cases = if (obstype == "none") {a*incidence} else {
+                             rbinom(length(date), size = incidence, prob = a)
+                                                                },
+                  hidden_true = incidence - cases,
+                  ## hidden_biasest = cases^2/dplyr::lag(cases,1),
+                  deaths = 0  ## needed for asymptor
+                  )
+    )
+}
+
+## set up parameters for sims
+params <- (cross_df(list(dt = c(1, 7),  ## daily, weekly
+           r = c(0.01, 0.02, 0.04, 0.08), ## doubling time 70, 35, 17, 8.5 days
+           I0 = c(20, 40),
+           a = c(0.05, 0.1, 0.2, 0.4, 0.6))) 
+    |> mutate(tmax = 100, s = 2, K = 1e5, k = 5, rtype = "none", obstype = "none")
+)
+paramsx <- mutate(params, sim = as.character(1:n()))
+set.seed(101)
+
+## simulate all combinations, collapse to a single data frame
+## FIXME: \(...) do.call is ugly!
+res0 <- (params |> pmap(function(...) do.call(richards_sim, list(...))))
+res_df <- bind_rows(res0, .id = "sim")
+```
+
+Basic check: (deterministic) incidence
+
+```{r det_incidence}
+res_join <- full_join(res_df, paramsx, by = "sim")
+print(ggplot(res_join, aes(x = date, y = incidence, group = sim))
+    + geom_line(aes(linetype = factor(I0), colour = factor(r)))
+    + scale_y_log10()
+    + scale_color_viridis_d()
+    + facet_wrap(~dt, labeller = label_both)
+)
+```
+
+(Deterministic) cases:
+
+```{r det_cases}
+print(ggplot(res_join, aes(x = date, y = cases, group = sim))
+    + geom_line(aes(linetype = factor(I0), colour = factor(r)))
+    + scale_y_log10()
+    + scale_color_viridis_d()
+    + facet_grid(dt~a, labeller = label_both)
+)
+```
+
+```{r more_funs}
+## estimation
+estfun <- function(r) {
+    full_join(r,
+              with(r, estimate_asympto(date, cases, deaths)),
+              by = "date")
+}
+## basic plotting
+pfun <- function(d, drop_mu = TRUE, params = NULL) {
+    ## mu will just clutter things up in deterministic runs (mu == incidence)
+    d2 <- (d |> estfun()
+        |> select(-deaths)
+    )
+    if (drop_mu) d2 <- d2 |> select(-mu)
+    d3a <- d2 |> select(-c(lower,upper)) |> pivot_longer(-date)
+    d3b <- d2 |> select(c(date,lower,upper))
+    gg <-ggplot(d3a, aes(x=date, colour = name, y = value)) +
+        geom_line() +
+        geom_point() +
+        geom_ribbon(data = d3b,
+                    aes(x = date, ymin = lower, ymax = upper),
+                    y = NA,
+                    colour = NA,
+                    alpha = 0.4) +
+        scale_y_log10()
+    if (!is.null(params)) {
+        title <- pmap(list(params, names(params)), ~ sprintf("%s = %1.2f", .y, .x)) |> paste(collapse = "; ")
+        gg <- gg + labs(title = title)
+    }
+    return(gg)
+}
+## coverage
+okfun <- function(d) {
+    e <- (estfun(d)
+        |> filter(cases > 5, cases < 500, lower > 1)  ## removes NAs too
+    )
+    if (nrow(e) == 0) return(NA_character_)
+    below <- with(e, any(hidden_true < lower))
+    above <- with(e, any(hidden_true > upper))
+    case_when(below && above ~ "both",
+              below ~ "below",
+              above ~ "above",
+              TRUE ~ "OK"
+              )
+}
+```
+
+```{r calc_ok}
+res_ok <- bind_cols(params, tibble(result = map_chr(res0, okfun)))
+res_ok2 <- (res_ok
+    |> select(dt, r, I0, a, result)
+    |> mutate(sim = 1:n(),
+              across(where(is.numeric), ~ factor(.) |> fct_inorder()))
+)
+rvec <- unique(params$r)
+labs <- sprintf("%1.2f\n(%1.1f)", rvec, log(2)/rvec)
+```
+
+We keep only time points where the number of reported cases is between 5 and 500, and where the estimated lower bound on hidden cases is >1.
+Simulations where no reports satisfied these conditions are NA/blank.
+We report whether the estimate of hidden cases fell below the estimated lower bound at any time ("below"), rose above the estimated upper bound ("above"), or stayed within bounds ("OK"). Numbers are parameter-set indices.
+
+```{r plot_ok, warn = FALSE}
+ggplot(res_ok2, aes(r,a, colour = result, shape = result)) +
+    geom_point(size=8, alpha = 0.6) +
+    geom_text(colour = "black", aes(label = sim)) +
+    facet_grid(dt~I0, label = label_both) +
+    scale_color_OkabeIto() +
+    scale_x_discrete(labels = labs) +
+    labs(y = "ascertainment ratio",
+         x = "epidemic growth rate/doubling time (per day/days)")
+```
+
+Examining the results for cases 38, 54, 70 (below, OK, above): all
+dt = 7, r = 0.04, I0 = 20.
+
+```{r examine,fig.width=10}
+tmpf <- function(i, legend = TRUE) {
+    p <- pfun(res0[[i]], params = params[i, c("a")])
+    if (!legend) p <- p + theme(legend.position = "none")
+    p
+}
+plot_grid(nrow = 1,
+    tmpf(38, FALSE),
+    tmpf(54, FALSE),
+    tmpf(70, TRUE), rel_widths = c(0.3, 0.3, 0.4))
+```                        
