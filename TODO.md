@@ -1,6 +1,7 @@
 ## To do
 
 - more systematic review of the citing papers, see how many of them actually use the method vs. quoting the estimates vs. just citing the method in general?
+	- (DONE)
 - check the asymptor package (on CRAN, or https://hugogruson.fr/asymptor/)?
     - redo calculations with COVID/monkeypox data?
     - run asymptor on simulated data?
