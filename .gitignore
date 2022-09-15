@@ -14,3 +14,5 @@ makestuff/
 *.out
 \.new
 \.#*
+*.pdf
+*.html
