@@ -4,7 +4,7 @@ Capture-recapture methods for the social and medical sciences
 
 ## Papers using the method
 
-- [Garchitorena 2020](https://www.medrxiv.org/content/10.1101/2020.08.17.20174821v2)
+- [Garchitorena et al 2020](https://www.medrxiv.org/content/10.1101/2020.08.17.20174821v2)
 - [Rocchetti et al 2020](https://www.sciencedirect.com/science/article/pii/S1201971220304446) (This is their covid paper)
 - [Polonsky et al 2021](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8632194/) (This is their Ebola paper)
 - [Lerdsuwansri et al 2022](https://link.springer.com/article/10.1186/s12879-022-07046-6) (This is their Thailand covid paper)
