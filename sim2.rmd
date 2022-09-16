@@ -179,7 +179,7 @@ print(ggplot(res_join, aes(x = date, y = cases, group = sim))
 estfun <- function(r) {
     full_join(r,
               with(r, estimate_asympto(date, cases, deaths)),
-              by = "date")
+               by = "date")
 }
 ## basic plotting
 pfun <- function(d, drop_mu = TRUE, params = NULL) {
@@ -261,3 +261,29 @@ plot_grid(nrow = 1,
     tmpf(54, FALSE),
     tmpf(70, TRUE), rel_widths = c(0.3, 0.3, 0.4))
 ```                        
+
+Compare upper/lower bounds for different values of $a$ (restrict to I0=40, dt == 1)
+```{r examine2, fig.width = 10}
+res4 <- (res0
+    |> map(estfun)
+    |> bind_rows(.id = "sim")
+    |> full_join(paramsx, by = "sim")
+    |> filter(I0 == 40, dt == 1)
+    |> filter(cases > 5, cases < 500, lower > 1)  ## removes NAs too
+    |> mutate(across(c(lower, upper), ~ . / cases))
+    |> select(sim, date, lower, upper, r, a)
+    |> pivot_longer(c(lower, upper))
+)
+gg3 <- ggplot(res4, aes(date, value, linetype = name)) +
+    geom_line() + ## geom_point() +
+    scale_y_log10() +
+    scale_colour_OkabeIto() +
+    labs(y = "lower/upper bounds scaled by observed reports") +
+    expand_limits(y=0.5)
+p3 <- plot_grid(
+    gg3 + aes( colour = factor(a)) + facet_wrap(~r, labeller = label_both),
+    gg3 + aes( colour = factor(r)) + facet_wrap(~a, labeller = label_both)
+)
+print(p3)
+cowplot::save_plot("scaled_bounds.pdf", p3, base_width = 10)
+```
