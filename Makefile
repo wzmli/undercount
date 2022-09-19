@@ -21,10 +21,13 @@ autopipeR = defined
 
 Ignore += undercount.pdf
 Sources += undercount.rmd
+## also depends on  gg_ok.pdf scaled_bounds.pdf, but we need more
+##   workflow magic to make this work
 undercount.pdf: undercount.rmd parameters.rda plot_all_estimates.pdf plot_all_estimates.rda
 	$(knitpdf)
 
 ## not piped, not using magic since I don't know what it is
+## generates sim2.html, gg_ok.pdf, scaled_bounds.pdf
 sim2.html: sim2.rmd
 	Rscript -e "rmarkdown::render('sim2.rmd')"
 

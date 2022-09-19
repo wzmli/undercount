@@ -282,7 +282,8 @@ gg4B <- gg4 + labs(y = "ratio of lower/upper bounds to cases") +
     geom_line() +
     scale_y_log10(limits = c(0.5, 4.5),
                   sec.axis = sec_axis(~ (1/(1+.)),
-                                      breaks = c(0.2,0.25, 0.5, 0.6)))
+                                      breaks = c(0.2,0.25, 0.5, 0.6),
+                                      name = "ascertainment ratio"))
 p4A <- gg4B + aes( linetype = name, colour = factor(a)) +
     facet_wrap(~r, labeller = label_both)
 p4 <- plot_grid(
