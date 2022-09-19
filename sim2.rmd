@@ -274,16 +274,47 @@ res4 <- (res0
     |> select(sim, date, lower, upper, r, a)
     |> pivot_longer(c(lower, upper))
 )
-gg3 <- ggplot(res4, aes(date, value, linetype = name)) +
-    geom_line() + ## geom_point() +
+gg4 <- ggplot(res4, aes(date, value)) +
     scale_y_log10() +
-    scale_colour_OkabeIto() +
-    labs(y = "lower/upper bounds scaled by observed reports") +
-    expand_limits(y=0.5)
-p3 <- plot_grid(
-    gg3 + aes( colour = factor(a)) + facet_wrap(~r, labeller = label_both),
-    gg3 + aes( colour = factor(r)) + facet_wrap(~a, labeller = label_both)
+    scale_colour_OkabeIto()
+gg4B <- gg4 + labs(y = "lower/upper bounds scaled by observed reports") +
+    expand_limits(y=0.5) + geom_line()
+p4 <- plot_grid(
+    gg4B + aes( linetype = name, colour = factor(a)) + facet_wrap(~r, labeller = label_both),
+    gg4B + aes( linetype = name, colour = factor(r)) + facet_wrap(~a, labeller = label_both)
 )
-print(p3)
-cowplot::save_plot("scaled_bounds.pdf", p3, base_width = 10)
+print(p4)
+cowplot::save_plot("scaled_bounds.pdf", p4, base_width = 10)
 ```
+
+Check with biased (simple) expression:
+
+```{r simple_plot, fig.width = 10}}
+res5 <- (res0
+    |> bind_rows(.id = "sim")
+    |> group_by(sim)
+    |> mutate(hidden_biasest = cases^2/dplyr::lag(cases,1),
+              lower = hidden_biasest / cases)
+    |> ungroup()
+    |> full_join(paramsx, by = "sim")
+    |> filter(I0 == 40) ## , dt == 1)
+    |> filter(cases > 5, cases < 500, lower > 1)  ## removes NAs too
+    |> select(sim, date, lower, r, a, dt)
+    |> pivot_longer(lower)
+)
+gg5 <- gg4 %+% res5 + labs(y="simple ratio scaled by observed reports") + geom_point()
+ldat <- (paramsx
+    |> filter(I0 == 40)
+    |> select(r, a, dt)
+    |> mutate(yval = exp(r*dt))
+)
+p5 <- plot_grid(
+    gg5 + aes(colour = factor(a), linetype = factor(dt)) +
+    facet_wrap(~r, labeller = label_both),
+    (gg5 + aes(colour = factor(r), linetype = factor(dt)) + facet_wrap(~a, labeller = label_both)
+        + geom_hline(data = ldat , lty = 2, aes(yintercept = yval,
+                                                colour = factor(r))))
+)
+print(p5)
+```
+
