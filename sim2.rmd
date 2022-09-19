@@ -234,17 +234,18 @@ labs <- sprintf("%1.2f\n(%1.1f)", rvec, log(2)/rvec)
 
 We keep only time points where the number of reported cases is between 5 and 500, and where the estimated lower bound on hidden cases is >1.
 Simulations where no reports satisfied these conditions are NA/blank.
-We report whether the estimate of hidden cases fell below the estimated lower bound at any time ("below"), rose above the estimated upper bound ("above"), or stayed within bounds ("OK"). Numbers are parameter-set indices.
+We report whether the estimate of hidden cases fell below the estimated lower bound at any time ("below"), rose above the estimated upper bound ("above"), or stayed within bounds ("OK"). Numbers (if shown) are parameter-set indices.
 
 ```{r plot_ok, warn = FALSE}
-ggplot(res_ok2, aes(r,a, colour = result, shape = result)) +
+gg_ok <- ggplot(res_ok2, aes(r,a, colour = result, shape = result)) +
     geom_point(size=8, alpha = 0.6) +
-    geom_text(colour = "black", aes(label = sim)) +
     facet_grid(dt~I0, label = label_both) +
     scale_color_OkabeIto() +
     scale_x_discrete(labels = labs) +
     labs(y = "ascertainment ratio",
          x = "epidemic growth rate/doubling time (per day/days)")
+print(gg_ok + geom_text(colour = "black", aes(label = sim)))
+ggsave(gg_ok, file = "gg_ok.pdf")
 ```
 
 Examining the results for cases 38, 54, 70 (below, OK, above): all
@@ -277,19 +278,24 @@ res4 <- (res0
 gg4 <- ggplot(res4, aes(date, value)) +
     scale_y_log10() +
     scale_colour_OkabeIto()
-gg4B <- gg4 + labs(y = "lower/upper bounds scaled by observed reports") +
-    expand_limits(y=0.5) + geom_line()
+gg4B <- gg4 + labs(y = "ratio of lower/upper bounds to cases") +
+    geom_line() +
+    scale_y_log10(limits = c(0.5, 4.5),
+                  sec.axis = sec_axis(~ (1/(1+.)),
+                                      breaks = c(0.2,0.25, 0.5, 0.6)))
+p4A <- gg4B + aes( linetype = name, colour = factor(a)) +
+    facet_wrap(~r, labeller = label_both)
 p4 <- plot_grid(
-    gg4B + aes( linetype = name, colour = factor(a)) + facet_wrap(~r, labeller = label_both),
-    gg4B + aes( linetype = name, colour = factor(r)) + facet_wrap(~a, labeller = label_both)
+   p4A,
+   gg4B + aes( linetype = name, colour = factor(r)) + facet_wrap(~a, labeller = label_both)
 )
 print(p4)
-cowplot::save_plot("scaled_bounds.pdf", p4, base_width = 10)
+cowplot::save_plot("scaled_bounds.pdf", p4A, base_width = 6)
 ```
 
 Check with biased (simple) expression:
 
-```{r simple_plot, fig.width = 10}}
+```{r simple_plot, fig.width = 10}
 res5 <- (res0
     |> bind_rows(.id = "sim")
     |> group_by(sim)
@@ -310,6 +316,8 @@ ldat <- (paramsx
 )
 p5 <- plot_grid(
     gg5 + aes(colour = factor(a), linetype = factor(dt)) +
+    geom_hline(data = ldat , lty = 2, aes(yintercept = yval,
+                                                colour = factor(a))) +
     facet_wrap(~r, labeller = label_both),
     (gg5 + aes(colour = factor(r), linetype = factor(dt)) + facet_wrap(~a, labeller = label_both)
         + geom_hline(data = ldat , lty = 2, aes(yintercept = yval,
@@ -318,3 +326,4 @@ p5 <- plot_grid(
 print(p5)
 ```
 
+In the absence of the additional variability driven by the absolute number of cases (which 

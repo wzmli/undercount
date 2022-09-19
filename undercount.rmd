@@ -76,8 +76,31 @@ At the peak of the epidemic, when the number of cases is large, the method predi
 knitr::include_graphics(matchFile(exts="pdf"))
 ```
 
+## Simulation example (Richards equation)
 
-We conclude that the authors' suggested formula should not be applied to disease outbreak incidence data.
+Based on correspondence with one of the authors of the original papers, we ran an additional set of simulations that used a Richards curve 
+\[
+\textrm{cuminc}(s) = K / (1 + s * exp(-s * r * (t - tinfl)))^{(1 / s)}
+\]
+to model the cumulative growth of the epidemic [@maEstimating2014]. We then differenced the cumulative curve to get the incidence, and used the ascertainment ratio $a$ to get the number of hidden cases and observed cases (multiplying by $1-a$ and $a$ respectively). We used a shape parameter of $s=2$, a final size of $10^5$ in all simulations and varied the reporting period ($\Delta t = \{1, 7\}$); starting incidence ($I_0 = \{20, 40\}$); epidemic growth rate ($r = \{ 0.01, 0.02, 0.04, 0.08\}$ per day); and ascertainment ratio ($a = \{0.05, 0.1, 0.2, 0.4, 0.6\}$). We ran each simulation for 100 days. We used the `asymptor` package [@grusonAsymptor2020], which implements the lower-bound formula from @bohningEstimating2020 and the upper-bound formula from @rocchettiEstimating2020, as an independent check to make sure we had not incorrectly coded any of the formulas. 
+
+The authors indicated (pers. comm.) that they intended the estimator to be used at the beginning of an epidemic. To make sure that we were only computing bounds during reasonable times, we restricted our conclusions to periods when the number of cases was between 5 and 500 (exclusive) and when the lower bound estimator was greater than 1.
+
+We ran deterministic simulations, to simplify comparisons. While omitting noise is unrealistic, adding (e.g.) negative binomial error for incidence and/or binomial error for ascertainment would not change any of our qualitative conclusions.
+
+For each of the simulation runs (80 in total), we first evaluated whether the number of hidden cases estimated by `asymptor` in fact remained within the computed upper and lower bounds (Figure 2). Regardless of reporting period and initial incidence, the method always underestimated the number of hidden cases (i.e., the true number of hidden cases was above the estimated upper bound for at least one time period) when the ascertainment ratio was low ($a$ from 0.05 to 0.2) and overestimated the number of hidden cases (the true number of hidden cases was below the lower bound for at least one time period) when the ascertainment ratio was high ($a=0.6$).
+
+If we instead examine the estimated upper and lower bounds scaled by number of reported cases (Figure 3), we see that the scaled bounds are always between about 1 and 3. These values correspond to lower bounds on the ascertainment ratio of 0.2 to 0.25 and upper bounds of 0.5 to 0.6, *largely independent of the true values of the ascertainment ratio*. Checking the simpler, non-bias-corrected expression for the lower bound ($\Delta N(t)^2/\Delta N(t-1)$, not shown) confirms that most of the observed variation in the estimated bounds is driven by the bias-correction terms. When these are excluded, the estimated lower bound ratio during the early/exponential phase of the epidemic always corresponds to the discrete-time growth rate ($\lambda = \exp(r\Delta t)$); these estimated bounds are completely independent of the ascertainment ratio, and indeed of any parameters other than the epidemic growth rate.
+
+```{r fig.cap="Outcome of lower/upper bound estimation for different parameter combinations. 'Above' (orange circle): true hidden cases > upper bound for at least one time point. 'Below' (blue triangle): true hidden cases < lower bound for at least one time point. Blank/NA: no time points met the filtering criterion. 'OK' (green square): true hidden cases were always within the estimated bounds.", echo = FALSE}
+knitr::include_graphics("gg_ok.pdf")
+```
+
+```{r fig.cap="Ratio of lower/upper bounds to observed cases. $\\Delta t = 1$, $I(0)=40$ (results are similar for other choices of $\\Delta t$ and $I(0)$). Left-hand axis shows ratios of bounds to observed cases; right-hand axis shows the estimated ascertainment ratio ($1/(1+\\textrm{ratio})$).", echo = FALSE}
+knitr::include_graphics("scaled_bounds.pdf")
+```
+
+We conclude that the authors' formula appears to work well because it leads to plausible bounds on the ascertainment ratio (0.25 -- 0.5) for realistic values of the epidemic growth rate, but that is in fact unrelated to the true ascertainment ratio and should not be applied to disease outbreak incidence data.
 
 \newpage
 
