@@ -36,9 +36,12 @@ pdat <- (dat_wide
 
 ## data for hidden cases
 pdat1 <- (pdat
-    |> select(c(Scenario, date, lower, upper, true = hidden))
+    |> select(c(Scenario, date, lower, upper, true = hidden, cases, incidence))
     |> replace_scenario()
 )
+
+print(pdat1)
+
 
 gg0 <- (ggplot(pdat1, aes(date)) +
  geom_ribbon(aes(ymin = lower, ymax = upper, fill = Scenario), colour = NA,
@@ -48,7 +51,9 @@ gg0 <- (ggplot(pdat1, aes(date)) +
 )
 
 gg_hidden <- (gg0 
-    + geom_line(aes(colour = Scenario, y = true, linetype = Scenario), lwd = my_lwd)
+#	 + geom_line(aes(y=incidence),color="black")
+    + geom_line(aes(colour = Scenario, y = true))
+#	 + geom_line(aes(colour = Scenario, y = cases),linetype = "dashed",size=1.5)
     + labs (y = "hidden cases")
     + theme(legend.position = "none")
     + scale_y_log10(limits = c(1, NA))
@@ -63,7 +68,7 @@ pdat2 <- (pdat
 
 gg_asc <- (gg0 %+% pdat2
     + geom_hline(data = summ |> replace_scenario(),
-                 aes(yintercept = reportProp, colour = Scenario, lty = Scenario), lwd = my_lwd)
+                 aes(yintercept = reportProp, colour = Scenario))
     + labs(y = "ascertainment ratio")
 )
 
