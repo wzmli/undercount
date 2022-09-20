@@ -26,25 +26,18 @@ replace_scenario <- .  %>% mutate(across(Scenario, factor,
                       levels = hh,
                       labels = sprintf("a = %1.1f", rProp[hh])))
 
+## we need a variety of shapes to conveniently do all the plots
 pdat <- (dat_wide
     |> filter(cases>1)
 )
 
+## data for hidden cases
 pdat1 <- (pdat
-    |> pivot_longer(-c(Scenario, date), names_to = "type")
-)
-
-pdat2 <- (pdat
-    |> select(c(Scenario, date, lower, upper))
+    |> select(c(Scenario, date, lower, upper, true = hidden))
     |> replace_scenario()
 )
 
-pdat3 <- (pdat
-    |> select(c(Scenario, date, true = hidden))
-    |> replace_scenario()
-)
-
-gg0 <- (ggplot(pdat2, aes(date)) +
+gg0 <- (ggplot(pdat1, aes(date)) +
  geom_ribbon(aes(ymin = lower, ymax = upper, fill = Scenario), colour = NA,
              alpha = 0.5)
     + scale_y_log10()
@@ -53,19 +46,20 @@ gg0 <- (ggplot(pdat2, aes(date)) +
 )
 
 gg_hidden <- (gg0 
-    + geom_line(data = pdat3, aes(colour = Scenario, y = true, linetype = Scenario)) 
+    + geom_line(aes(colour = Scenario, y = true, linetype = Scenario)) 
     + labs (y = "hidden cases")
     + theme(legend.position = "none")
 
 )
-pdat4 <- (pdat
+
+## data for ascertainment ratios
+pdat2 <- (pdat
     |> select(c(Scenario, date, asc_lower, asc_upper))
     |> rename(lower = "asc_lower", upper = "asc_upper")
     |> replace_scenario()
 )
 
-
-gg_asc <- (gg0 %+% pdat4
+gg_asc <- (gg0 %+% pdat2
     + geom_hline(data = summ |> replace_scenario(),
                  aes(yintercept = reportProp, colour = Scenario, lty = Scenario))
     + labs(y = "ascertainment ratio")

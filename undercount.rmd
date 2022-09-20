@@ -16,14 +16,14 @@ urlcolor: blue
 
 Several papers [@bohningEstimating2020; @maruottiEstimating2022; @rocchettiEstimating2020] have promoted formulas that claim to provide bounds on the completeness of sampling of infectious disease cases, based only on case reports. We believe these approaches are fundamentally wrong, and that it is impossible to estimate undercounting without a specialized sampling design or some kind of auxiliary information.
 
-The basic idea is to use formulas developed by Chao to estimate bounds on true population sizes based on the numbers of individuals observed multiple times. The basic estimator for the lower bound on true cases is $\Delta N(t) (\Delta N(t) - 1)/(1 + \Delta N(t-1))$, where $\Delta N(t)$ is the number of new cases observed per reporting period; an extension to the formula adjusts for mortality. The upper bound also involves $\Delta N(t-2)$ [@bohningEstimating2020; @rocchettiEstimating2020].
+The authors' basic idea uses formulas developed by Chao to estimate bounds on true population sizes based on the numbers of individuals observed multiple times. For example, their estimator for the lower bound on true cases is $\Delta N(t) (\Delta N(t) - 1)/(1 + \Delta N(t-1))$, where $\Delta N(t)$ is the number of new cases observed per reporting period; an extended formula adjusts for mortality. The upper bound also involves $\Delta N(t-2)$ [@bohningEstimating2020; @rocchettiEstimating2020].
 
 ## Critique
 
 This approach misuses the mark-recapture formulas. Cases identified at time $t-1$ are supposed to be representative of the number of cases counted twice: why? The fact that the same individual *could* be counted twice in the cumulative case report (for some sampling designs) is irrelevant. How can comparing yesterday's count to today's provide information about the completeness of sampling? 
 
-In principle, the number of unobserved individuals (hidden cases) can be estimated if individuals can be re-identified when observed a second time, or even with unmarked individuals given an appropriate sampling design [@royleHierarchical2008]. 
-In practice public health case reporting rarely uses such sampling designs. Case reporting is usually exclusive (i.e. someone who has been identified as a case will not be reported again later) and/or anonymized so that we cannot identify whether a particular infected individual was double-counted or not. Mark-recapture methods are sometimes used in public health, but "one needs at least two sources of information with individual case reporting and a unique personal identifier for each case" [@desenclosLimitations1994].
+In principle, the number of unobserved individuals (hidden cases) can be estimated if individuals can be re-identified, or even with unmarked individuals given an appropriate sampling design [@royleHierarchical2008]. 
+In practice public health case reporting rarely uses such sampling designs. Case reporting is usually exclusive (i.e. someone who has been identified as a case will not be reported again later), or anonymized so that we cannot identify a particular infected individual as double-counted. Mark-recapture methods are sometimes used in public health, but "one needs at least two sources of information with individual case reporting and a unique personal identifier for each case" [@desenclosLimitations1994].
 
 ### Exponential example
 
@@ -57,15 +57,15 @@ rProp <- c(high = as.numeric(getstat("high", "reportProp")), low = as.numeric(ge
 true_frac <- (1-rProp)/rProp
 ```
 
-We simulate a deterministic SIR epidemic in discrete time, apply two different ascertainment ratios to derive a time series of case reports, and apply the authors' formula (including bias corrections) to estimate the number of hidden cases (Figure 1).
-At the peak of the epidemic, when the number of cases is large, the method predicts the same ratio of hidden cases to observed case reports regardless of the ascertainment fraction; at the beginning and end of the epidemic, the bias correction terms make underreporting appear lower in the lower-ascertainment scenario, when the number of reported cases is lower. In the high-ascertainment case ($a = `r rProp[["high"]]`$) the true ratio of hidden to reported cases is `r true_frac[["high"]]`, but the average estimated ratio is `r getstat("high", "mean")` (range `r getstat("high", "min")` -- `r getstat("high", "max")`); in the low-ascertainment case ($a = `r rProp[["low"]]`$) the true ratio is `r true_frac[["low"]]` and the mean estimate is `r getstat("low", "mean")` (range `r getstat("low", "min")` -- `r getstat("low", "max")`).
+We simulated a discrete-time deterministic SIR epidemic, applied two different ascertainment ratios ($a = \{0.2, 0.8\}$) to derive two time series of case reports, and used the `asymptor` package [@grusonAsymptor2020] which implements the authors' formula (including bias corrections) to estimate hidden cases (Figure 1).
+The estimated lower and upper bounds are largely independent of the true $a$; at the beginning and end of the epidemic, when the absolute number of cases is lower, the bias correction terms make the estimated bounds on the ascertainment ratio *higher* in the low-ascertainment scenario and *vice versa*.
 
 <!-- note N is hard-coded, too hard to format nicely/automatically -->
 ```{r get_plot, echo = FALSE, out.height = "4in", fig.cap = sprintf('Estimates based on a simulated SIR epidemic with ${\\cal R}_0 = %1.1f$, infectious period of %1.2f days, $N = 10^6$. Left panel, true numbers of hidden cases (lines) with estimated bounds (regions). Right panel, true ascertainment ratios (lines) and estimated bounds (regions).', R0, inf_per)}
 knitr::include_graphics(matchFile(exts="pdf"))
 ```
 
-## Simulation example (Richards equation)
+### Simulation example (Richards equation)
 
 Based on correspondence with one of the authors of the original papers, we ran an additional set of simulations that used a Richards curve to model the cumulative growth of the epidemic [@maEstimating2014]. (We reparameterized the model using the initial incidence, i.e. the derivative of the curve at $t=0$, rather than the inflection point parameter $t_{\textrm{infl}}$.) We then computed the incidence by differencing the cumulative incidence, and used the ascertainment ratio $a$ to get the number of hidden cases and observed cases (multiplying by $1-a$ and $a$ respectively). Throughout, we used a shape parameter of $s=2$ and a final epidemic size of $10^5$; we varied the reporting period ($\Delta t = \{1, 7\}$); starting incidence ($I_0 = \{20, 40\}$); epidemic growth rate ($r = \{ 0.01, 0.02, 0.04, 0.08\}$ per day); and ascertainment ratio ($a = \{0.05, 0.1, 0.2, 0.4, 0.6\}$). We ran each simulation for 100 days. We used the `asymptor` package [@grusonAsymptor2020], which implements the lower-bound formula from @bohningEstimating2020 and the upper-bound formula from @rocchettiEstimating2020, as an independent check to make sure we had not incorrectly coded any of the formulas. 
 
