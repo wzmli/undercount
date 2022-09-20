@@ -27,21 +27,21 @@ In practice public health case reporting rarely uses such sampling designs. Case
 
 ### Exponential example
 
-During the initial phase of an epidemic, various measures of current epidemic size (incidence, cumulative incidence, etc.) all grow geometrically. Suppose the incidence (true number of new infections: $I(t)$) grows at a rate $\lambda$ per time step, i.e. $I(t) = I(0) \lambda^t$, and suppose a fraction $a$ (the *ascertainment ratio*) of these cases are reported. The estimated ascertainment ratio $\hat a$ equals the number of reported cases, divided by the total number of estimated cases, i.e. (reported cases + estimated hidden cases). Using the simpler, non-bias-corrected formula:
+During the initial phase of an epidemic, various measures of current epidemic size (incidence, cumulative incidence, etc.) all grow geometrically. Suppose the incidence (true number of new infections: $I(t)$) grows at a rate $\lambda$ per time step, i.e. $I(t) = I(0) \lambda^t$, and suppose a fraction $a$ (the *ascertainment ratio*) of these cases are reported. The (lower bound on the) estimated ascertainment ratio $\hat a$ equals the number of reported cases, divided by the total number of estimated cases, i.e. (reported cases + estimated bound on hidden cases). Using the simpler, non-bias-corrected formula:
 
 $$
 \begin{split}
 \hat a & = \frac{\Delta N(t)}{\Delta N(t) + H(t)} \\
 & = \frac{\Delta N(t)}{\Delta N(t) + \frac{[\Delta N(t)]^2}{\Delta N(t - 1)}} \\
-& = \left(1 + \Delta N(t)/\Delta N(t-1)\right) \\
-& = \left(1 + a I(0) \lambda^t/(a I(0) \lambda^{t-1}\right) \\
+& = \left(1 + \Delta N(t)/\Delta N(t-1)\right)^{-1} \\
+& = \left(1 + a I(0) \lambda^t/(a I(0) \lambda^{t-1}\right)^{-1} \\
 & = 1/(1+\lambda).
 \end{split}
 $$
 
-The estimated ascertainment ratio $\hat a$ depends only on the epidemic growth rate; it is independent of the true ascertainment ratio.  The bias-corrected formula, which we use in our simulations below, has similar problems.
+The estimated ascertainment ratio $\hat a$ depends only on the epidemic growth rate; it is independent of the true ascertainment ratio.  As we show below, the bias-corrected formula has similar problems.
 
-More generally, we can see that the estimate of underreporting will always be equal to the rate of acceleration of observed cases ($\Delta N(t)/\Delta N(t-1)$) times the number of new cases $\Delta N(t)$, so underreporting (proportional to observed cases) will be assumed to be larger when disease incidence is increasing, and smaller when it is decreasing.
+<!-- More generally, we can see that the estimate of underreporting will always be equal to the rate of acceleration of observed cases ($\Delta N(t)/\Delta N(t-1)$) times the number of new cases $\Delta N(t)$, so underreporting (proportional to observed cases) will be assumed to be larger when disease incidence is increasing, and smaller when it is decreasing. -->
 
 ### Simulation example (SIR model)
 
@@ -78,6 +78,10 @@ knitr::include_graphics("a_plot.pdf")
 ```
 
 We conclude that the authors' formula appears to work well because it leads to plausible bounds on the ascertainment ratio (0.2 -- 0.5) for realistic values of the epidemic growth rate, but that it is in fact nearly unrelated to the true ascertainment ratio and should not be applied to disease outbreak incidence data.
+
+---
+
+Source code for all examples is available at [https://github.com/wzmli/undercount/](https://github.com/wzmli/undercount/).
 
 \newpage
 
