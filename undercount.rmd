@@ -71,7 +71,7 @@ We ran additional simulations using a Richards curve for the cumulative incidenc
 
 The authors indicated (pers. comm.) that they intended the estimator to be used at the beginning of an epidemic. Therefore we considered only sample points when the number of cases was between 5 and 500 (exclusive) and the lower bound estimator for hidden cases was greater than 1.
 
-For each simulation run (80 in total), we computed the mean and confidence intervals for the estimated lower and upper bounds of $\hat a$ over time (Figure 2). As suggested by our SIR example, the bounds on $\hat a$ rarely included the true value, and were *largely independent of the true values of $a$*. The only noticeable signal arises from the bias-correction terms: simulations with lower overall case numbers (low $r$, low $a$, $\Delta t = 1$) have noticeably lower upper bounds and slightly greater lower bounds. Analyzing simulations without noise and with the simpler, non-bias-corrected expression for the lower bound (not shown), the estimated lower bound ratio during the exponential phase of the epidemic exactly equals the discrete-time growth rate ($\lambda = \exp(r\Delta t)$); these estimates are completely independent of the ascertainment ratio, and indeed of any parameters other than the epidemic growth rate.
+For each simulation run (80 in total), we computed the mean and confidence intervals for the estimated lower and upper bounds of $\hat a$ over time (Figure 2). As suggested by our SIR example, the bounds on $\hat a$ rarely include the true value, and are *largely independent of the true values of $a$*. The only noticeable signal arises from the bias-correction terms: simulations with lower overall case numbers (low $r$, low $a$, $\Delta t = 1$) have smaller upper bounds and larger lower bounds. In simulations without noise and with the simpler, non-bias-corrected expression for the lower bound (not shown), the lower-bound estimates of $\hat a$ are completely independent of $a$, and indeed of any parameters other than the epidemic growth rate.
 
 ```{r fig.cap="Ratio of lower/upper bounds to observed cases. $\\Delta t = 1$, $I(0)=40$ (results are similar for other choices of $\\Delta t$ and $I(0)$). Left-hand axis shows ratios of bounds to observed cases; right-hand axis shows the estimated ascertainment ratio ($1/(1+\\textrm{bounds ratio})$). Dashed line is the one-to-one line.", echo = FALSE}
 knitr::include_graphics("a_plot.pdf")
@@ -82,8 +82,6 @@ We conclude that the authors' formula appears to work well because it leads to p
 ---
 
 Source code for all examples is available at [https://github.com/wzmli/undercount/](https://github.com/wzmli/undercount/).
-
-\newpage
 
 ## References
 
