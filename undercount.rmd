@@ -13,7 +13,7 @@ urlcolor: blue
 
 ## Introduction
 
-Two papers (@bohningEstimating2020 and @maruottiEstimating2022) have promoted a formula that claims  to estimate the completeness of sampling of an infectious disease epidemic, using only case reporting counts, based on a mark-recapture formula developed by Chao. We believe this formula is fundamentally wrong, and that it is impossible to estimate undercounting without a specialized sampling design or some kind of auxiliary information.
+Two papers (@bohningEstimating2020 and @maruottiEstimating2022) have promoted a formula that claims  to estimate the completeness of sampling of an infectious disease epidemic, using only case reporting counts, based on a mark-recapture formula developed by Chao. We believe this approach is fundamentally wrong, and that it is impossible to estimate undercounting from incidence data alone, without a sampling design or any auxilliary information.
 
 From @bohningEstimating2020:
 
