@@ -9,6 +9,9 @@ rpcall("plot_all_estimates.Rout plot_all_estimates.R low.estimate.rda high.estim
 
 startGraphics(width = 8, height = 4)
 
+my_lwd <- 1.5
+alpha_region <- 0.3
+
 el <- loadEnvironmentList(trim=".estimate.*")
 
 dat_long <- el %>% map_dfr("dat_long", .id = "Scenario")
@@ -39,17 +42,16 @@ pdat1 <- (pdat
 
 gg0 <- (ggplot(pdat1, aes(date)) +
  geom_ribbon(aes(ymin = lower, ymax = upper, fill = Scenario), colour = NA,
-             alpha = 0.5)
-    + scale_y_log10()
+             alpha = alpha_region)
     + scale_colour_OkabeIto()
     + scale_fill_OkabeIto()
 )
 
 gg_hidden <- (gg0 
-    + geom_line(aes(colour = Scenario, y = true, linetype = Scenario)) 
+    + geom_line(aes(colour = Scenario, y = true, linetype = Scenario), lwd = my_lwd)
     + labs (y = "hidden cases")
     + theme(legend.position = "none")
-
+    + scale_y_log10(limits = c(1, NA))
 )
 
 ## data for ascertainment ratios
@@ -61,7 +63,7 @@ pdat2 <- (pdat
 
 gg_asc <- (gg0 %+% pdat2
     + geom_hline(data = summ |> replace_scenario(),
-                 aes(yintercept = reportProp, colour = Scenario, lty = Scenario))
+                 aes(yintercept = reportProp, colour = Scenario, lty = Scenario), lwd = my_lwd)
     + labs(y = "ascertainment ratio")
 )
 

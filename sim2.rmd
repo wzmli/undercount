@@ -337,23 +337,15 @@ res6 <- (res1
     |> map(estfun)
     |> bind_rows(.id = "sim")
     |> full_join(paramsx, by = "sim")
-    |> filter(I0 == 40, dt == 1)
     |> filter(cases > 5, cases < 500, lower > 1)  ## removes NAs too
     |> mutate(across(c(lower, upper), ~ . / cases))
-    |> select(sim, date, lower, upper, r, a)
+    |> select(sim, date, lower, upper, r, a, I0, dt)
     |> pivot_longer(c(lower, upper))
 )
 res6_mean <- (res6
-    |> group_by(sim, a, r, name)
+    |> group_by(sim, a, r, I0, dt, name)
     |> summarise(across(value, mean, na.rm  = TRUE), .groups = "drop")
 )
-p4A_noise <- p4A %+% res6 +
-    geom_point(data = res6_mean, x = 100, aes(shape = name), size = 4) +
-    scale_y_log10(limits = c(0.5, 4.5),
-                  sec.axis = sec_axis(~ (1/(1+.)),
-                                      breaks = seq(0.2, 0.6, by = 0.1),
-                                      name = "ascertainment ratio"))
-ggsave(file = "scaled_bounds_noise.pdf", plot = p4A_noise, width = 6)
 ```
 
 Plot estimated bounds vs true ascertainment ratio:
@@ -362,7 +354,7 @@ Plot estimated bounds vs true ascertainment ratio:
 dodge <- 0.008
 psize <- 0.8
 res6_mean <- (res6
-    |> group_by(sim, a, r, name)
+    |> group_by(sim, a, r, I0, dt, name)
     |> summarise(across(value, mean_cl_normal), .groups = "drop")
     |> unpack(value)
     |> mutate(across(starts_with("y"), ~ 1/(1+.)))
@@ -378,7 +370,9 @@ a_plot <- ggplot(res6_mean,
     geom_abline(intercept = 0, slope = 1, lty = 2) +
     scale_colour_OkabeIto(name = "r\n(growth rate, /day)")  +
     labs (x = "true ascertainment ratio", y = "estimated ascertainment ratio bounds") +
-    expand_limits(y = c(0.05, 0.6))
+    expand_limits(y = c(0.05, 0.6)) +
+    facet_wrap(I0 ~ dt, labeller = label_both) +
+    scale_y_continuous(limits = c(0.05, 0.6), oob = scales::squish)
 print(a_plot)
 ggsave(a_plot, file = "a_plot.pdf", width = 6)
 ```
