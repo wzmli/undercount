@@ -27,7 +27,7 @@ undercount.pdf: undercount.rmd parameters.rda plot_all_estimates.pdf plot_all_es
 	$(knitpdf)
 
 
-undercount_short.pdf: undercount_short.rmd a_plot.Rout.pdf
+undercount_short.pdf: undercount_short.rmd a_plot.pdf
 	$(knitpdf)
 
 a_plot.Rout: a_plot.R sim_funs.rda
