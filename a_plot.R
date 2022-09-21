@@ -53,7 +53,7 @@ res6_wide <- res6_mean |> select(-c(ymin, ymax)) |> pivot_wider(values_from = y)
 ## fix_vars <- . %>% rename(`$I_0$` = "I0", `$\\Delta t` = "dt")
 
 ## hack strip labels!
-my_label <- function (labels, multi_line = TRUE, sep = ": ",
+my_label <- function (labels, multi_line = TRUE, sep = " = ",
                       subs = c("$I_0$" = "I0", "$\\Delta t$" = "dt"))
 {
     value <- label_value(labels, multi_line = multi_line)
@@ -79,6 +79,10 @@ my_label <- function (labels, multi_line = TRUE, sep = ": ",
     }
     out
 }
+
+## alternative OkabeIto palette, skipping colour 4 (yellow, too pale)
+alt_OI <- colorblindr::palette_OkabeIto[-4]
+
 ## res6_mean |> filter(dt == 7, a >= 0.4, name == "lower")
 ## pd <- position_dodge(width = 0.01)
 a_plot <- (ggplot(res6_mean,
@@ -90,7 +94,7 @@ a_plot <- (ggplot(res6_mean,
                    aes(x = a_shift, xend = a_shift,
                        y = lower, yend = upper), alpha = 0.3, size = 0.5)
     + geom_abline(intercept = 0, slope = 1, lty = 2)
-    + scale_colour_OkabeIto(name = "r\n(growth rate, /day)")
+    + scale_colour_manual(values = alt_OI, name = "r\n(growth rate, /day)")
     + scale_shape_manual(name = "r\n(growth rate, /day)", values = 15:18)
     + labs (x = "true ascertainment ratio", y = "estimated ascertainment ratio bounds")
     + expand_limits(y = c(0.05, 0.6))
