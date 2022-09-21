@@ -16,7 +16,7 @@ urlcolor: blue
 
 Several papers [@bohningEstimating2020; @maruottiEstimating2022; @rocchettiEstimating2020] have promoted formulas that claim to provide bounds on the completeness of sampling of infectious disease cases, based only on case reports. We believe these approaches are fundamentally wrong, and that it is impossible to estimate undercounting from incidence data without a specialized sampling design or some kind of auxiliary information.
 
-The authors use formulas developed by Chao [@chaoEstimating1989a] and others [@alfoUpper2021] to estimate bounds on true population sizes based on the numbers of individuals observed multiple times. For example, the estimator for the lower bound on hidden cases is $\Delta N(t) (\Delta N(t) - 1)/(1 + \Delta N(t-1))$, where $\Delta N(t)$ is the number of new cases observed per reporting period; extended formulas adjust for mortality and recovery. The upper bound also involves $\Delta N(t-2)$ [@bohningEstimating2020; @rocchettiEstimating2020].
+The authors use mark-recapture formulas developed by Chao [@chaoEstimating1989a] and others [@alfoUpper2021] to estimate bounds on true population sizes based on the numbers of individuals observed multiple times. For example, the estimator for the lower bound on hidden cases is $\Delta N(t) (\Delta N(t) - 1)/(1 + \Delta N(t-1))$, where $\Delta N(t)$ is the number of new cases observed per reporting period; extended formulas adjust for mortality and recovery. The upper bound also involves $\Delta N(t-2)$ [@bohningEstimating2020; @rocchettiEstimating2020].
 
 ## Critique
 
@@ -37,7 +37,7 @@ For each simulation run (80 in total), we computed the mean and confidence inter
 knitr::include_graphics("a_plot.pdf")
 ```
 
-We conclude that the authors' formula appears to work well because it leads to plausible bounds on the ascertainment ratio ($\approx$ 0.2 -- 0.5) for realistic values of the epidemic growth rate, but that it is in fact nearly unrelated to the true ascertainment ratio and should not be applied to disease outbreak incidence data.
+We conclude that the authors' formulas appear to work well because they lead to plausible bounds on the ascertainment ratio ($\approx$ 0.2 -- 0.5) for realistic values of the epidemic growth rate, but that they are in fact nearly unrelated to the true ascertainment ratio and should not be applied to disease outbreak incidence data.
 
 ---
 
