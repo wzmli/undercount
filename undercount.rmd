@@ -16,7 +16,7 @@ urlcolor: blue
 
 Several papers [@bohningEstimating2020; @maruottiEstimating2022; @rocchettiEstimating2020] have promoted formulas that claim to provide bounds on the completeness of sampling of infectious disease cases, based only on case reports. We believe these approaches are fundamentally wrong, and that it is impossible to estimate undercounting from incidence data without a specialized sampling design or some kind of auxiliary information.
 
-The authors' basic idea uses formulas developed by Chao to estimate bounds on true population sizes based on the numbers of individuals observed multiple times. For example, their estimator for the lower bound on true cases is $\Delta N(t) (\Delta N(t) - 1)/(1 + \Delta N(t-1))$, where $\Delta N(t)$ is the number of new cases observed per reporting period; an extended formula adjusts for mortality. The upper bound also involves $\Delta N(t-2)$ [@bohningEstimating2020; @rocchettiEstimating2020].
+The authors' basic idea uses formulas developed by Chao to estimate bounds on true population sizes based on the numbers of individuals observed multiple times. For example, their estimator for the lower bound on true cases is $\Delta N(t) (\Delta N(t) - 1)/(1 + \Delta N(t-1))$, where $\Delta N(t)$ is the number of new cases observed per reporting period; an extended formula adjusts for mortality. The upper bound involves $\Delta N(t-2)$ as well [@bohningEstimating2020; @rocchettiEstimating2020].
 
 ## Critique
 
