@@ -26,6 +26,10 @@ Sources += undercount.rmd
 undercount.pdf: undercount.rmd parameters.rda plot_all_estimates.pdf plot_all_estimates.rda
 	$(knitpdf)
 
+## also a_plot.pdf (from sim2)
+undercount_short.pdf: undercount_short.rmd
+	$(knitpdf)
+
 ## not piped, not using magic since I don't know what it is
 ## generates sim2.html, gg_ok.pdf, scaled_bounds.pdf
 sim2.html: sim2.rmd
