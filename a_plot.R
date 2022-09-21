@@ -2,12 +2,14 @@ library(tidyverse)
 library(colorblindr)
 library(asymptor)
 library(cowplot)
+library(tikzDevice)
 theme_set(theme_bw() + theme(panel.spacing = grid::unit(0, "lines")))
 
 library(shellpipes)
 
+rpcall("a_plot.Rout a_plot.R sim_funs.rda")
 loadEnvironments()
-startGraphics(width = 5.5, height = 5.5)
+startGraphics(width = 5.5, height = 5.5, otype = "tikz", standAlone = TRUE)
 
 params <- (cross_df(list(dt = c(1, 7),  ## daily, weekly
            r = c(0.01, 0.02, 0.04, 0.08), ## doubling time 70, 35, 17, 8.5 days
@@ -48,7 +50,35 @@ res6_mean <- (res6
     |> mutate(a_shift = a + (as.numeric(factor(r)) - 2.5)*dodge)
 )
 res6_wide <- res6_mean |> select(-c(ymin, ymax)) |> pivot_wider(values_from = y)
+## fix_vars <- . %>% rename(`$I_0$` = "I0", `$\\Delta t` = "dt")
 
+## hack strip labels!
+my_label <- function (labels, multi_line = TRUE, sep = ": ",
+                      subs = c("$I_0$" = "I0", "$\\Delta t$" = "dt"))
+{
+    value <- label_value(labels, multi_line = multi_line)
+    variable <- ggplot2:::label_variable(labels, multi_line = multi_line)
+    variable <- lapply(variable,
+                       function(x) {
+                           for (i in seq_along(subs)) {
+                               x[x==subs[[i]]] <- names(subs)[[i]]
+                           }
+                           x
+                       })
+    if (multi_line) {
+        out <- vector("list", length(value))
+        for (i in seq_along(out)) {
+            out[[i]] <- paste(variable[[i]], value[[i]], sep = sep)
+        }
+    }
+    else {
+        value <- do.call("paste", c(value, sep = ", "))
+        variable <- do.call("paste", c(variable, sep = ", "))
+        out <- Map(paste, variable, value, sep = sep)
+        out <- list(unname(unlist(out)))
+    }
+    out
+}
 ## res6_mean |> filter(dt == 7, a >= 0.4, name == "lower")
 ## pd <- position_dodge(width = 0.01)
 a_plot <- (ggplot(res6_mean,
@@ -65,7 +95,7 @@ a_plot <- (ggplot(res6_mean,
     + labs (x = "true ascertainment ratio", y = "estimated ascertainment ratio bounds")
     + expand_limits(y = c(0.05, 0.6))
     + scale_x_continuous(breaks = c(0.05, 0.1, 0.2, 0.4, 0.6))
-    + facet_wrap(I0 ~ dt, labeller = label_both)
+    + facet_wrap(I0 ~ dt, labeller = my_label)
     + scale_y_continuous() ##limits = c(0.05, 0.6), oob = scales::squish)
     + theme(legend.position = "bottom",
             axis.text.x = element_text(size = 6) ## avoid label collisions

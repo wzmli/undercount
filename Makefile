@@ -26,9 +26,15 @@ Sources += undercount.rmd
 undercount.pdf: undercount.rmd parameters.rda plot_all_estimates.pdf plot_all_estimates.rda
 	$(knitpdf)
 
-## also a_plot.pdf (from sim2)
-undercount_short.pdf: undercount_short.rmd
+
+undercount_short.pdf: undercount_short.rmd a_plot.Rout.pdf
 	$(knitpdf)
+
+a_plot.Rout: a_plot.R sim_funs.rda
+	$(pipeR)
+
+a_plot.Rout.pdf: a_plot.Rout
+	pdflatex a_plot.Rout.tikz
 
 ## not piped, not using magic since I don't know what it is
 ## generates sim2.html, gg_ok.pdf, scaled_bounds.pdf
@@ -50,9 +56,6 @@ model_definition.Rout: model_definition.R parameters.rda states.rda
 	$(pipeR)
 
 sim_funs.Rout: sim_funs.R
-	$(pipeR)
-
-a_plot.Rout: a_plot.R sim_funs.rda
 	$(pipeR)
 
 ## packages
