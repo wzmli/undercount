@@ -1,8 +1,9 @@
 # undercount
 
-`make undercount.pdf`
 
-Required R packages: (GitHub) `dushoff/shellpipes`, `mac-theobio/McMasterPandemic` , `clauswilke/colorblindr`, (CRAN) `cowplot`, `tidyverse`, `directlabels`, `tikzDevice`
+`make sim2.html; make undercount.pdf`
+
+Required R packages: (GitHub) `dushoff/shellpipes`, `mac-theobio/McMasterPandemic` , `clauswilke/colorblindr`, (CRAN) `cowplot`, `tidyverse`, `directlabels`, `tikzDevice`, `asymptor` (`make pkgs`)
 
 ## citations (via Google scholar)
 

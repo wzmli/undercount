@@ -45,6 +45,9 @@ states.Rout: states.R parameters.rda
 model_definition.Rout: model_definition.R parameters.rda states.rda
 	$(pipeR)
 
+## packages
+pkgs:
+	Rscript install_pkgs.R
 
 ## Setting up different parameters
 

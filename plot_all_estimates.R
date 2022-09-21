@@ -2,18 +2,22 @@ library(tidyverse)
 library(ggplot2); theme_set(theme_bw(base_size=14))
 library(directlabels)
 library(cowplot)
+library(colorblindr)
 
 library(shellpipes)
 rpcall("plot_all_estimates.Rout plot_all_estimates.R low.estimate.rda high.estimate.rda")
 
 startGraphics(width = 8, height = 4)
 
+my_lwd <- 1.5
+alpha_region <- 0.3
+
 el <- loadEnvironmentList(trim=".estimate.*")
 
-dat <- el %>% map_dfr("dat", .id = "Scenario")
+dat_long <- el %>% map_dfr("dat_long", .id = "Scenario")
+dat_wide <- el %>% map_dfr("dat_wide", .id = "Scenario")
 
-summary(dat)
-summary(dat %>% mutate_if(is.character, as.factor))
+summary(dat_long %>% mutate_if(is.character, as.factor))
 
 summ <- el %>% map_dfr("summ", .id="Scenario")
 summary(summ)
@@ -25,68 +29,45 @@ replace_scenario <- .  %>% mutate(across(Scenario, factor,
                       levels = hh,
                       labels = sprintf("a = %1.1f", rProp[hh])))
 
-dat_cum <- (dat
-    %>% filter(type != "htfrac")
-    %>% mutate(across(type, factor,
-                      levels = c("estcuminc", "truecuminc", "cumreport"),
-                      labels = c("estimated", "true", "reported")
-                      ))
-    %>% replace_scenario()
+## we need a variety of shapes to conveniently do all the plots
+pdat <- (dat_wide
+    |> filter(cases>1)
 )
 
-ddtrue <- (dat_cum
-	%>% filter(type == "true")
-	%>% mutate(type = as.character(type))
+## data for hidden cases
+pdat1 <- (pdat
+    |> select(c(Scenario, date, lower, upper, true = hidden))
+    |> replace_scenario()
 )
 
-print(ddtrue)
-
-dat_cum2 <- (dat_cum
-	%>% filter(type != "true")
-	%>% mutate(type = factor(type, levels=c("estimated","reported"))
-	)
+gg0 <- (ggplot(pdat1, aes(date)) +
+ geom_ribbon(aes(ymin = lower, ymax = upper, fill = Scenario), colour = NA,
+             alpha = alpha_region)
+    + scale_colour_OkabeIto()
+    + scale_fill_OkabeIto()
 )
 
-print(dat_cum2)
-
-gg_cum <- (ggplot(dat_cum2, aes(Date,y=value/1e5))
-	 + geom_line(aes(color=Scenario,linetype=type))
-	 + scale_linetype_manual(values=c("dashed","solid"))
-    + ylab("Cumulative count (× 100,000)")
-    + theme(legend.position = c(0.2,0.6))
-	 + xlim(as.Date(c("2022-01-01","2022-07-01")))
-    ## + geom_dl(method = list(dl.trans(x = x + 0.1),
-    ## "last.bumpup"),
-    ## aes(label = type))
-    ## hack to expand limits for direct labels
-    ## + expand_limits(x = max(dat$Date) + 60, y = 8)
-    + colorblindr::scale_colour_OkabeIto()
-    + geom_line(data=ddtrue,aes(Date,y=value/1e5),
-                size=1.5,color="black")
-    + annotate(geom = "text", x = max(dat_cum2$Date)-50,
-               y = 5, label = "incidence")
+gg_hidden <- (gg0 
+    + geom_line(aes(colour = Scenario, y = true, linetype = Scenario), lwd = my_lwd)
+    + labs (y = "hidden cases")
+    + theme(legend.position = "none")
+    + scale_y_log10(limits = c(1, NA))
 )
 
-dat_prop <- (dat
-    %>% filter(type == "htfrac")
-    %>% replace_scenario()
+## data for ascertainment ratios
+pdat2 <- (pdat
+    |> select(c(Scenario, date, asc_lower, asc_upper))
+    |> rename(lower = "asc_lower", upper = "asc_upper")
+    |> replace_scenario()
 )
 
-true_prop <- (tibble(Scenario = names(rProp), value = rProp)
-    %>% replace_scenario())
-
-## FIXME: better to merge, make horizontal lines pseudo-data
-gg_prop <- (ggplot(dat_prop, aes(Date, value, color = Scenario))
-    + geom_line(linetype = "dashed")
-    + labs(x = "Date", y = "underreporting ratio")
-    + geom_hline(data = true_prop,
-    #             colour = "blue",
-                 aes(yintercept = (1-value)/value, color = Scenario))
-    + theme(legend.position = c(0.2,0.6))
-    + colorblindr::scale_colour_OkabeIto()
+gg_asc <- (gg0 %+% pdat2
+    + geom_hline(data = summ |> replace_scenario(),
+                 aes(yintercept = reportProp, colour = Scenario, lty = Scenario), lwd = my_lwd)
+    + labs(y = "ascertainment ratio")
 )
 
-plot_grid(gg_cum, gg_prop)
+plot_grid(gg_hidden, gg_asc, rel_widths = c(0.45, 0.55))
 
-saveVars(gg_cum, gg_prop, summ)
+saveVars(gg_hidden, gg_asc, summ)
 
