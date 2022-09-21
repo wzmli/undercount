@@ -37,9 +37,10 @@ res6_mean <- (res6
     |> summarise(across(value, mean, na.rm  = TRUE), .groups = "drop")
 )
 
-dodge <- 0.01
-psize <- 0.4
-lsize <- 0.6
+dodge <- 0.01 ## dodging (manual for geom_segment)
+psize <- 0.4  ## point size
+lsize <- 0.6  ## linerange size
+tsize <- 7    ## x-axis label size
 res6_mean <- (res6
     |> group_by(sim, a, r, I0, dt, name)
     |> summarise(across(value, mean_cl_boot), .groups = "drop")
@@ -82,7 +83,7 @@ my_label <- function (labels, multi_line = TRUE, sep = " = ",
 
 ## alternative OkabeIto palette, skipping colour 4 (yellow, too pale)
 alt_OI <- colorblindr::palette_OkabeIto[-4]
-
+r_lab <- "$r$ (growth rate, day$^{-1})$"
 ## res6_mean |> filter(dt == 7, a >= 0.4, name == "lower")
 ## pd <- position_dodge(width = 0.01)
 a_plot <- (ggplot(res6_mean,
@@ -94,15 +95,15 @@ a_plot <- (ggplot(res6_mean,
                    aes(x = a_shift, xend = a_shift,
                        y = lower, yend = upper), alpha = 0.3, size = 0.5)
     + geom_abline(intercept = 0, slope = 1, lty = 2)
-    + scale_colour_manual(values = alt_OI, name = "r\n(growth rate, /day)")
-    + scale_shape_manual(name = "r\n(growth rate, /day)", values = 15:18)
-    + labs (x = "true ascertainment ratio", y = "estimated ascertainment ratio bounds")
+    + scale_colour_manual(values = alt_OI, name = r_lab)
+    + scale_shape_manual(name = r_lab, values = 15:18)
+    + labs (x = "true ascertainment ratio ($a$)", y = "estimated ascertainment ratio bounds ($\\hat a$)")
     + expand_limits(y = c(0.05, 0.6))
     + scale_x_continuous(breaks = c(0.05, 0.1, 0.2, 0.4, 0.6))
     + facet_wrap(I0 ~ dt, labeller = my_label)
     + scale_y_continuous() ##limits = c(0.05, 0.6), oob = scales::squish)
     + theme(legend.position = "bottom",
-            axis.text.x = element_text(size = 6) ## avoid label collisions
+            axis.text.x = element_text(size = tsize) ## avoid label collisions
             )
 )
 
