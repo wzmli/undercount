@@ -16,3 +16,4 @@ makestuff/
 \.#*
 *.pdf
 *.html
+*.tikz
