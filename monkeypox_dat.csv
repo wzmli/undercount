@@ -1,0 +1,16 @@
+## data from Maruotti et al 2022 table 1
+## Canada, France, Portugal data up to July 24; others up to July 31
+## est: estimated lower bound on true cases (obs + hidden)
+## lwr, upr: 95% CI on est
+## ratio: true/obs ( = 1/est ascertainment ratio)
+Country,obs_cases,est,lwr,upr,ratio
+Brazil,1367,4303,3865,4740,3.14
+Canada,676,1511,1321,1701,2.24
+France,1561,4935,4413,5456,3.16
+Germany,2591,5696,5372,6019,2.20
+Italy,476,1024,891,1156,2.15
+Netherlands,876,2271,1973,2569,2.59
+Portugal,565,1029,916,1142,1.82
+Spain,4260,13141,12262,14019,3.08
+UK,2473,7653,6875,8433,3.10
+USA,5173,14779,14396,15162,2.86
