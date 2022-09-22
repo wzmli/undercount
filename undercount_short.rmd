@@ -1,28 +1,39 @@
 ---
 title: "Evaluating undercounts in epidemics: response to Maruotti *et al.* 2022"
-output:
-  pdf_document
 date: "`r format(Sys.Date(), '%d %B %Y')`"
-author: "Michael Li, Jonathan Dushoff, David J. D. Earn, and Ben Bolker"
+authors:
+  - name: Michael Li
+    affiliation: "Public Health Agency of Canada"
+  - name: Jonathan Dushoff
+    affiliation: McMaster University
+  - name: David J. D. Earn
+    affiliation: McMaster University
+  - name: Benjamin M. Bolker
+    affiliation: McMaster University
 bibliography: undercount.bib
 csl: nature.csl 
 header-includes:
   - \usepackage[utf8]{inputenc}
   - \usepackage{grffile}
 urlcolor: blue
+output: 
+   rticles::arxiv_article:
+     keep_tex: true
 ---
 
-## Abstract
+# Abstract
 
-Maruotti *et al* 2022 used a mark-recapture formulalated approach to estimate bounds on true number of Monkeypox infections in most affected countries. We believe these approaches are fundametally flawed and that it is impossible to estimate solely on reported cases. We ran a simple simulation example using a Richards curve to validate the boundaries of the proposed method and that it is unrelated to the true ascertainment ratio and should not be applied to disease outbreak incidence data.
+Maruotti *et al.* 2022 used a mark-recapture approach to estimate bounds on the true number of monkeypox infections in various countries. These approaches are fundamentally flawed; it is impossible to estimate undercounting based solely on a single stream of reported cases. Simulations based on a Richards curve for cumulative incidence show that, for reasonable epidemic parameters, the proposed methods estimate bounds on the ascertainment ratio of $\approx 0.2-0.5$ roughly *independently* of the true ascertainment ratio. These methods should not be used.
 
-## Introduction
+# Introduction
 
 Several papers [@bohningEstimating2020; @maruottiEstimating2022; @rocchettiEstimating2020] have promoted formulas that claim to provide bounds on the completeness of sampling of infectious disease cases, based only on case reports. We believe these approaches are fundamentally flawed, and that it is impossible to estimate undercounting from incidence data without a specialized sampling design or some kind of auxiliary information.
 
 The authors use mark-recapture formulas developed by Chao [@chaoEstimating1989a] and others [@alfoUpper2021] to estimate bounds on true population sizes based on the numbers of individuals observed multiple times. For example, the proposed estimator for the lower bound on unobserved individuals (hidden cases) is $\Delta N(t) (\Delta N(t) - 1)/(1 + \Delta N(t-1))$, where $\Delta N(t)$ is the number of new cases observed per reporting period; extended formulas adjust for mortality and recovery. The upper bound also involves $\Delta N(t-2)$ [@bohningEstimating2020; @rocchettiEstimating2020].
 
-## Critique
+# Critique
+
+## Logical argument
 
 This approach misuses the mark-recapture formulas. Cases identified at time $t-1$ are claimed to be representative of the number of cases counted twice: why? The fact that the same individual *could* be counted twice in the cumulative case report (for some sampling designs) is irrelevant. How can comparing yesterday's count to today's provide information about the completeness of sampling? 
 
@@ -45,7 +56,7 @@ We conclude that the authors' formulas appear to work well because they lead to 
 
 ---
 
-Source code for all examples is available at [https://github.com/wzmli/undercount/](https://github.com/wzmli/undercount/).
+Further details, and source code for all examples, are available at [https://github.com/wzmli/undercount/](https://github.com/wzmli/undercount/).
 
 ## References
 
