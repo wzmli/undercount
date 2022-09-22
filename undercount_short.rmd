@@ -12,6 +12,10 @@ header-includes:
 urlcolor: blue
 ---
 
+## Abstract
+
+Maruotti *et al* 2022 used a mark-recapture formulalated approach to estimate bounds on true number of Monkeypox infections in most affected countries. We believe these approaches are fundametally flawed and that it is impossible to estimate solely on reported cases. We ran a simple simulation example using a Richards curve to validate the boundaries of the proposed method and that it is unrelated to the true ascertainment ratio and should not be applied to disease outbreak incidence data.
+
 ## Introduction
 
 Several papers [@bohningEstimating2020; @maruottiEstimating2022; @rocchettiEstimating2020] have promoted formulas that claim to provide bounds on the completeness of sampling of infectious disease cases, based only on case reports. We believe these approaches are fundamentally flawed, and that it is impossible to estimate undercounting from incidence data without a specialized sampling design or some kind of auxiliary information.
