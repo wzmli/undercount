@@ -31,6 +31,7 @@ undercount.pdf: undercount.rmd parameters.rda plot_all_estimates.pdf plot_all_es
 
 ## FIXME: Is this obsolete? 2022 Sep 23 (Fri)
 ## Apparently not; can we annotate what the docs are?
+Ignore += undercount_short.tex
 undercount_short.pdf: undercount_short.rmd a_plot.pdf
 	$(render)
 
