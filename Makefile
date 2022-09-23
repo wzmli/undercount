@@ -21,12 +21,13 @@ autopipeR = defined
 
 Ignore += undercount.pdf
 Sources += undercount.rmd
+
 ## also depends on  gg_ok.pdf scaled_bounds.pdf, but we need more
 ##   workflow magic to make this work
 undercount.pdf: undercount.rmd parameters.rda plot_all_estimates.pdf plot_all_estimates.rda
 	$(knitpdf)
 
-
+## Is this obsolete? 2022 Sep 23 (Fri)
 undercount_short.pdf: undercount_short.rmd a_plot.pdf
 	$(knitpdf)
 
