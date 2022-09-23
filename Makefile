@@ -1,4 +1,4 @@
-## Ben, if you have a make that works for you, can you just make it your default make, or would that break other stuff?
+## FIXME: Is this obsolete? 2022 Sep 23 (Fri)
 ## MAKE=/usr/local/opt/make/bin/gmake
 
 current: target
@@ -15,6 +15,8 @@ vim_session:
 
 Sources += $(wildcard *.R)
 
+broom.Rout: broom.R
+
 ######################################################################
 
 autopipeR = defined
@@ -27,7 +29,7 @@ Sources += undercount.rmd
 undercount.pdf: undercount.rmd parameters.rda plot_all_estimates.pdf plot_all_estimates.rda
 	$(knitpdf)
 
-## Is this obsolete? 2022 Sep 23 (Fri)
+## FIXME: Is this obsolete? 2022 Sep 23 (Fri)
 undercount_short.pdf: undercount_short.rmd a_plot.pdf
 	$(knitpdf)
 
@@ -46,10 +48,10 @@ a_plot.Rout: a_plot.R sim_funs.rda
 a_plot.Rout.pdf: a_plot.Rout
 	pdflatex a_plot.Rout.tikz
 
-## not piped, not using magic since I don't know what it is
-## generates sim2.html, gg_ok.pdf, scaled_bounds.pdf
 sim2.html: sim2.rmd
-	Rscript -e "rmarkdown::render('sim2.rmd')"
+	$(knithtml)
+
+gg_ok.pdf scaled_bounds.pdf: sim2.html ;
 
 ## Stupid work-around for knitr error
 Ignore += plot_all_estimates.pdf
@@ -130,6 +132,8 @@ makestuff/Makefile:
 -include makestuff/os.mk
 
 -include makestuff/pipeR.mk
+-include makestuff/rmd.mk
 -include makestuff/chains.mk
 -include makestuff/git.mk
+
 -include makestuff/visual.mk
