@@ -19,7 +19,7 @@ header-includes:
 urlcolor: blue
 output: 
    rticles::arxiv_article:
-     keep_tex: true
+   keep_tex: true
 ---
 
 # Abstract

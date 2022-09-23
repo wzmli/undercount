@@ -34,7 +34,10 @@ undercount_short.pdf: undercount_short.rmd a_plot.pdf
 # undercount_short.tex.Rout: rmd_tex.R undercount_short.rmd
 %.tex.Rout: rmd_tex.R %.rmd
 	$(pipeR)
-	
+
+# undercount_short.docx.Rout: rmd_docx.R undercount_short.rmd
+%.docx.Rout: rmd_docx.R %.rmd
+	$(pipeR)
 
 a_plot.Rout: a_plot.R sim_funs.rda
 	$(pipeR)
