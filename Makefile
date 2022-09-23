@@ -6,7 +6,7 @@ current: target
 
 # -include makestuff/perl.def
 
-all: undercount.pdf
+all: undercount.pdf sim2.html 
 
 vim_session:
 	bash -cl "vmt"
