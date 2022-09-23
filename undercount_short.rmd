@@ -1,16 +1,16 @@
 ---
 title: "Evaluating undercounts in epidemics: response to Maruotti *et al.* 2022"
 date: "`r format(Sys.Date(), '%d %B %Y')`"
-author: "Michael Li, Jonathan Dushoff, David J. D. Earn, and Benjamin M. Bolker"
-#author:
-#  - name: Michael Li
-#    affiliation: "Public Health Agency of Canada"
-#  - name: Jonathan Dushoff
-#    affiliation: McMaster University
-#  - name: David J. D. Earn
-#    affiliation: McMaster University
-#  - name: Benjamin M. Bolker
-#    affiliation: McMaster University
+#author: "Michael Li, Jonathan Dushoff, David J. D. Earn, and Benjamin M. Bolker"
+author:
+  - name: Michael Li
+    affiliation: "Public Health Agency of Canada"
+  - name: Jonathan Dushoff
+    affiliation: McMaster University
+  - name: David J. D. Earn
+    affiliation: McMaster University
+  - name: Benjamin M. Bolker
+    affiliation: McMaster University
 bibliography: undercount.bib
 csl: nature.csl 
 header-includes:
