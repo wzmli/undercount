@@ -41,8 +41,12 @@ undercount_short.pdf: undercount_short.rmd a_plot.pdf
 	$(pipeR)
 
 # undercount_short.docx.Rout: rmd_docx.R undercount_short.rmd
+## How can this be right?
 %.docx.Rout: rmd_docx.R %.rmd
 	$(pipeR)
+
+######################################################################
+## tikz piping needs work
 
 a_plot.Rout: a_plot.R sim_funs.rda
 	$(pipeR)
@@ -50,15 +54,17 @@ a_plot.Rout: a_plot.R sim_funs.rda
 a_plot.Rout.pdf: a_plot.Rout
 	pdflatex a_plot.Rout.tikz
 
-sim2.html: sim2.rmd
-	$(knithtml)
-
-gg_ok.pdf scaled_bounds.pdf: sim2.html ;
-
 ## Stupid work-around for knitr error
 Ignore += plot_all_estimates.pdf
 %.pdf: %.Rout.pdf
 	$(copy)
+
+######################################################################
+
+sim2.html: sim2.rmd
+	$(knithtml)
+
+gg_ok.pdf scaled_bounds.pdf: sim2.html ;
 
 parameters.Rout: parameters.R
 	$(pipeR)
@@ -116,6 +122,8 @@ plot_all_estimates.Rout: $(estScen)
 
 plot_all.Rout: high.estimate
 
+######################################################################
+
 ### Makestuff
 
 Sources += Makefile
@@ -126,10 +134,11 @@ Sources += Makefile
 Ignore += makestuff
 msrepo = https://github.com/dushoff
 
-Makefile: makestuff/Makefile
-makestuff/Makefile:
-	git clone $(msrepo)/makestuff
-	ls makestuff/Makefile
+Makefile: makestuff/00.stamp
+makestuff/%.stamp:
+	- $(RM) makestuff/*.stamp
+	(cd makestuff && $(MAKE) pull) || git clone $(msrepo)/makestuff
+	touch $@
 
 -include makestuff/os.mk
 
