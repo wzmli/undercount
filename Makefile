@@ -6,7 +6,7 @@ current: target
 
 # -include makestuff/perl.def
 
-all = undercount.pdf sim2.html 
+all = undercount_short.pdf undercount.pdf sim2.html 
 all: $(all)
 
 vim_session:
