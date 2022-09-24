@@ -23,7 +23,7 @@ Sources += undercount.rmd
 
 ## also depends on  gg_ok.pdf scaled_bounds.pdf, but we need more
 ##   workflow magic to make this work
-undercount.pdf: undercount.rmd parameters.rda plot_all_estimates.pdf plot_all_estimates.rda
+undercount.pdf: undercount.rmd parameters.rda plot_all_estimates.pdf plot_all_estimates.rda a_plot.pdf
 	$(knitpdf)
 
 ## FIXME: Is this obsolete? 2022 Sep 23 (Fri)
