@@ -6,7 +6,8 @@ current: target
 
 # -include makestuff/perl.def
 
-all: undercount.pdf sim2.html 
+all = undercount.pdf sim2.html 
+all: $(all)
 
 vim_session:
 	bash -cl "vmt"
@@ -14,10 +15,6 @@ vim_session:
 ######################################################################
 
 Sources += $(wildcard *.R)
-
-broom.Rout: broom.R
-
-######################################################################
 
 autopipeR = defined
 
