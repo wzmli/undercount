@@ -31,22 +31,23 @@ undercount.pdf: undercount.rmd parameters.rda plot_all_estimates.pdf plot_all_es
 ## Shorter versions (current; on arxiv, and submitted)
 
 Ignore += undercount_short.tex
-undercount_short.tex: undercount_short.rmd a_plot.pdf
+undercount_short.tex: undercount_short.rmd
 	$(render)
 
+## undercount_jmv.pdf:
 undercount_jmv.tex: undercount_short.fixtex.Rout ;
 
-# undercount_short.tex.Rout: rmd_tex.R undercount_short.rmd authors.tex
+# undercount_short.tex.Rout: rmd_tex.R undercount_short.rmd
 %.fixtex.Rout: fixtex.R %.tex
 	$(pipeR)
-
-undercount_short_jmv.pdf: undercount_short_jmv.tex
-	pdflatex undercount_short_jmv.tex
 
 # undercount_short.docx.Rout: rmd_docx.R undercount_short.rmd
 ## How can this be right?
 %.docx.Rout: rmd_docx.R %.rmd
 	$(pipeR)
+
+## Work-around because render drops file extension:
+%: %.pdf ;
 
 ######################################################################
 ## tikz piping needs work
@@ -124,6 +125,11 @@ plot_all_estimates.Rout: plot_all_estimates.R
 plot_all_estimates.Rout: $(estScen)
 
 plot_all.Rout: high.estimate
+
+######################################################################
+
+%.pdf: %.tex
+	pdflatex $<
 
 ######################################################################
 
