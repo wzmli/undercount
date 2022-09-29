@@ -49,7 +49,7 @@ The authors indicated (pers. comm.) that they intended the estimator to be used 
 
 For each simulation run (80 in total), we computed the mean and confidence intervals for the estimated lower and upper bounds of $\hat a$ over time (Figure 1). The bounds on $\hat a$ rarely overlap the true value, and are *largely independent of the true values of $a$*. The only noticeable signal arises from the bias-correction terms: simulations with lower overall case numbers (low $r$, low $a$, $\Delta t = 1$) have larger lower bounds and smaller upper bounds. In simulations without noise and with the simpler, non-bias-corrected expression for the lower bound (not shown), the lower-bound estimates of $\hat a$ are completely independent of $a$; some algebra shows that during the exponential growth phase of an epidemic, the (simplified) lower bound on $\hat a$ is exactly equal to $1/(1+\exp(r \Delta t))$.
 
-```{r aplot,fig.cap="Comparison of true ascertainment ratio ($a$) to estimated lower and upper bounds of ascertainment ratio ($\\hat a$). Dashed line is the one-to-one line (estimated = true).", echo = FALSE}
+```{r aplot,fig.cap="Comparison of true ascertainment ratio ($a$) to estimated lower and upper bounds of ascertainment ratio ($\\hat a$). Dashed line is the one-to-one line (estimated = true).", echo = FALSE, out.width="80%"}
 knitr::include_graphics("a_plot.pdf")
 ```
 
