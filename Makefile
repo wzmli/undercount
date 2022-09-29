@@ -18,12 +18,11 @@ Sources += README.md
 
 ######################################################################
 
-Sources += $(wildcard *.R)
+Sources += $(wildcard *.R *.rmd *.pl)
 
 autopipeR = defined
 
 Ignore += undercount.pdf
-Sources += undercount.rmd
 
 ## also depends on  gg_ok.pdf scaled_bounds.pdf, but we need more
 ##   workflow magic to make this work
