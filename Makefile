@@ -31,7 +31,7 @@ undercount.pdf: undercount.rmd parameters.rda plot_all_estimates.pdf plot_all_es
 ## Shorter versions (current; on arxiv, and submitted)
 
 Ignore += undercount_short.tex
-undercount_short.tex: undercount_short.rmd
+undercount_short.tex: undercount_short.rmd a_plot.pdf
 	$(render)
 
 ## undercount_jmv.pdf:
