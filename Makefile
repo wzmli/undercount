@@ -26,15 +26,18 @@ Sources += undercount.rmd
 undercount.pdf: undercount.rmd parameters.rda plot_all_estimates.pdf plot_all_estimates.rda a_plot.pdf
 	$(knitpdf)
 
-## FIXME: Is this obsolete? 2022 Sep 23 (Fri)
-## Apparently not; can we annotate what the docs are?
+######################################################################
+
+## Shorter versions (current; on arxiv, and submitted)
+
 Ignore += undercount_short.tex
-undercount_short_arxiv.pdf: undercount_short.rmd a_plot.pdf
+undercount_short.tex: undercount_short.rmd a_plot.pdf
 	$(render)
 
-# undercount_short_jmv.tex
+undercount_jmv.tex: undercount_short.fixtex.Rout ;
+
 # undercount_short.tex.Rout: rmd_tex.R undercount_short.rmd authors.tex
-%.tex.Rout: rmd_tex.R %.rmd
+%.fixtex.Rout: fixtex.R %.tex
 	$(pipeR)
 
 undercount_short_jmv.pdf: undercount_short_jmv.tex
