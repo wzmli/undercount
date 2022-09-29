@@ -2,7 +2,7 @@
 repos <- c(CRAN = "https://cloud.r-project.org")
 options(repos = repos)
 
-cran_pkgs <- c("cowplot", "directlabels", "ggplot2", "tikzDevice","remotes", "asymptor")
+cran_pkgs <- c("cowplot", "directlabels", "ggplot2", "tikzDevice","remotes", "asymptor", "rticles")
 
 github_pkgs <- c("dushoff/shellpipes", "mac-theobio/McMasterPandemic", "clauswilke/colorblindr")
 

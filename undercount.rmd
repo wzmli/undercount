@@ -62,7 +62,7 @@ The estimated lower and upper bounds are largely independent of the true $a$; at
 
 <!-- note N is hard-coded, too hard to format nicely/automatically -->
 ```{r get_plot, echo = FALSE, out.height = "4in", fig.cap = sprintf('Estimates based on a simulated SIR epidemic with ${\\cal R}_0 = %1.1f$, infectious period of %1.2f days, $N = 10^6$. Left panel, true numbers of hidden cases (lines) with estimated bounds (regions). Right panel, true ascertainment ratios (lines) and estimated bounds (regions).', R0, inf_per)}
-knitr::include_graphics(matchFile(exts="pdf"))
+knitr::include_graphics(matchFile("all", exts="pdf"))
 ```
 
 ### Simulation example (Richards curve)

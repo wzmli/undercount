@@ -6,7 +6,8 @@ current: target
 
 # -include makestuff/perl.def
 
-all: undercount.pdf sim2.html 
+all = undercount_short.pdf undercount.pdf sim2.html 
+all: $(all)
 
 vim_session:
 	bash -cl "vmt"
@@ -15,10 +16,6 @@ vim_session:
 
 Sources += $(wildcard *.R)
 
-broom.Rout: broom.R
-
-######################################################################
-
 autopipeR = defined
 
 Ignore += undercount.pdf
@@ -26,7 +23,7 @@ Sources += undercount.rmd
 
 ## also depends on  gg_ok.pdf scaled_bounds.pdf, but we need more
 ##   workflow magic to make this work
-undercount.pdf: undercount.rmd parameters.rda plot_all_estimates.pdf plot_all_estimates.rda
+undercount.pdf: undercount.rmd parameters.rda plot_all_estimates.pdf plot_all_estimates.rda a_plot.pdf
 	$(knitpdf)
 
 ## FIXME: Is this obsolete? 2022 Sep 23 (Fri)
@@ -44,8 +41,12 @@ undercount_short_jmv.pdf: undercount_short_jmv.tex
 	pdflatex undercount_short_jmv.tex
 
 # undercount_short.docx.Rout: rmd_docx.R undercount_short.rmd
+## How can this be right?
 %.docx.Rout: rmd_docx.R %.rmd
 	$(pipeR)
+
+######################################################################
+## tikz piping needs work
 
 a_plot.Rout: a_plot.R sim_funs.rda
 	$(pipeR)
@@ -53,15 +54,17 @@ a_plot.Rout: a_plot.R sim_funs.rda
 a_plot.Rout.pdf: a_plot.Rout
 	pdflatex a_plot.Rout.tikz
 
-sim2.html: sim2.rmd
-	$(knithtml)
-
-gg_ok.pdf scaled_bounds.pdf: sim2.html ;
-
 ## Stupid work-around for knitr error
 Ignore += plot_all_estimates.pdf
 %.pdf: %.Rout.pdf
 	$(copy)
+
+######################################################################
+
+sim2.html: sim2.rmd
+	$(knithtml)
+
+gg_ok.pdf scaled_bounds.pdf: sim2.html ;
 
 parameters.Rout: parameters.R
 	$(pipeR)
@@ -119,6 +122,8 @@ plot_all_estimates.Rout: $(estScen)
 
 plot_all.Rout: high.estimate
 
+######################################################################
+
 ### Makestuff
 
 Sources += Makefile
@@ -129,10 +134,11 @@ Sources += Makefile
 Ignore += makestuff
 msrepo = https://github.com/dushoff
 
-Makefile: makestuff/Makefile
-makestuff/Makefile:
-	git clone $(msrepo)/makestuff
-	ls makestuff/Makefile
+Makefile: makestuff/undercount01.stamp
+makestuff/%.stamp:
+	- $(RM) makestuff/*.stamp
+	(cd makestuff && $(MAKE) pull) || git clone $(msrepo)/makestuff
+	touch $@
 
 -include makestuff/os.mk
 
