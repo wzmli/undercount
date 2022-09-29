@@ -4,7 +4,7 @@
 current: target
 -include target.mk
 
-# -include makestuff/perl.def
+-include makestuff/perl.def
 
 all = undercount_short.pdf undercount.pdf sim2.html 
 all: $(all)
@@ -40,7 +40,8 @@ undercount_short.tex: undercount_short.rmd a_plot.pdf
 	$(render)
 
 ## undercount_jmv.pdf:
-undercount_jmv.tex: undercount_short.fixtex.Rout ;
+undercount_jmv.tex: undercount_short.tex fixtex.pl
+	$(PUSH)
 
 # undercount_short.tex.Rout: rmd_tex.R undercount_short.rmd
 %.fixtex.Rout: fixtex.R %.tex
