@@ -14,6 +14,10 @@ vim_session:
 
 ######################################################################
 
+Sources += README.md
+
+######################################################################
+
 Sources += $(wildcard *.R)
 
 autopipeR = defined
@@ -30,7 +34,8 @@ undercount.pdf: undercount.rmd parameters.rda plot_all_estimates.pdf plot_all_es
 
 ## Shorter versions (current; on arxiv, and submitted)
 
-Ignore += undercount_short.tex
+Ignore += $(wildcard *.tex)
+## undercount_short.pdf: undercount_short.rmd
 undercount_short.tex: undercount_short.rmd a_plot.pdf
 	$(render)
 
@@ -46,25 +51,24 @@ undercount_jmv.tex: undercount_short.fixtex.Rout ;
 %.docx.Rout: rmd_docx.R %.rmd
 	$(pipeR)
 
-## Work-around because render drops file extension:
-%: %.pdf ;
-
 ######################################################################
 ## tikz piping needs work
 
+## a_plot.pdf: a_plot.R
 a_plot.Rout: a_plot.R sim_funs.rda
 	$(pipeR)
 
-a_plot.Rout.pdf: a_plot.Rout
-	pdflatex a_plot.Rout.tikz
+a_plot.Rout.tikz.tex: a_plot.Rout ;
 
-## Stupid work-around for knitr error
+## Stupid work-around for knitr incompatibility
 Ignore += plot_all_estimates.pdf
-%.pdf: %.Rout.pdf
+%.pdf: %.Rout.tikz.pdf
 	$(copy)
 
 ######################################################################
 
+## What is this (used to conflict with a_plot)?
+another_plot.pdf: sim2.html ;
 sim2.html: sim2.rmd
 	$(knithtml)
 
@@ -128,6 +132,7 @@ plot_all.Rout: high.estimate
 
 ######################################################################
 
+## Make pdf from Auto tex files the simple way!
 %.pdf: %.tex
 	pdflatex $<
 

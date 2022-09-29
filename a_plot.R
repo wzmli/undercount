@@ -9,7 +9,10 @@ library(shellpipes)
 
 rpcall("a_plot.Rout a_plot.R sim_funs.rda")
 loadEnvironments()
-startGraphics(width = 5.5, height = 5.5, otype = "tikz", standAlone = TRUE)
+startGraphics(width = 5.5, height = 5.5
+	, otype = "tikz", ext="tikz.tex"
+	, standAlone = TRUE
+)
 
 params <- (cross_df(list(dt = c(1, 7),  ## daily, weekly
            r = c(0.01, 0.02, 0.04, 0.08), ## doubling time 70, 35, 17, 8.5 days
