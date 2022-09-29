@@ -1,9 +1,14 @@
-## undercount
+# undercount
 
 This repository contains a reponse to several papers by Maruotti, Böhning et al, which propose a flawed method for estimating undercounting (also known as the *ascertainment ratio*) from case reports of epidemic disease.
 
 - We have submitted a letter to the editor (see `undercount_short.rmd`, `outputs/undercount_short.pdf`) to *J. Med. Virology* and posted a preprint on [arxiv](https://t.co/ki3OoysqNb).
 - `undercount.rmd` contains earlier work (much of which was cut from the letter to the editor to satisfy word-count requirements), including an SIR-based example and some algebra evaluating a version of Maruotti *et al.*'s lower-bound criterion for the exponential phase of an epidemic.
+
+## Outputs
+
+undercount_short.pdf
+
 
 ## code and source files
 
@@ -14,7 +19,6 @@ The workflow uses the `make` utility, [makestuff](https://github.com/dushoff/mak
 - `states.R`, `low.R`, `high.R`, `parameters.R`, `model_definition.R`, `simulate.R`, `plot_all_estimates.R`: workflow for SIR model simulations and plots using [McMasterPandemic](https://github.com/mac-theobio/McMasterPandemic)
 - `sim2.rmd`: various views of Richards-model simulations
 - `a_plot.R`: Richards-model simulations and plot for short letter
-- **junk/obsolete**: `plot_tikz.R`
 
 ## References
 

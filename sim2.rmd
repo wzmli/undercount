@@ -389,5 +389,5 @@ a_plot <- (ggplot(res6_mean,
 )
 
 print(a_plot)
-ggsave(a_plot, file = "a_plot.pdf", width = 5.5, height = 5.5)
+ggsave(a_plot, file = "another_plot.pdf", width = 5.5, height = 5.5)
 ```
