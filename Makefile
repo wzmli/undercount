@@ -49,13 +49,13 @@ undercount_jmv.tex: undercount_short.tex authors.inc fixtex.pl
 
 ######################################################################
 
-## This mysteriously hangs forever; don't make it
+## This is ugly, and doesn't contain author information, but the best I was able to do
+
 Ignore += *.docx
-undercount_jmv.docx: undercount_jmv.tex
+undercount_short.docx: undercount_short.rmd
 	$(render)
 
 ######################################################################
-## tikz piping needs work
 
 ## a_plot.pdf: a_plot.R
 a_plot.Rout: a_plot.R sim_funs.rda
