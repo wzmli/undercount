@@ -6,7 +6,7 @@ current: target
 
 -include makestuff/perl.def
 
-all = undercount_short.pdf undercount.pdf sim2.html 
+all = undercount_jmf.pdf undercount.pdf sim2.html 
 all: $(all)
 
 vim_session:
@@ -24,6 +24,7 @@ autopipeR = defined
 
 Ignore += undercount.pdf
 
+## Does this comment still apply? FIXME 2022 Sep 29 (Thu)
 ## also depends on  gg_ok.pdf scaled_bounds.pdf, but we need more
 ##   workflow magic to make this work
 undercount.pdf: undercount.rmd parameters.rda plot_all_estimates.pdf plot_all_estimates.rda a_plot.pdf
@@ -38,18 +39,17 @@ Ignore += $(wildcard *.tex)
 undercount_short.tex: undercount_short.rmd a_plot.pdf
 	$(render)
 
+Sources += authors.inc
 ## undercount_jmv.pdf:
-undercount_jmv.tex: undercount_short.tex fixtex.pl
+undercount_jmv.tex: undercount_short.tex authors.inc fixtex.pl
 	$(PUSH)
 
-# undercount_short.tex.Rout: rmd_tex.R undercount_short.rmd
-%.fixtex.Rout: fixtex.R %.tex
-	$(pipeR)
+######################################################################
 
-# undercount_short.docx.Rout: rmd_docx.R undercount_short.rmd
-## How can this be right?
-%.docx.Rout: rmd_docx.R %.rmd
-	$(pipeR)
+## This mysteriously hangs forever; don't make it
+Ignore += *.docx
+undercount_jmv.docx: undercount_jmv.tex
+	$(render)
 
 ######################################################################
 ## tikz piping needs work
@@ -69,6 +69,7 @@ Ignore += plot_all_estimates.pdf
 
 ## What is this (used to conflict with a_plot)?
 another_plot.pdf: sim2.html ;
+
 sim2.html: sim2.rmd
 	$(knithtml)
 
@@ -148,7 +149,7 @@ Sources += Makefile
 Ignore += makestuff
 msrepo = https://github.com/dushoff
 
-Makefile: makestuff/undercount01.stamp
+Makefile: makestuff/undercount02.stamp
 makestuff/%.stamp:
 	- $(RM) makestuff/*.stamp
 	(cd makestuff && $(MAKE) pull) || git clone $(msrepo)/makestuff
