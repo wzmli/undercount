@@ -6,7 +6,7 @@ current: target
 
 -include makestuff/perl.def
 
-all = undercount_jmf.pdf undercount.pdf sim2.html 
+all = undercount_jmv.pdf undercount.pdf sim2.html 
 all: $(all)
 
 vim_session:
@@ -29,6 +29,9 @@ Ignore += undercount.pdf
 ##   workflow magic to make this work
 undercount.pdf: undercount.rmd parameters.rda plot_all_estimates.pdf plot_all_estimates.rda a_plot.pdf
 	$(knitpdf)
+
+plot_all_estimates.pdf: plot_all_estimates.Rout.pdf
+	$(copy)
 
 ######################################################################
 
