@@ -5,11 +5,6 @@ This repository contains a reponse to several papers by Maruotti, Böhning et al
 - We have submitted a letter to the editor (see `undercount_short.rmd`, `outputs/undercount_short.pdf`) to *J. Med. Virology* and posted a preprint on [arxiv](https://t.co/ki3OoysqNb).
 - `undercount.rmd` contains earlier work (much of which was cut from the letter to the editor to satisfy word-count requirements), including an SIR-based example and some algebra evaluating a version of Maruotti *et al.*'s lower-bound criterion for the exponential phase of an epidemic.
 
-## Outputs
-
-undercount_short.pdf
-
-
 ## code and source files
 
 The workflow uses the `make` utility, [makestuff](https://github.com/dushoff/makestuff) rules, and the [shellpipes](https://github.com/dushoff/shellpipes) R package

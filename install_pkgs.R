@@ -8,8 +8,8 @@ github_pkgs <- c("dushoff/shellpipes", "mac-theobio/McMasterPandemic", "clauswil
 
 i1 <- installed.packages()
 cran_pkgs <- setdiff(cran_pkgs, rownames(i1))
-
 if (length(cran_pkgs)>0) install.packages(cran_pkgs)
+
 ## MacPan seems to be problematic -- too big?
 sapply(github_pkgs, function(x) try(remotes::install_github(x)))
 
