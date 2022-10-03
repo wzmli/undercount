@@ -137,6 +137,7 @@ plot_all.Rout: high.estimate
 ######################################################################
 
 ## Make pdf from Auto tex files the simple way!
+a_plot.Rout.tikz.pdf: a_plot.Rout.tikz.tex
 %.pdf: %.tex
 	pdflatex $<
 
