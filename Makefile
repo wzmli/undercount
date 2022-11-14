@@ -1,5 +1,5 @@
-## FIXME: Is this obsolete? 2022 Sep 23 (Fri)
-## MAKE=/usr/local/opt/make/bin/gmake
+
+## This is the monkeypox-inspired response to a stupid undercount paper
 
 current: target
 -include target.mk
@@ -11,6 +11,10 @@ all: $(all)
 
 vim_session:
 	bash -cl "vmt"
+
+######################################################################
+
+## MAKE=/usr/local/opt/make/bin/gmake
 
 ######################################################################
 
