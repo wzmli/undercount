@@ -16,6 +16,7 @@ csl: nature.csl
 header-includes:
   - \usepackage[utf8]{inputenc}
   - \usepackage{grffile}
+  - \usepackage{amsmath}
 urlcolor: blue
 output: 
    rticles::arxiv_article:
@@ -30,7 +31,7 @@ Maruotti *et al.* 2022 used a mark-recapture approach to estimate bounds on the 
 
 Several papers [@bohningEstimating2020; @maruottiEstimating2022; @rocchettiEstimating2020] have promoted formulas that claim to provide bounds on the completeness of sampling of infectious disease cases, based only on case reports. We believe these approaches are fundamentally flawed, and that it is impossible to estimate undercounting from incidence data without a specialized sampling design or some kind of auxiliary information.
 
-The authors use mark-recapture formulas developed by Chao [@chaoEstimating1989a] and others [@alfoUpper2021] to estimate bounds on true population sizes based on the numbers of individuals observed multiple times. For example, the proposed estimator for the lower bound on unobserved individuals (hidden cases) is $\Delta N(t) (\Delta N(t) - 1)/(1 + \Delta N(t-1))$, where $\Delta N(t)$ is the number of new cases observed per reporting period; extended formulas adjust for mortality and recovery. The upper bound also involves $\Delta N(t-2)$ [@bohningEstimating2020; @rocchettiEstimating2020].
+The authors use mark-recapture formulas developed by Chao [@chaoEstimating1989a] and others [@alfoUpper2021] to estimate bounds on true population sizes based on the numbers of individuals observed multiple times. For example, the proposed estimator for the lower bound on unobserved individuals (hidden cases) is $\hat H(t) =\ Delta N(t) (\Delta N(t) - 1)/(1 + \Delta N(t-1))$, where $\Delta N(t)$ is the number of new cases observed per reporting period; extended formulas adjust for mortality and recovery. The upper bound also involves $\Delta N(t-2)$ [@bohningEstimating2020; @rocchettiEstimating2020].
 
 # Critique
 
@@ -41,9 +42,26 @@ This approach misuses the mark-recapture formulas. Cases identified at time $t-1
 In principle, the number of unobserved hidden cases can be estimated if cases can be re-identified, or even with unmarked/unidentified cases given an appropriate sampling design [@royleHierarchical2008]. 
 In practice public health case reporting rarely uses such sampling designs. Case reporting is usually exclusive (i.e. someone who has been identified as a case will not be reported again later), or anonymized so that we cannot identify a particular infected individual as double-counted. Mark-recapture methods can provide valuable public health information, but "one needs at least two sources of information with individual case reporting and a unique personal identifier for each case" [@desenclosLimitations1994].
 
+## Mathematical argument
+
+The simplest mathematical illustration of the problems with the method occurs during the exponential-growth phase of the epidemic (when the authors have suggested that their method is most appropriate). During this phase the incidence (true number of new infections: $I(t)$) grows at a rate $\lambda$ per time step, i.e. $I(t) = I(0) \lambda^t$. Suppose a fraction $a$ (the *ascertainment ratio*) of these cases are reported (i.e. $a$ is the ratio of reported cases to the true incidence). An estimated lower bound on the number of hidden cases $\hat H$ can be converted to an upper bound on the estimated ascertainment ratio, $\hat a$. Using the simpler, non-bias-corrected formula:
+
+$$
+\begin{split}
+\hat a & = \frac{\textrm{observed cases}}{\textrm{observed cases} + \textrm{hidden cases}} \\
+& = \frac{\Delta N(t)}{\Delta N(t) + \hat H(t)} \\
+& = \frac{\Delta N(t)}{\Delta N(t) + \frac{[\Delta N(t)]^2}{\Delta N(t - 1)}} \\
+& = \left(1 + \Delta N(t)/\Delta N(t-1)\right)^{-1} \\
+& = \left(1 + a I(0) \lambda^t/(a I(0) \lambda^{t-1}\right)^{-1} \\
+& = 1/(1+\lambda).
+\end{split}
+$$
+
+The estimated upper bound of the ascertainment ratio $\hat a$ thus depends only on the epidemic growth rate; it is independent of the true ascertainment ratio. When applying a bias correction the results depend on the overall number of reported cases as well, so the results are more complicated, but as we show below they are still wrong.
+
 ## Simulation example
 
-We ran simulations using a Richards curve for the cumulative incidence of the epidemic [@maEstimating2014]. We computed expected incidence by differencing the cumulative incidence, drew a random negative binomial deviate with  mean equal to the expected incidence, and used a binomial sample with probability equal to the ascertainment ratio $a$ to get the number of observed cases. Throughout, we used a shape parameter of $s=2$ and a final epidemic size of $10^5$ for the Richards curve, and a negative binomial dispersion parameter $k=5$. We varied the reporting period ($\Delta t = \{1, 7\}$); starting incidence ($I_0 = \{20, 40\}$); epidemic growth rate ($r$ =  0.01 to 0.08 per day); and ascertainment ratio ($a$ from 0.05 to 0.6). We ran each simulation for 100 days and used the R package `asymptor` [@grusonAsymptor2020] to compute bounds on the ascertainment ratio.
+We ran simulations using a Richards curve for the cumulative incidence of the epidemic [@maEstimating2014] (according to the authors, this is the same method they used to test their method). We computed expected incidence by differencing the cumulative incidence, drew a random negative binomial deviate with  mean equal to the expected incidence, and used a binomial sample with probability equal to the ascertainment ratio $a$ to get the number of observed cases. Throughout, we used a shape parameter of $s=2$ and a final epidemic size of $10^5$ for the Richards curve, and a negative binomial dispersion parameter $k=5$. We varied the reporting period ($\Delta t = \{1, 7\}$); starting incidence ($I_0 = \{20, 40\}$); epidemic growth rate ($r$ =  0.01 to 0.08 per day); and ascertainment ratio ($a$ from 0.05 to 0.6). We ran each simulation for 100 days and used the R package `asymptor` [@grusonAsymptor2020] to compute bounds on the ascertainment ratio.
 
 The authors indicated (pers. comm.) that they intended the estimator to be used at the beginning of an epidemic. Therefore we considered only sample points when the number of cases was between 5 and 500 (exclusive) and the lower bound estimator for hidden cases was greater than 1.
 

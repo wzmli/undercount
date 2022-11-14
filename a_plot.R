@@ -93,10 +93,10 @@ a_plot <- (ggplot(res6_mean,
                   aes(x = a_shift, y = y,
                       colour = factor(r), shape = factor(r)))
     + geom_pointrange(size = psize, aes(ymin = ymin, ymax = ymax))
-    + geom_linerange(size = lsize, aes(ymin = ymin, ymax = ymax))
+    + geom_linerange(linewidth = lsize, aes(ymin = ymin, ymax = ymax))
     + geom_segment(data = res6_wide,
                    aes(x = a_shift, xend = a_shift,
-                       y = lower, yend = upper), alpha = 0.3, size = 0.5)
+                       y = lower, yend = upper), alpha = 0.3, linewidth = 0.5)
     + geom_abline(intercept = 0, slope = 1, lty = 2)
     + scale_colour_manual(values = alt_OI, name = r_lab)
     + scale_shape_manual(name = r_lab, values = 15:18)
