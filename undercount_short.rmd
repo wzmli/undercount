@@ -57,7 +57,7 @@ $$
 \end{split}
 $$
 
-The estimated upper bound of the ascertainment ratio $\hat a$ thus depends only on the epidemic growth rate; it is independent of the true ascertainment ratio. When applying a bias correction the results depend on the overall number of reported cases as well, so the results are more complicated, but as we show below they are still wrong.
+The estimated upper bound of the ascertainment ratio $\hat a$ thus depends only on the epidemic growth rate; it is independent of the true ascertainment ratio. When applying a bias correction the results also depend on the overall number of reported cases, so the results are more complicated, but as we show below the estimate is still largely independent of the true ratio. 
 
 ## Simulation example
 

@@ -1,12 +1,12 @@
 
-## This is the monkeypox-inspired response to a stupid undercount paper
+## This is the monkeypox-inspired response to a stupid undercount_long paper
 
 current: target
 -include target.mk
 
 -include makestuff/perl.def
 
-all = undercount_jmv.pdf undercount.pdf sim2.html 
+all = undercount_jmv.pdf undercount_long.pdf sim2.html 
 all: $(all)
 
 vim_session:
@@ -20,18 +20,21 @@ vim_session:
 
 Sources += README.md responses.md TODO.md
 
+responses.html: responses.md
+	$(ghh_r)
+
 ######################################################################
 
 Sources += $(wildcard *.R *.rmd *.pl)
 
 autopipeR = defined
 
-Ignore += undercount.pdf
+Ignore += undercount_long.pdf
 
 ## Does this comment still apply? FIXME 2022 Sep 29 (Thu)
 ## also depends on  gg_ok.pdf scaled_bounds.pdf, but we need more
 ##   workflow magic to make this work
-undercount.pdf: undercount.rmd parameters.rda plot_all_estimates.pdf plot_all_estimates.rda a_plot.pdf
+undercount_long.pdf: undercount_long.rmd parameters.rda plot_all_estimates.pdf plot_all_estimates.rda a_plot.pdf
 	$(knitpdf)
 
 plot_all_estimates.pdf: plot_all_estimates.Rout.pdf
@@ -167,6 +170,7 @@ makestuff/%.stamp:
 
 -include makestuff/pipeR.mk
 -include makestuff/rmd.mk
+-include makestuff/pandoc.mk
 -include makestuff/chains.mk
 -include makestuff/git.mk
 

@@ -1,9 +1,5 @@
 ## To do
 
-Rename original to be less confusing
-
-Add responses.md to Makefile
-
 Wordsmith the end of math
 
 Respond to reviews.  **Deadline**: 26 November 2022
