@@ -9,6 +9,7 @@ my $inc = <INC>;
 open TEX, "<", grep(/tex$/, @ARGV) or die;
 my $tex = <TEX>;
 
+$tex =~ s/\\usepackage.*arxiv.*//;
 $tex =~ s/\\author[^}]*}/$inc/;
 
 print $tex;

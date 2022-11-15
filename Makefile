@@ -6,7 +6,7 @@ current: target
 
 -include makestuff/perl.def
 
-all = undercount_jmv.pdf undercount_long.pdf sim2.html 
+all = undercount_jmv.pdf
 all: $(all)
 
 vim_session:
@@ -50,11 +50,11 @@ responses.pdf: responses.md
 	$(render)
 
 ## undercount_short.pdf: undercount_short.rmd
-undercount_short.tex undercount_compare.tex: %.tex: %.rmd a_plot.pdf
+undercount_short.tex undercount_base.tex: %.tex: %.rmd a_plot.pdf
 	$(render)
 
 Sources += authors.inc
-## undercount_jmv.pdf:
+## undercount_jmv.pdf: undercount_short.rmd
 undercount_jmv.tex: undercount_short.tex authors.inc fixtex.pl undercount.bib
 	$(PUSH)
 
@@ -72,13 +72,16 @@ undercount_short.docx: undercount_short.rmd
 
 compare_sept_sub: undercount_short.rmd.9843e02.oldfile
 
-undercount_compare.rmd: undercount*.rmd.*.oldfile
+undercount_base.rmd: undercount*.rmd.*.oldfile
 	$(copy)
 
-undercount_diff.tex: undercount_compare.tex undercount_short.tex
+undercount.ld.tex: undercount_base.tex undercount_short.tex
 	$(latexdiff)
 
-## undercount_diff.pdf:
+undercount_diff.tex: undercount.ld.tex authors.inc fixtex.pl undercount.bib
+	$(PUSH)
+
+## undercount_diff.pdf: undercount_short.rmd
 
 ######################################################################
 
