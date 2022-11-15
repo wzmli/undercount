@@ -59,7 +59,7 @@ $$
 
 The estimated upper bound of the ascertainment ratio $\hat a$ thus depends only on the epidemic growth rate; it is independent of the true ascertainment ratio. Furthermore, epidemics typically grow at rates of a few percent per reporting period; an epidemic with more than 20% growth per reporting period ($\lambda > 1.2$) would be catastrophic. Thus, the upper bound on the ascertainment ratio during the exponential phase would typically range only from about 0.45 to 0.5.
 
-Applying a bias correction decreases the lower bound on the number of hidden cases, thus increasing the upper bound on $\hat a$. The results also depend on the overall number of reported cases, so the pattern is more complicated, but as we show below the estimate is still largely independent of the true ratio. 
+Applying a bias correction decreases the lower bound on the number of hidden cases, thus increasing the upper bound on $\hat a$. The results also depend on the overall number of reported cases, so the pattern is more complicated, but as we show below the estimated upper and lower bounds are still largely independent of the true ascertainment ratio.
 
 ## Simulation example
 

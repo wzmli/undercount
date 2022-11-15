@@ -17,3 +17,7 @@ makestuff/
 *.pdf
 *.html
 *.tikz
+*.tikz.tex
+tmp.rmd
+*.tex
+*.docx

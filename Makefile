@@ -45,6 +45,10 @@ plot_all_estimates.pdf: plot_all_estimates.Rout.pdf
 ## Shorter versions (current; on arxiv, and submitted)
 
 Ignore += $(wildcard *.tex)
+
+responses.pdf: responses.md
+	$(render)
+
 ## undercount_short.pdf: undercount_short.rmd
 undercount_short.tex: undercount_short.rmd a_plot.pdf
 	$(render)
