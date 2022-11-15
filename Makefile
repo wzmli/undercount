@@ -1,5 +1,5 @@
 
-## This is the monkeypox-inspired response to a stupid undercount_long paper
+## This is the monkeypox-inspired response to a stupid undercount paper
 
 current: target
 -include target.mk
@@ -50,7 +50,7 @@ responses.pdf: responses.md
 	$(render)
 
 ## undercount_short.pdf: undercount_short.rmd
-undercount_short.tex: undercount_short.rmd a_plot.pdf
+undercount_short.tex undercount_compare.tex: %.tex: %.rmd a_plot.pdf
 	$(render)
 
 Sources += authors.inc
@@ -65,6 +65,20 @@ undercount_jmv.tex: undercount_short.tex authors.inc fixtex.pl undercount.bib
 Ignore += *.docx
 undercount_short.docx: undercount_short.rmd
 	$(render)
+
+######################################################################
+
+## latexdiff
+
+compare_sept_sub: undercount_short.rmd.9843e02.oldfile
+
+undercount_compare.rmd: undercount*.rmd.*.oldfile
+	$(copy)
+
+undercount_diff.tex: undercount_compare.tex undercount_short.tex
+	$(latexdiff)
+
+## undercount_diff.pdf:
 
 ######################################################################
 
