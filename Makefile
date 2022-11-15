@@ -178,7 +178,7 @@ Sources += Makefile
 Ignore += makestuff
 msrepo = https://github.com/dushoff
 
-Makefile: makestuff/undercount02.stamp
+Makefile: makestuff/undercount03.stamp
 makestuff/%.stamp:
 	- $(RM) makestuff/*.stamp
 	(cd makestuff && $(MAKE) pull) || git clone $(msrepo)/makestuff
