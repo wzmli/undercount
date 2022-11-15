@@ -1,9 +1,7 @@
 ## To do
 
-* make latex-diff version of paper (JD)
 * check revision and responses (everyone)
 * check CoI statement, author contribution, etc. (ML)
-* Wordsmith the end of math (JD?)
 * pipeline for `make undercount_long.pdf` ? (JD)
 
 **Deadline**: 26 November 2022

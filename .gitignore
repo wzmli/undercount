@@ -21,3 +21,4 @@ makestuff/
 tmp.rmd
 *.tex
 *.docx
+.Rhistory
