@@ -2,6 +2,8 @@
 
 Wordsmith the end of math
 
+* Look up Richards curve shape estimates? e.g. see @chowellUsing2016, @mingioneShortterm in bib file. May have to distinguish between *generalized* Richards (two separate shape parameters for growth-phase dynamics and density-dep component) and our (Ma et al) Richards, which only has one for density-dep
+
 Respond to reviews.  **Deadline**: 26 November 2022
 
 * Add algebra/math description back in.
