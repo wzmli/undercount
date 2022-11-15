@@ -47,6 +47,7 @@ The estimated ascertainment ratio $\hat a$ depends only on the epidemic growth r
 
 ```{r get_pars, echo=FALSE}
 library(shellpipes)
+rpcall("undercount_long.rmd parameters.rda plot_all_estimates.pdf plot_all_estimates.rda a_plot.pdf")
 loadEnvironments()
 options(digits = 2)
 pct <- function(x) round(100*x)

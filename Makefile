@@ -51,7 +51,7 @@ undercount_short.tex: undercount_short.rmd a_plot.pdf
 
 Sources += authors.inc
 ## undercount_jmv.pdf:
-undercount_jmv.tex: undercount_short.tex authors.inc fixtex.pl
+undercount_jmv.tex: undercount_short.tex authors.inc fixtex.pl undercount.bib
 	$(PUSH)
 
 ######################################################################
