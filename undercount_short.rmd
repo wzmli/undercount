@@ -21,7 +21,7 @@ urlcolor: blue
 output: 
    rticles::arxiv_article:
    keep_tex: true
-abstract: Maruotti *et al.* 2022 used a mark-recapture approach to estimate bounds on the true number of monkeypox infections in various countries. These approaches are fundamentally flawed; it is impossible to estimate undercounting based solely on a single stream of reported cases. Simulations based on a Richards curve for cumulative incidence show that, for reasonable epidemic parameters, the proposed methods estimate bounds on the ascertainment ratio of $\approx 0.2-0.5$ roughly *independently* of the true ascertainment ratio. These methods should not be used to estimate undercounting or ascertainment ratios.
+abstract: Maruotti *et al.* 2022 used a mark-recapture approach to estimate bounds on the true number of monkeypox infections in various countries. Such approaches are fundamentally flawed; it is impossible to estimate undercounting based solely on a single stream of reported cases. Simulations based on a Richards curve for cumulative incidence show that, for reasonable epidemic parameters, the proposed methods estimate bounds on the ascertainment ratio of $\approx 0.2-0.5$ roughly *independently* of the true ascertainment ratio. These methods should not be used to estimate undercounting or ascertainment ratios.
 
 ---
 
@@ -30,8 +30,11 @@ abstract: Maruotti *et al.* 2022 used a mark-recapture approach to estimate boun
 Several papers [@bohningEstimating2020; @maruottiEstimating2022; @rocchettiEstimating2020] have promoted formulas that claim to provide bounds on the completeness of sampling of infectious disease cases, based only on case reports. We believe these approaches are fundamentally flawed, and that it is impossible to estimate undercounting from incidence data without a specialized sampling design or some kind of auxiliary information.
 
 The authors use mark-recapture formulas developed by Chao [@chaoEstimating1989a] and others [@alfoUpper2021] to estimate bounds on true population sizes based on the numbers of individuals observed multiple times.
-For example, the proposed estimator for the lower bound on unobserved individuals (hidden cases) is $\hat H(t) = \Delta N(t) (\Delta N(t) - 1)/(1 + \Delta N(t-1))$,
-where $\Delta N(t)$ is the number of new cases observed per reporting period; extended formulas adjust for mortality and recovery. The upper bound also involves $\Delta N(t-2)$ [@bohningEstimating2020; @rocchettiEstimating2020].
+For example, the proposed estimator for the lower bound on unobserved individuals (hidden cases) is 
+\begin{equation*}
+\hat H(t) = \Delta N(t) \frac{\Delta N(t) - 1}{\Delta N(t-1) + 1} \,,
+\end{equation*}
+where $\Delta N(t)$ is the number of new cases observed per reporting period; extended formulas adjust for mortality and recovery. The upper bound also involves $\Delta N(t-2)$ (refs. [@bohningEstimating2020; @rocchettiEstimating2020]).
 
 # Critique
 
@@ -44,7 +47,7 @@ In practice public health case reporting rarely uses such sampling designs. Case
 
 ## Mathematical argument
 
-The simplest mathematical illustration of the problems with the method occurs during the exponential-growth phase of the epidemic (when the authors have suggested that their method is most appropriate). During this phase the incidence (true number of new infections: $I(t)$) grows at a rate $\lambda$ per time step, i.e. $I(t) = I(0) \lambda^t$. Suppose a fraction $a$ (the *ascertainment ratio*) of these cases are reported (i.e. $a$ is the ratio of reported cases to the true incidence). An estimated lower bound on the number of hidden cases $\hat H$ can be converted to an upper bound on the estimated ascertainment ratio, $\hat a$. Using the simpler, non-bias-corrected formula:
+The simplest mathematical illustration of the problems with the method occurs during the exponential-growth phase of the epidemic (when the authors have suggested that their method is most appropriate). During this phase the incidence (true number of new infections: $I(t)$) grows at a rate $\lambda$ per time step, i.e. $I(t) = I(0) \lambda^t$. Suppose a fraction $a$ (the *ascertainment ratio*) of these cases is reported (i.e. $a$ is the ratio of reported cases to the true incidence). An estimated lower bound on the number of hidden cases $\hat H$ can be converted to an upper bound on the estimated ascertainment ratio, $\hat a$. Using the simpler, non-bias-corrected formula:
 
 $$
 \begin{split}
