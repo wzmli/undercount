@@ -35,7 +35,7 @@ where $\Delta N(t)$ is the number of new cases observed per reporting period; ex
 
 # Critique
 
-## Logical argument
+## Conceptual argument
 
 This approach misuses the mark-recapture formulas. Cases identified at time $t-1$ are claimed to be representative of the number of cases counted twice: why? The fact that the same individual *could* be counted twice in the cumulative case report (for some sampling designs) is irrelevant. How can comparing yesterday's count to today's provide information about the completeness of sampling? 
 
