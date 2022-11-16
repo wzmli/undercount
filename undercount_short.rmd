@@ -51,9 +51,9 @@ $$
 \hat a & = \frac{\textrm{observed cases}}{\textrm{observed cases} + \textrm{hidden cases}} \\
 & = \frac{\Delta N(t)}{\Delta N(t) + \hat H(t)} \\
 & = \frac{\Delta N(t)}{\Delta N(t) + \frac{[\Delta N(t)]^2}{\Delta N(t - 1)}} \\
-& = \left(1 + \Delta N(t)/\Delta N(t-1)\right)^{-1} \\
-& = \left(1 + a I(0) \lambda^t/(a I(0) \lambda^{t-1}\right)^{-1} \\
-& = 1/(1+\lambda).
+& = \left(1 + \frac{\Delta N(t)}{\Delta N(t-1)}\right)^{-1} \\
+& = \left(1 + \frac{a\,I(0) \lambda^t}{a\,I(0) \lambda^{t-1}}\right)^{-1} \\
+& = \frac{1}{1+\lambda} \,.
 \end{split}
 $$
 
@@ -65,7 +65,8 @@ Applying a bias correction decreases the lower bound on the number of hidden cas
 
 We ran simulations using a Richards curve for the cumulative incidence of the epidemic [@maEstimating2014]:
 \begin{equation}
-\textrm{cumulative incidence}(t) = \frac{K}{(1 + s \exp(-s  r (t - h)))^{1 / s}}.
+\textrm{cumulative incidence}(t) = 
+\frac{K}{(1 + s\,e^{-s  r (t - h)})^{1 / s}}.
 \label{eq:richards}
 \end{equation}
 The Richards curve is a widely used phenomenological model for epidemic curves [@chowellUsing2016; @mingioneShortterm2022] and, according to the authors, is the same method they used to test their approach  (pers. comm.). We computed expected incidence by differencing the cumulative incidence, drew a random negative binomial deviate with  mean equal to the expected incidence, and used a binomial sample with probability equal to the ascertainment ratio $a$ to get the number of observed cases. Throughout, we used a shape parameter of $s=2$ and a final epidemic size of $10^5$ for the Richards curve, and a negative binomial dispersion parameter $k=5$. We varied the reporting period ($\Delta t = \{1, 7\}$); initial incidence ($I_0 = \{20, 40\}$); epidemic growth rate ($r$ =  0.01 to 0.08 per day); and ascertainment ratio ($a$ from 0.05 to 0.6). (We solved the Richards equation numerically to recover the $h$ parameter given a value of the initial incidence, which is the derivative of (\ref{eq:richards}) at time zero.) These ranges encompass typical parameters of epidemic outbreaks (SARS-CoV-1, COVID-19, monkeypox, etc.), but we argue that the precise numerical values are not very important. The key aspects of a simulation are the epidemic growth rate ($\lambda = \exp(r\Delta t)$), which is the primary determinant of the ascertainment ratio bounds computed according to Maruotti *et al*'s method, and the typical number of cases reported per period, which determines the effects of the bias correction terms.
