@@ -28,7 +28,7 @@ We already expressed this idea (that mark-recapture techniques require multiple,
 
 **"some algebra shows that during the exponential growth phase of an epidemic, the (simplified) lower bound on $\hat{a}$ is exactly equal to $1/(1+ exp(r \Delta t))$." should have a reference for a source.**
 
-We have include a section showing the algebra in the revised version. 
+We have included a section showing the algebra in the revised version. 
 
 **It is a too broad conclusion "These methods should not be used.". For what? Please clarify. Because these methods may exist as an exercise to understand an initial stage of the infections' spreading.**
 
