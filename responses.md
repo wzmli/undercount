@@ -32,7 +32,7 @@ We have included a section showing the algebra in the revised version.
 
 **It is a too broad conclusion "These methods should not be used.". For what? Please clarify. Because these methods may exist as an exercise to understand an initial stage of the infections' spreading.**
 
-The authors of the original method have presented these methods as a way to estimate undercounts, especially during the initial stages of an epidemic. We argue here that the method is simply not fit for this purpose, or any other purpose (we have qualified "should not be used" to "should not be applied to estimate ascertainment ratios from disease outbreak incidence data").
+The authors of the original method have presented these methods as a way to estimate undercounts, especially during the initial stages of an epidemic. We argue here that the method is simply not fit for the stated purpose (we have qualified "should not be used" to "should not be applied to estimate ascertainment ratios from disease outbreak incidence data").
 
 ## EDITORIAL OFFICE COMMENTS
 
