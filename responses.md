@@ -40,7 +40,8 @@ When submitting your revision, please note that we will require some extra infor
 
 ### Data Availability Statement
 
-No data are used in the paper; all code for simulations is available at https://github.com/wzmli/undercount
+No data are used in the paper; all code for simulations is available at https://doi.org/10.5281/zenodo.7328063
+
 
 ### Conflict of Interest statement
 
