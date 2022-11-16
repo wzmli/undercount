@@ -83,7 +83,7 @@ We conclude that the authors' formulas appear to work well because they lead to 
 
 ---
 
-Further details, and source code for all examples, are available at [https://github.com/wzmli/undercount/](https://github.com/wzmli/undercount/).
+Further details, and source code for all examples, are available at https://doi.org/10.5281/zenodo.7328063
 
 ## References
 
