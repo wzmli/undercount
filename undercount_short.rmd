@@ -101,8 +101,5 @@ We declare that none of the authors have conflicts of interest.
 All authors contributed to the conceptual development of the paper. ML and BMB wrote computer code for simulations and figures. BMB wrote the first draft of the paper. All authors commented and edited to produce the final version.
 
 
-
-Further details, and source code for all examples, are available at https://doi.org/10.5281/zenodo.7328063
-
 ## References
 
