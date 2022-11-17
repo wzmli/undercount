@@ -87,6 +87,21 @@ We conclude that the authors' formulas appear to work well because they lead to 
 
 ---
 
+# Data Availability Statement
+
+No data are used in the paper; all code for simulations is available at https://doi.org/10.5281/zenodo.7328063
+
+
+# Conflict of Interest statement
+
+We declare that none of the authors have conflicts of interest.
+
+# Author contribution statement
+
+All authors contributed to the conceptual development of the paper. ML and BMB wrote computer code for simulations and figures. BMB wrote the first draft of the paper. All authors commented and edited to produce the final version.
+
+
+
 Further details, and source code for all examples, are available at https://doi.org/10.5281/zenodo.7328063
 
 ## References
