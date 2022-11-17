@@ -1,6 +1,6 @@
 ---
 title: "Evaluating undercounts in epidemics: response to Maruotti *et al.* 2022"
-date: "`r format(Sys.Date(), '%d %B %Y')`"
+# date: "`r format(Sys.Date(), '%d %B %Y')`"
 #author: "Michael Li, Jonathan Dushoff, David J. D. Earn, and Benjamin M. Bolker"
 author:
   - name: Michael Li

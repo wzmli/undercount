@@ -10,7 +10,7 @@ Based on both reviewer's comments, and with the editor's permission, we have gon
 
 **This is a responsa to the paper by Maruotti et al. (2022) in the same Journal and to similar paper by the same group appeared in 2020 in the Intarnational Journal of Infectious Dieseases. the argument is sound but, in my perspective, the real reson for the method proposed by Maruotti et al. (2022) not working properly is not fully exploited.**
 
-We have amplified the arguments in our logical critique,  and have added a section showing a simple mathematical argument that refutes Maruotti *et al*'s method in a particular case (exponential growth without bias correction).
+We have amplified the arguments in our conceptual (previously logical) critique,  and have added a section showing a simple mathematical argument that refutes Maruotti *et al*'s method in a particular case (exponential growth without bias correction).
 
 **In this respect the logical argument is much more sound than the simulation experiment which is not commented at all. Usually, simulation experiments are built to match some real situations but this step, and the choice of parameters used, isnot explained by the authors, so one may not aundferstand what is going on. This should be better posed in a clear argument to describe which kind of disease we are thinking of, which kind of geogrphical/temporal spread and so on.**
 
