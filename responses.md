@@ -34,20 +34,4 @@ We have included a section showing the algebra in the revised version.
 
 The authors of the original method have presented these methods as a way to estimate undercounts, especially during the initial stages of an epidemic. We argue here that the method is simply not fit for the stated purpose (we have qualified "should not be used" to "should not be applied to estimate ascertainment ratios from disease outbreak incidence data").
 
-## EDITORIAL OFFICE COMMENTS
-
-When submitting your revision, please note that we will require some extra information from you. If this information is not supplied at revision, it may result in the delay in processing of your manuscript:
-
-### Data Availability Statement
-
-No data are used in the paper; all code for simulations is available at https://doi.org/10.5281/zenodo.7328063
-
-
-### Conflict of Interest statement
-
-We declare that none of the authors have conflicts of interest.
-
-### Author contribution statement
-
-All authors contributed to the conceptual development of the paper. ML and BMB wrote computer code for simulations and figures. BMB wrote the first draft of the paper. All authors commented and edited to produce the final version.
 
