@@ -1,5 +1,4 @@
-
-## This is the monkeypox-inspired response to a stupid undercount paper
+## This is the monkeypox-inspired response to a undercount paper
 
 current: target
 -include target.mk
