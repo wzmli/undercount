@@ -90,7 +90,7 @@ We conclude that the authors' formulas appear to work well because they lead to 
 
 # Data Availability Statement
 
-No data are used in the paper; all code for simulations is available at https://doi.org/10.5281/zenodo.7328063
+No data are used in the paper; all code for simulations is available at https://doi.org/10.5281/zenodo.7473422
 
 
 # Conflict of Interest statement
