@@ -22,6 +22,9 @@ Sources += README.md responses.md TODO.md
 responses.html: responses.md
 	$(ghh_r)
 
+responses2.html: responses.md
+	$(ghh_r)
+
 ######################################################################
 
 Sources += $(wildcard *.R *.rmd *.pl)
