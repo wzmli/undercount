@@ -57,7 +57,7 @@ responses2.pdf: responses2.md
 ## undercount_short.pdf: undercount_short.rmd
 undercount_short.tex undercount_base.tex: %.tex: %.rmd a_plot.pdf
 	$(render)
-	$(RO)
+	$(readonly)
 
 Sources += authors.inc
 ## undercount_jmv.pdf: undercount_short.rmd
@@ -77,8 +77,9 @@ undercount_short.docx: undercount_short.rmd
 ## latexdiff
 
 compare_sept_sub: undercount_short.rmd.9843e02.oldfile
+second_sub: undercount_short.rmd.d9ab52e0.oldfile
 
-undercount_base.rmd: undercount*.rmd.*.oldfile
+undercount_base.rmd: undercount_short.rmd.*.oldfile
 	$(copy)
 
 undercount.ld.tex: undercount_base.tex undercount_short.tex
