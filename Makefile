@@ -22,7 +22,7 @@ Sources += README.md responses.md responses2.md TODO.md
 responses.html: responses.md
 	$(ghh_r)
 
-responses2.html: responses.md
+responses2.html: responses2.md
 	$(ghh_r)
 
 ######################################################################
