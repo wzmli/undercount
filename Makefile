@@ -17,7 +17,7 @@ vim_session:
 
 ######################################################################
 
-Sources += README.md responses.md TODO.md
+Sources += README.md responses.md responses2.md TODO.md
 
 responses.html: responses.md
 	$(ghh_r)
@@ -49,6 +49,9 @@ plot_all_estimates.pdf: plot_all_estimates.Rout.pdf
 Ignore += $(wildcard *.tex)
 
 responses.pdf: responses.md
+	$(render)
+
+responses2.pdf: responses2.md
 	$(render)
 
 ## undercount_short.pdf: undercount_short.rmd
