@@ -57,6 +57,7 @@ responses2.pdf: responses2.md
 ## undercount_short.pdf: undercount_short.rmd
 undercount_short.tex undercount_base.tex: %.tex: %.rmd a_plot.pdf
 	$(render)
+	$(RO)
 
 Sources += authors.inc
 ## undercount_jmv.pdf: undercount_short.rmd
