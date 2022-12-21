@@ -1,63 +1,60 @@
 ---
-title: "Evaluating undercounts in epidemics: response to Maruotti *et al.* 2022"
+title: "evaluating undercounts in epidemics"
+output:
+  pdf_document
 date: "`r format(Sys.Date(), '%d %B %Y')`"
-#author: "Michael Li, Jonathan Dushoff, David J. D. Earn, and Benjamin M. Bolker"
-author:
-  - name: Michael Li
-    affiliation: "Public Health Agency of Canada"
-  - name: Jonathan Dushoff
-    affiliation: McMaster University
-  - name: David J. D. Earn
-    affiliation: McMaster University
-  - name: Benjamin M. Bolker
-    affiliation: McMaster University
+author: Mike Li and Ben Bolker"
 bibliography: undercount.bib
-csl: nature.csl 
 header-includes:
   - \usepackage[utf8]{inputenc}
-  - \usepackage{grffile}
-urlcolor: blue
-output: 
-   rticles::arxiv_article:
-   keep_tex: true
 ---
 
-# Abstract
+From @bohningEstimating2020:
 
-Maruotti *et al.* 2022 used a mark-recapture approach to estimate bounds on the true number of monkeypox infections in various countries. These approaches are fundamentally flawed; it is impossible to estimate undercounting based solely on a single stream of reported cases. Simulations based on a Richards curve for cumulative incidence show that, for reasonable epidemic parameters, the proposed methods estimate bounds on the ascertainment ratio of $\approx 0.2-0.5$ roughly *independently* of the true ascertainment ratio. These methods should not be used.
+> The idea is to apply this estimator (4) day-wise. We take an arbitrary day $t$. At this day we have $\Delta N(t)$ new infections. This will be viewed as $f_1$, the infected people identified just once. If we look at $\Delta N(t - 1)$, then this is the count of new infections the day before. But these will still be infected at day $t$ unless they decease. So, $f_2$ corresponds to $\Delta N(t - 1) - \Delta D(t)$. We can ignore the number of recoveries as we are looking at infections which are very recent (notified at day $t$ or $t - 1$). Hence we are able to give the estimate for the number of hidden infections at day $t$ as $H(t) = \frac{[\Delta N(t)]^2}{\Delta N(t - 1) - \Delta D(t)}$
 
-# Introduction
+the authors go on to use a bias-corrected estimator from Chao.
 
-Several papers [@bohningEstimating2020; @maruottiEstimating2022; @rocchettiEstimating2020] have promoted formulas that claim to provide bounds on the completeness of sampling of infectious disease cases, based only on case reports. We believe these approaches are fundamentally flawed, and that it is impossible to estimate undercounting from incidence data without a specialized sampling design or some kind of auxiliary information.
+Or from @maruottiEstimating2022:
 
-The authors use mark-recapture formulas developed by Chao [@chaoEstimating1989a] and others [@alfoUpper2021] to estimate bounds on true population sizes based on the numbers of individuals observed multiple times. For example, the proposed estimator for the lower bound on unobserved individuals (hidden cases) is $\Delta N(t) (\Delta N(t) - 1)/(1 + \Delta N(t-1))$, where $\Delta N(t)$ is the number of new cases observed per reporting period; extended formulas adjust for mortality and recovery. The upper bound also involves $\Delta N(t-2)$ [@bohningEstimating2020; @rocchettiEstimating2020].
+> We will denote with $N(t)$ the cumulative count of infections at week $t$ where $t = t_0, \dots, t_m$. Hence $\Delta N (t) = N(t) -N(t-1)$ are the number of  new  infections at week $t$ where $t = t_0, t_1,  \dots t_m$ ... Here $\Delta N(t)$ corresponds to the infected people identified just once, and $\Delta N(t-1)$  is the  number  of  those  identified  twice. 
 
-# Critique
+Here the full bias-corrected expression (without a death term), eq 1 in the paper, is
+\[
+\frac{\Delta N(t) (\Delta N(t) - 1)}{1 + \Delta N(t-1)}
+\]
+but the bias-correction ($\pm 1$) terms don't change our basic critique of the method.
 
-## Logical argument
+The logic is hard to understand here. Why are cases identified at time $t-1$ representative of the number of cases counted twice? The fact that the same individual *could* be counted twice in the cumulative case report (for some sampling designs) is not relevant. How can comparing yesterday's count to today's provide information about the completeness of sampling, or anything other than the rate of growth of the epidemic? Public health case reporting is typically unrelated to mark-recapture (although there are applications in contact tracing: @lerdsuwansriSensitivity2022, @polonskyNovel2022). Furthermore, case reports are often exclusive (i.e. someone who has been reported as a case will not be tested again), *or* are anonymous so that we cannot identify whether a particular case/infected individual was double-counted or not.
 
-This approach misuses the mark-recapture formulas. Cases identified at time $t-1$ are claimed to be representative of the number of cases counted twice: why? The fact that the same individual *could* be counted twice in the cumulative case report (for some sampling designs) is irrelevant. How can comparing yesterday's count to today's provide information about the completeness of sampling? 
+Suppose we have an epidemic that is growing exponentially. In the epidemic phase, the various measures of current epidemic size (incidence, prevalence, cumulative incidence, etc.) *all* grow exponentially, or geometrically if we're sampling in discrete time. Suppose $I(t)$ ("new cases" or incidence) is growing at a geometric rate $R$ per time step, i.e. $I(t) = I(0) R^t$, and suppose we are sampling a fraction $a$ (for "ascertainment") of the incidence. Again for simplicity, we'll see how the simple/non-bias-corrected estimate, without death, works out:
 
-In principle, the number of unobserved hidden cases can be estimated if cases can be re-identified, or even with unmarked/unidentified cases given an appropriate sampling design [@royleHierarchical2008]. 
-In practice public health case reporting rarely uses such sampling designs. Case reporting is usually exclusive (i.e. someone who has been identified as a case will not be reported again later), or anonymized so that we cannot identify a particular infected individual as double-counted. Mark-recapture methods can provide valuable public health information, but "one needs at least two sources of information with individual case reporting and a unique personal identifier for each case" [@desenclosLimitations1994].
+$$
+\begin{split}
+H(t) & = \frac{[\Delta N(t)]^2}{\Delta N(t - 1)} \\
+& = \frac{a^2 I(0)^2 R^{2t}}{a I(0) R^{t-1}} \\
+& = a I(0) R^{t+1}
+\end{split}
+$$
 
-## Simulation example
+More generally, just looking at the form of the expression $[\Delta N(t)]^2/\Delta N(t - 1)$, we can see that the undercount will *always* be taken equal to the rate of acceleration of observed cases ($\Delta N(t)/\Delta N(t-1)$) times the number of new cases $\Delta N(t)$, so undercounting will always be assumed to be large (proportional to observed cases) at the beginning of the epidemic and continuously decreasing toward the end.
 
-We ran simulations using a Richards curve for the cumulative incidence of the epidemic [@maEstimating2014]. We computed expected incidence by differencing the cumulative incidence, drew a random negative binomial deviate with  mean equal to the expected incidence, and used a binomial sample with probability equal to the ascertainment ratio $a$ to get the number of observed cases. Throughout, we used a shape parameter of $s=2$ and a final epidemic size of $10^5$ for the Richards curve, and a negative binomial dispersion parameter $k=5$. We varied the reporting period ($\Delta t = \{1, 7\}$); starting incidence ($I_0 = \{20, 40\}$); epidemic growth rate ($r$ =  0.01 to 0.08 per day); and ascertainment ratio ($a$ from 0.05 to 0.6). We ran each simulation for 100 days and used the R package `asymptor` [@grusonAsymptor2020] to compute bounds on the ascertainment ratio.
+## example
 
-The authors indicated (pers. comm.) that they intended the estimator to be used at the beginning of an epidemic. Therefore we considered only sample points when the number of cases was between 5 and 500 (exclusive) and the lower bound estimator for hidden cases was greater than 1.
-
-For each simulation run (80 in total), we computed the mean and confidence intervals for the estimated lower and upper bounds of $\hat a$ over time (Figure 1). The bounds on $\hat a$ rarely overlap the true value, and are *largely independent of the true values of $a$*. The only noticeable signal arises from the bias-correction terms: simulations with lower overall case numbers (low $r$, low $a$, $\Delta t = 1$) have larger lower bounds and smaller upper bounds. In simulations without noise and with the simpler, non-bias-corrected expression for the lower bound (not shown), the lower-bound estimates of $\hat a$ are completely independent of $a$; some algebra shows that during the exponential growth phase of an epidemic, the (simplified) lower bound on $\hat a$ is exactly equal to $1/(1+\exp(r \Delta t))$.
-
-```{r aplot,fig.cap="Comparison of true ascertainment ratio ($a$) to estimated lower and upper bounds of ascertainment ratio ($\\hat a$). Dashed line is the one-to-one line (estimated = true).", echo = FALSE, out.width="80%"}
-knitr::include_graphics("a_plot.pdf")
+```{r get_pars, echo=FALSE}
+## Next two lines don't work
+## > Error in makeArgs() : Define callArgs to use makeR files; see .args file?
+## library(shellpipes)
+## loadEnvironments()
+load("parameters.rda")
+options(digits = 2)
 ```
 
-We conclude that the authors' formulas appear to work well because they lead to plausible bounds on the ascertainment ratio ($\approx$ 0.2 -- 0.5) for realistic values of the epidemic growth rate, but that they are in fact nearly unrelated to the true ascertainment ratio and should not be applied to disease outbreak incidence data.
+Here is a simulated SIR epidemic with ${\cal R}_0 = `r beta/gamma`$, infectious period of `r 1/gamma` days, and ascertainment rate of `r 100*c_prop`% (which means that the proportion of "hidden" cases is $(1-a)/a = `r (1-c_prop)/c_prop`$):
 
----
+```{r get_plot, echo = FALSE, out.height = "4in"}
+knitr::include_graphics("plot_cuminf.Rout.pdf")
+```
 
-Further details, and source code for all examples, are available at [https://github.com/wzmli/undercount/](https://github.com/wzmli/undercount/).
-
-## References
+## references
 
