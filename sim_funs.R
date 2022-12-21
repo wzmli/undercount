@@ -21,9 +21,13 @@ richards <- function(..., deriv = FALSE) {
 stopifnot(all.equal(
     richards(t = 1, r = 1, tinfl = 4, K=1, s=1),
     0.0474258731775668))
-                    
-## curve(richards(x, r = 1, tinfl = 4, K=1, s=1), from = 0, to = 10, ylim = c(0,1))
-## curve(richards(x, r = 1, tinfl = 4, K=1, s=1, deriv = TRUE), from = 0, to = 10)
+
+if (FALSE) {
+    curve(richards(x, r = 1, tinfl = 4, K=1, s=1), from = 0, to = 10, ylim = c(0,1))
+    curve(richards(x, r = 1, tinfl = 4, K=1, s=1, deriv = TRUE), from = 0, to = 10)
+    curve(richards(x, r = 1, tinfl = 4, K=1, s=3), from = 0, to = 10, ylim = c(0,1))
+    abline(v=4, lty = 2)
+}
 
 ## solve for I0 as a function of tinfl
 ## I0 = K / (1 + s * exp(-s * r * (0 - tinfl)))^(1 / s)
