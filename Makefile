@@ -79,6 +79,7 @@ undercount_short.docx: undercount_short.rmd
 compare_sept_sub: undercount_short.rmd.9843e02.oldfile
 second_sub: undercount_short.rmd.d9ab52e0.oldfile
 
+## undercount_diff.pdf: undercount_short.rmd
 undercount_base.rmd: undercount_short.rmd.*.oldfile
 	$(copy)
 
@@ -88,7 +89,6 @@ undercount.ld.tex: undercount_base.tex undercount_short.tex
 undercount_diff.tex: undercount.ld.tex authors.inc fixtex.pl undercount.bib
 	$(PUSH)
 
-## undercount_diff.pdf: undercount_short.rmd
 
 ######################################################################
 
