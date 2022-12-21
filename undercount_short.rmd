@@ -21,7 +21,10 @@ urlcolor: blue
 output: 
    rticles::arxiv_article:
    keep_tex: true
-abstract: Maruotti *et al.* 2022 used a mark-recapture approach to estimate bounds on the true number of monkeypox infections in various countries. We show that such approaches are fundamentally flawed; it is impossible to estimate undercounting based solely on a single stream of reported cases. Simulations based on a Richards curve for cumulative incidence show that, for reasonable epidemic parameters, the proposed methods estimate bounds on the ascertainment ratio of $\approx 0.2-0.5$ roughly *independently* of the true ascertainment ratio. Based on such simulation results and corroborated by analytic proofs, we show that these methods should not be used to estimate undercounting or ascertainment ratios.
+abstract: Maruotti *et al.* 2022 used a mark-recapture approach to estimate bounds on the true number of monkeypox infections in various countries. We show that such approaches are fundamentally flawed; it is impossible to estimate undercounting based solely on a single stream of reported cases. 
+We give a conceptual argument why this is impossible, and support it with simulations of disease incidence and reporting. 
+The simulations show that the proposed methods estimate bounds on the ascertainment ratio of $\approx 0.2-0.5$ roughly *independently* of the true ascertainment ratio. 
+The conclulsion is that the proposed mark-recapture approach should not be used to estimate undercounting or ascertainment ratios.
 
 ---
 
