@@ -92,7 +92,6 @@ We conclude that the authors' formulas appear to work well because they lead to 
 
 No data are used in the paper; all code for simulations is available at https://doi.org/10.5281/zenodo.7473422
 
-
 # Conflict of Interest statement
 
 We declare that none of the authors have conflicts of interest.
