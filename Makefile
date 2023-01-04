@@ -13,10 +13,6 @@ vim_session:
 
 ######################################################################
 
-## MAKE=/usr/local/opt/make/bin/gmake
-
-######################################################################
-
 Sources += README.md responses.md responses2.md TODO.md
 
 responses.html: responses.md
@@ -59,6 +55,7 @@ undercount_short.tex undercount_base.tex: %.tex: %.rmd a_plot.pdf
 	$(render)
 	$(readonly)
 
+## Put author information into this file to have perl insert it after rendering
 Sources += authors.inc
 ## undercount_jmv.pdf: undercount_short.rmd
 undercount_jmv.tex: undercount_short.tex authors.inc fixtex.pl undercount.bib
@@ -79,9 +76,10 @@ undercount_short.docx: undercount_short.rmd
 compare_sept_sub: undercount_short.rmd.9843e02.oldfile
 second_sub: undercount_short.rmd.d9ab52e0.oldfile
 
+## Untested (dependency was chaining badly) 2023 Jan 04 (Wed)
 ## undercount_diff.pdf: undercount_short.rmd
-undercount_base.rmd: undercount_short.rmd.*.oldfile
-	$(copy)
+undercount_base.rmd:
+	$(CP) undercount_short.rmd.*.oldfile $@
 
 undercount.ld.tex: undercount_base.tex undercount_short.tex
 	$(latexdiff)
