@@ -2,8 +2,8 @@
 
 This repository contains a reponse to several papers by Maruotti, Böhning et al, which propose a flawed method for estimating undercounting (also known as the *ascertainment ratio*) from case reports of epidemic disease.
 
-- We have submitted a letter to the editor (see <undercount_short.rmd>, <outputs/undercount_jmv.pdf>) to *J. Med. Virology* and posted a preprint on [arxiv](https://t.co/ki3OoysqNb).
-- <undercount.rmd> (compiled to <outputs/undercount_long.pdf>) contains earlier work (much of which was cut from the letter to the editor to satisfy word-count requirements), including an SIR-based example and some algebra evaluating a version of Maruotti *et al.*'s lower-bound criterion for the exponential phase of an epidemic.
+- We have published a [letter to the editor](https://onlinelibrary.wiley.com/doi/full/10.1002/jmv.28474), and posted a preprint on [arxiv](https://t.co/ki3OoysqNb) – [the source is here](undercount_short.rmd)
+- Our [original version](outputs/undercount_long.pdf) contains additional work which was cut from the letter to the editor to satisfy word-count requirements, including an SIR-based example and some algebra evaluating a version of Maruotti *et al.*'s lower-bound criterion for the exponential phase of an epidemic – [the source is here](undercount_long.rmd).
 - `sim2.rmd`/`sim2.html` contain additional experiments that show (for example) the match of the estimated bounds on the ascertainment ratio to $1/(1+\lambda)$ during the exponential phase.
 
 ## code and source files
