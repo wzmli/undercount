@@ -37,7 +37,7 @@ Ignore += undercount_long.pdf
 ## also depends on  gg_ok.pdf scaled_bounds.pdf, but we need more
 ##   workflow magic to make this work
 undercount_long.pdf: undercount_long.rmd parameters.rda plot_all_estimates.pdf plot_all_estimates.rda a_plot.pdf
-	$(knitpdf)
+	$(rmdpdf)
 
 plot_all_estimates.pdf: plot_all_estimates.Rout.pdf
 	$(copy)
